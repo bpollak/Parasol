@@ -208,11 +208,15 @@ Automated checks do not replace visual, keyboard, focus, zoom/reflow, and screen
 
 ## Working in an iCloud-synced checkout
 
-This folder lives under `~/Documents`, which iCloud may sync and evict. `node_modules/` and `dist/` carry the `com.apple.fileprovider.ignore#P` attribute so they stay local, and the build empties `dist/` instead of deleting it so the attribute survives. If a build or `npm ci` slows to minutes, re-apply it:
+`~/Documents` is synced by iCloud, which evicts files it thinks are unused. An evicted file stalls any tool that reads it (`git add` hung for 15 minutes on one vendor template). The checkout at `~/Documents/Parasol` therefore carries the `com.apple.fileprovider.ignore#P` attribute on its root folder, which keeps the whole tree local; GitHub is its backup. The build also empties `dist/` instead of deleting it.
+
+If a fresh clone lands under `~/Documents`, mark it the same way before installing:
 
 ```bash
-xattr -w 'com.apple.fileprovider.ignore#P' 1 node_modules dist
+xattr -w 'com.apple.fileprovider.ignore#P' 1 .
 ```
+
+If a file is already evicted (`ls -lO` shows `dataless`), restore it from GitHub rather than waiting for iCloud.
 
 ## Publishing
 
