@@ -36,8 +36,11 @@ function safeFilePath(distDir, requestPath, basePath) {
 }
 
 export async function startDistServer(distDir = path.join(ROOT, "dist")) {
+  // The build's base path is the repository name on GitHub Pages, which need
+  // not match the package name. Prefer the value the build actually used.
+  const configured = (process.env.SITE_BASE_PATH || "").replace(/^\/+|\/+$/g, "");
   const packageName = JSON.parse(await readFile(path.join(ROOT, "package.json"), "utf8")).name;
-  const basePath = `/${packageName}`;
+  const basePath = `/${configured || packageName}`;
   const server = http.createServer(async (request, response) => {
     const filename = safeFilePath(distDir, request.url || "/", basePath);
     if (!filename) {
