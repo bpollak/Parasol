@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "defaultSocialImage": "/_images/campus/scripps-pier-1200.webp",
+  "defaultSocialImageAlt": "A rainbow over Scripps Pier in La Jolla at sunset.",
+  "routes": {
+    "/search/index.html": { "robots": "noindex,follow" }
+  }
+}

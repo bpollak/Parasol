@@ -1,0 +1,261 @@
+/*
+ * PARASOL documentation styles.
+ *
+ * Every rule is scoped to the canvas, main#main-content. The Decorator shell
+ * arrives styled from cdn.ucsd.edu and is not ours to restyle; see CLAUDE.md.
+ * Colors come from the UC San Diego palette: navy #182b49, blue #00629b,
+ * gold #ffcd00, and the Decorator's own grays.
+ */
+
+/* Ported documentation pages: tables, code, and callouts */
+
+
+body.docs-page main#main-content .main-section {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+body.docs-page main#main-content .main-section h2 {
+  margin-top: 2em;
+  scroll-margin-top: 1em;
+}
+
+body.docs-page main#main-content .main-section h3 {
+  margin-top: 1.5em;
+  scroll-margin-top: 1em;
+}
+
+main#main-content .table-responsive {
+  margin: 1em 0 1.5em;
+  border: 0;
+}
+
+main#main-content .table-responsive > .table {
+  margin-bottom: 0;
+}
+
+main#main-content .table > thead > tr > th {
+  background: #182b49;
+  border-bottom: 0;
+  color: #fff;
+  vertical-align: bottom;
+}
+
+main#main-content .table > tbody > tr > td {
+  vertical-align: top;
+}
+
+main#main-content .main-section code {
+  background: #f3f4f6;
+  border-radius: 3px;
+  color: #182b49;
+  font-size: 0.9em;
+  padding: 1px 4px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+main#main-content pre.docs-code,
+main#main-content .main-section pre {
+  background: #182b49;
+  border: 0;
+  border-radius: 4px;
+  color: #f8f9fa;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 1em 0 1.5em;
+  overflow-x: auto;
+  padding: 14px 16px;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+main#main-content .main-section pre code {
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  padding: 0;
+  white-space: inherit;
+  word-break: normal;
+}
+
+main#main-content .docs-callout {
+  border-left-width: 5px;
+  margin: 1.25em 0;
+}
+
+main#main-content .docs-callout > p:last-child {
+  margin-bottom: 0;
+}
+
+main#main-content .docs-callout-label {
+  margin-bottom: 0.35em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.85em;
+}
+
+main#main-content .docs-status {
+  margin-top: 0;
+}
+
+main#main-content .docs-figure {
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  margin: 1em 0;
+}
+
+/* "On this page" list built from a page's second-level headings */
+
+main#main-content .docs-page-contents {
+  background: #f5f7fa;
+  border-left: 4px solid #00629b;
+  margin: 0 0 1.75em;
+  padding: 14px 18px 10px;
+}
+
+main#main-content .docs-page-contents h2 {
+  font-size: 18px;
+  margin: 0 0 0.5em;
+}
+
+main#main-content .docs-page-contents ol {
+  columns: 2 16em;
+  column-gap: 2em;
+  margin: 0;
+  padding-left: 1.25em;
+}
+
+main#main-content .docs-page-contents li {
+  break-inside: avoid;
+  margin-bottom: 0.35em;
+}
+
+/* Previous and next within a documentation section */
+
+main#main-content .docs-pager {
+  border-top: 1px solid #d6d6d6;
+  margin-top: 2.5em;
+  padding-top: 1.25em;
+}
+
+main#main-content .docs-pager ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+main#main-content .docs-pager li {
+  flex: 1 1 14em;
+  max-width: 100%;
+}
+
+main#main-content .docs-pager .next {
+  margin-left: auto;
+  text-align: right;
+}
+
+main#main-content .docs-pager a {
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  display: block;
+  min-height: 44px;
+  padding: 10px 14px;
+  text-decoration: none;
+}
+
+main#main-content .docs-pager a:hover,
+main#main-content .docs-pager a:focus {
+  border-color: #00629b;
+  background: #f5f7fa;
+}
+
+main#main-content .docs-pager-direction {
+  color: #555;
+  display: block;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+main#main-content .docs-pager-title {
+  display: block;
+  font-weight: 700;
+}
+
+main#main-content .docs-page-help {
+  background: #fff8db;
+  border-left: 4px solid #ffcd00;
+  margin-top: 1.5em;
+  padding: 12px 16px;
+}
+
+main#main-content .docs-page-help p {
+  margin: 0;
+}
+
+main#main-content pre:focus,
+main#main-content .table-responsive:focus {
+  outline: 3px solid #00629b;
+  outline-offset: 2px;
+}
+
+/* Hub additions */
+
+main#main-content .hub-section-cta {
+  margin-top: 1.25em;
+}
+
+/* Site search results */
+
+main#main-content #result-count-placeholder p {
+  color: #333;
+}
+
+main#main-content .parasol-search-results {
+  list-style: none;
+  margin: 1em 0 0;
+  padding: 0;
+}
+
+main#main-content .parasol-search-results > li {
+  border-bottom: 1px solid #e3e3e3;
+  padding: 14px 0;
+}
+
+main#main-content .parasol-search-results h2 {
+  font-size: 19px;
+  margin: 0 0 0.25em;
+}
+
+main#main-content .parasol-search-results .parasol-search-path {
+  color: #555;
+  font-size: 13px;
+  margin: 0 0 0.35em;
+}
+
+main#main-content .parasol-search-results p {
+  margin: 0;
+}
+
+main#main-content .parasol-search-results mark {
+  background: #fff3b0;
+  color: inherit;
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  main#main-content pre.docs-code,
+  main#main-content .main-section pre {
+    font-size: 13px;
+  }
+
+  main#main-content .docs-pager .next {
+    text-align: left;
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "description": "Reusable public claims about PARASOL. Every figure on a page should trace to an entry here, with its source and review date.",
+  "facts": [
+    {
+      "id": "usage-ay-2025-26",
+      "claim": "In AY 2025-26 the platform hosted more than 140 classes, 75 instructors, and 18,000 student enrollments.",
+      "status": "public",
+      "owner": "IT Services, Datahub team",
+      "lastReviewed": "2026-09-29",
+      "source": "DSMLP documentation overview, https://dsmlp-docs.ucsd.edu/overview/",
+      "measurementPeriod": "Academic year 2025-26",
+      "canonicalUrl": "/about/index.html"
+    },
+    {
+      "id": "fall-2026-gpu-expansion",
+      "claim": "Four new GPU servers with a total of 32 NVIDIA RTX PRO 6000 Blackwell GPUs, increasing peak instructional AI computing capacity by nearly four times.",
+      "status": "pending-announcement",
+      "owner": "Halıcıoğlu School of Data Science and Computing",
+      "lastReviewed": "2026-10-24",
+      "source": "PARASOL announcement draft by Tiffany Fox, dated 2026-10-28, marked NOT FOR RELEASE",
+      "measurementPeriod": "Fall 2026 deployment",
+      "canonicalUrl": "/about/why-parasol.html"
+    },
+    {
+      "id": "annual-gpu-hours",
+      "claim": "About 66,800 annual peak instructional GPU-hours and more than 213,000 annual off-peak GPU-hours for approved research, capstones, and graduate work.",
+      "status": "pending-announcement",
+      "owner": "Halıcıoğlu School of Data Science and Computing",
+      "lastReviewed": "2026-10-24",
+      "source": "PARASOL announcement draft by Tiffany Fox, dated 2026-10-28, marked NOT FOR RELEASE",
+      "measurementPeriod": "Annual capacity of the fall 2026 system",
+      "canonicalUrl": "/about/why-parasol.html"
+    }
+  ]
+}

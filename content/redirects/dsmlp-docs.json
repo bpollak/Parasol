@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "description": "Every published DSMLP documentation URL and the PARASOL route that replaces it. Use this map for server-side redirects when dsmlp-docs.ucsd.edu is decommissioned.",
+  "source": "https://dsmlp-docs.ucsd.edu/sitemap.xml",
+  "generatedFrom": "2026-09-29",
+  "redirects": [
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/",
+      "to": "/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/",
+      "to": "/docs/access/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/datahub-in-the-browser/",
+      "to": "/docs/access/datahub-in-the-browser.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/remote-editor-setup/",
+      "to": "/docs/access/remote-editor-setup.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/sign-in-and-session-problems/",
+      "to": "/docs/access/sign-in-and-session-problems.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/the-login-node/",
+      "to": "/docs/access/the-login-node.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/access/when-access-starts-and-ends/",
+      "to": "/docs/access/when-access-starts-and-ends.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/environments/",
+      "to": "/docs/environments/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/environments/building-a-custom-image/",
+      "to": "/docs/environments/building-a-custom-image.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/environments/customizing-your-environment/",
+      "to": "/docs/environments/customizing-your-environment.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/environments/standard-images/",
+      "to": "/docs/environments/standard-images.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/faculty-research-lab/",
+      "to": "/get-started/faculty-research-lab.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/",
+      "to": "/docs/gpu-access/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/gpu-classes/",
+      "to": "/docs/gpu-access/gpu-classes.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/gpu-hardware/",
+      "to": "/docs/gpu-access/gpu-hardware.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/quotas-and-availability/",
+      "to": "/docs/gpu-access/quotas-and-availability.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/reservations/",
+      "to": "/docs/gpu-access/reservations.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/service-units-and-budgets/",
+      "to": "/docs/gpu-access/service-units-and-budgets.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/what-ends-a-session/",
+      "to": "/docs/gpu-access/what-ends-a-session.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/gpu-access/workloads-by-gpu-class/",
+      "to": "/docs/gpu-access/workloads-by-gpu-class.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/grading/",
+      "to": "/docs/grading/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/grading/choosing-a-grading-tool/",
+      "to": "/docs/grading/choosing-a-grading-tool.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/grading/grading-failures/",
+      "to": "/docs/grading/grading-failures.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/grading/notebook-grading-workflow/",
+      "to": "/docs/grading/notebook-grading-workflow.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/individual-researcher/",
+      "to": "/get-started/individual-researcher.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/instructor-or-ta/",
+      "to": "/get-started/instructor-or-ta.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/overview/",
+      "to": "/about/how-parasol-works.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/",
+      "to": "/docs/reference/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/coming-from-hpc/",
+      "to": "/docs/reference/coming-from-hpc.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/error-messages/",
+      "to": "/docs/reference/error-messages.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/getting-help/",
+      "to": "/docs/reference/getting-help.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/glossary/",
+      "to": "/docs/reference/glossary.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/managing-a-group/",
+      "to": "/docs/reference/managing-a-group.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/policy/",
+      "to": "/docs/reference/policy.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/reservation-events/",
+      "to": "/docs/reference/reservation-events.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/reference/software/",
+      "to": "/docs/reference/software.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/",
+      "to": "/docs/running-jobs/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/checkpointing/",
+      "to": "/docs/running-jobs/checkpointing.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/job-modes-and-limits/",
+      "to": "/docs/running-jobs/job-modes-and-limits.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/kubernetes/",
+      "to": "/docs/running-jobs/kubernetes.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/launch-sh-reference/",
+      "to": "/docs/running-jobs/launch-sh-reference.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/running-jobs/watching-your-job/",
+      "to": "/docs/running-jobs/watching-your-job.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/search/",
+      "to": "/search/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/student-in-a-course/",
+      "to": "/get-started/student-in-a-course.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/student-project/",
+      "to": "/get-started/student-project.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/working-from-the-command-line/",
+      "to": "/get-started/working-from-the-command-line.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/workspaces-and-storage/",
+      "to": "/docs/workspaces-and-storage/index.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/workspaces-and-storage/datasets/",
+      "to": "/docs/workspaces-and-storage/datasets.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/workspaces-and-storage/moving-and-sharing-data/",
+      "to": "/docs/workspaces-and-storage/moving-and-sharing-data.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/workspaces-and-storage/what-a-workspace-is/",
+      "to": "/docs/workspaces-and-storage/what-a-workspace-is.html"
+    },
+    {
+      "from": "https://dsmlp-docs.ucsd.edu/workspaces-and-storage/your-files-and-quotas/",
+      "to": "/docs/workspaces-and-storage/your-files-and-quotas.html"
+    }
+  ]
+}

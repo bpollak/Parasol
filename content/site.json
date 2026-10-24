@@ -1,0 +1,261 @@
+{
+  "name": "PARASOL",
+  "alternateNames": [
+    "Platform for Applied Research, Analytics, Science and Open Learning",
+    "UC San Diego PARASOL",
+    "DSMLP",
+    "Data Science and Machine Learning Platform"
+  ],
+  "origin": "https://parasol.ucsd.edu",
+  "originStatus": "Proposed. The production hostname has not been provisioned; change it here at cutover.",
+  "description": "PARASOL is UC San Diego's shared GPU and data science computing platform for coursework, student projects, and research. It was formerly called DSMLP.",
+  "lastReviewed": "2026-10-24",
+  "supportEmail": "datahub@ucsd.edu",
+  "analytics": {
+    "googleAnalyticsId": null
+  },
+  "docsStatusNotice": "This documentation is in draft and under active review. Figures for the Fall 2026 GPU reservation system are not yet published, and some pages describe behavior that has not been verified against a primary source. Confirm any figure with datahub@ucsd.edu before relying on it.",
+  "navigation": [
+    {
+      "label": "About",
+      "href": "/about/index.html",
+      "items": [
+        {
+          "label": "Why PARASOL",
+          "href": "/about/why-parasol.html"
+        },
+        {
+          "label": "From DSMLP to PARASOL",
+          "href": "/about/from-dsmlp-to-parasol.html"
+        },
+        {
+          "label": "How PARASOL Works",
+          "href": "/about/how-parasol-works.html"
+        }
+      ]
+    },
+    {
+      "label": "Get Started",
+      "href": "/get-started/index.html",
+      "items": [
+        {
+          "label": "Using Datahub in a Course",
+          "href": "/get-started/student-in-a-course.html"
+        },
+        {
+          "label": "Working from the Command Line",
+          "href": "/get-started/working-from-the-command-line.html"
+        },
+        {
+          "label": "Teaching with PARASOL",
+          "href": "/get-started/instructor-or-ta.html"
+        },
+        {
+          "label": "Projects & Independent Study",
+          "href": "/get-started/student-project.html"
+        },
+        {
+          "label": "Research on PARASOL",
+          "href": "/get-started/individual-researcher.html"
+        },
+        {
+          "label": "Setting Up a Research Lab",
+          "href": "/get-started/faculty-research-lab.html"
+        }
+      ]
+    },
+    {
+      "label": "Documentation",
+      "href": "/docs/index.html",
+      "items": [
+        {
+          "label": "Access",
+          "href": "/docs/access/index.html",
+          "items": [
+            {
+              "label": "Datahub in the Browser",
+              "href": "/docs/access/datahub-in-the-browser.html"
+            },
+            {
+              "label": "The Login Node",
+              "href": "/docs/access/the-login-node.html"
+            },
+            {
+              "label": "Remote Editor Setup",
+              "href": "/docs/access/remote-editor-setup.html"
+            },
+            {
+              "label": "Sign-In & Session Problems",
+              "href": "/docs/access/sign-in-and-session-problems.html"
+            },
+            {
+              "label": "When Access Starts & Ends",
+              "href": "/docs/access/when-access-starts-and-ends.html"
+            }
+          ]
+        },
+        {
+          "label": "Workspaces & Storage",
+          "href": "/docs/workspaces-and-storage/index.html",
+          "items": [
+            {
+              "label": "What a Workspace Is and What It Controls",
+              "href": "/docs/workspaces-and-storage/what-a-workspace-is.html"
+            },
+            {
+              "label": "Directories, Quotas & Cleaning Up",
+              "href": "/docs/workspaces-and-storage/your-files-and-quotas.html"
+            },
+            {
+              "label": "Moving & Sharing Data",
+              "href": "/docs/workspaces-and-storage/moving-and-sharing-data.html"
+            },
+            {
+              "label": "Datasets",
+              "href": "/docs/workspaces-and-storage/datasets.html"
+            }
+          ]
+        },
+        {
+          "label": "Running Jobs",
+          "href": "/docs/running-jobs/index.html",
+          "items": [
+            {
+              "label": "launch.sh Reference",
+              "href": "/docs/running-jobs/launch-sh-reference.html"
+            },
+            {
+              "label": "Job Modes, Runtime Limits & Configuration",
+              "href": "/docs/running-jobs/job-modes-and-limits.html"
+            },
+            {
+              "label": "Watching a Running Job",
+              "href": "/docs/running-jobs/watching-your-job.html"
+            },
+            {
+              "label": "Checkpointing & Logging Long Runs",
+              "href": "/docs/running-jobs/checkpointing.html"
+            },
+            {
+              "label": "Direct Kubernetes Use and Session Events",
+              "href": "/docs/running-jobs/kubernetes.html"
+            }
+          ]
+        },
+        {
+          "label": "GPU Access",
+          "href": "/docs/gpu-access/index.html",
+          "items": [
+            {
+              "label": "GPU Classes",
+              "href": "/docs/gpu-access/gpu-classes.html"
+            },
+            {
+              "label": "Workloads by GPU Class",
+              "href": "/docs/gpu-access/workloads-by-gpu-class.html"
+            },
+            {
+              "label": "GPU Hardware & CUDA",
+              "href": "/docs/gpu-access/gpu-hardware.html"
+            },
+            {
+              "label": "Reservations",
+              "href": "/docs/gpu-access/reservations.html"
+            },
+            {
+              "label": "Service Units & Budgets",
+              "href": "/docs/gpu-access/service-units-and-budgets.html"
+            },
+            {
+              "label": "Quotas, Cohorts & Availability",
+              "href": "/docs/gpu-access/quotas-and-availability.html"
+            },
+            {
+              "label": "What Ends a Session",
+              "href": "/docs/gpu-access/what-ends-a-session.html"
+            }
+          ]
+        },
+        {
+          "label": "Environments",
+          "href": "/docs/environments/index.html",
+          "items": [
+            {
+              "label": "Standard Images, Tags, and Pinning",
+              "href": "/docs/environments/standard-images.html"
+            },
+            {
+              "label": "Customizing an Environment",
+              "href": "/docs/environments/customizing-your-environment.html"
+            },
+            {
+              "label": "Building & Publishing a Custom Image",
+              "href": "/docs/environments/building-a-custom-image.html"
+            }
+          ]
+        },
+        {
+          "label": "Grading",
+          "href": "/docs/grading/index.html",
+          "items": [
+            {
+              "label": "Choosing a Grading Tool & Interface",
+              "href": "/docs/grading/choosing-a-grading-tool.html"
+            },
+            {
+              "label": "Notebook Grading Workflow",
+              "href": "/docs/grading/notebook-grading-workflow.html"
+            },
+            {
+              "label": "Common Grading Failures & Recovery",
+              "href": "/docs/grading/grading-failures.html"
+            }
+          ]
+        },
+        {
+          "label": "Reference",
+          "href": "/docs/reference/index.html",
+          "items": [
+            {
+              "label": "Error Messages",
+              "href": "/docs/reference/error-messages.html"
+            },
+            {
+              "label": "Reservation Events",
+              "href": "/docs/reference/reservation-events.html"
+            },
+            {
+              "label": "Getting Help",
+              "href": "/docs/reference/getting-help.html"
+            },
+            {
+              "label": "Glossary",
+              "href": "/docs/reference/glossary.html"
+            },
+            {
+              "label": "Coming from HPC",
+              "href": "/docs/reference/coming-from-hpc.html"
+            },
+            {
+              "label": "Managing a Group",
+              "href": "/docs/reference/managing-a-group.html"
+            },
+            {
+              "label": "Policy",
+              "href": "/docs/reference/policy.html"
+            },
+            {
+              "label": "Software",
+              "href": "/docs/reference/software.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Support",
+      "href": "/support/index.html",
+      "items": []
+    }
+  ]
+}

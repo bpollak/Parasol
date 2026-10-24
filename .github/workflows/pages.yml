@@ -1,0 +1,97 @@
+name: Validate and deploy GitHub Pages
+
+# GitHub Pages is where PARASOL is reviewed before it has a campus home. A push
+# to main publishes the review build; pull requests validate without deploying.
+#
+# Every review page carries noindex,nofollow (SITE_BASE_PATH is set, so the
+# build treats it as non-production), so the Pages copy stays out of search
+# results while people review it.
+#
+# The daily run validates main without deploying. It catches a dead CDN
+# dependency or content going stale between pushes.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "17 14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium for accessibility checks
+        run: npx playwright install --with-deps chromium
+
+      - name: Run unit tests
+        run: npm run test:ux && npm run test:webmcp && npm run test:chrome && npm run test:indexing
+
+      - name: Build project Pages site
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}
+        run: npm run build
+
+      - name: Validate routes, links, chrome, and metadata
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}
+        run: npm run validate
+
+      - name: Check copy against the voice guide
+        run: npm run test:language
+
+      - name: Run site-wide accessibility checks
+        run: npm run test:a11y
+
+      - name: Upload accessibility report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-${{ github.run_id }}
+          path: reports/accessibility.json
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
