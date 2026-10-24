@@ -576,3 +576,9 @@ main#main-content .docs-callout-label > .glyphicon {
   margin-right: 8px;
   top: 2px;
 }
+
+/* A light rule above a hub section that follows another white section, as
+   TritonAI sets one above its Harness section. */
+main#main-content .hub-section-ruled {
+  border-top: 1px solid var(--triton-border);
+}

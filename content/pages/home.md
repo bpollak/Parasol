@@ -35,7 +35,7 @@ landingHub: true
 </div>
 </section>
 
-<section class="hub-section" aria-labelledby="home-usage-heading">
+<section class="hub-section hub-section-ruled" aria-labelledby="home-usage-heading">
 <div class="hub-heading"><p class="home-kicker">2025-26 academic year</p><h2 id="home-usage-heading">More than 140 classes ran on the platform last year</h2></div>
 <ul class="row agent-metric-grid" aria-label="Platform use in the 2025-26 academic year">
 <li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">140+</strong><span class="agent-metric-label">Classes</span><span class="agent-metric-note">From introductory data science to graduate machine learning</span></div></li>
