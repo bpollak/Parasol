@@ -12,10 +12,11 @@
 // Output: src/site/_images/hero/<name>.webp at 2500x625, the size the
 // TritonAI hero banners use. Motifs listed in SLIDES are also drawn as home
 // page rotator slides, slide-<name>.webp at 2500x920 and slide-<name>-828.webp,
-// the sizes the TritonAI homepage carousel uses. Requires `cwebp`
-// (brew install webp).
+// the sizes the TritonAI homepage carousel uses. Every motif is also drawn as a
+// share card, src/site/_images/social/<name>.jpg at 1200x630, with the label
+// from `socialCards` in content/site.json. Requires `cwebp` (brew install webp).
 import { execFileSync } from "node:child_process";
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
@@ -29,7 +30,23 @@ const SLIDE_MOBILE_WIDTH = 828;
 const SLIDE_SCALE = 1.3;
 const SLIDE_CENTER = [1800, 470];
 const SLIDES = ["home", "gpu", "rename"];
+// Share cards are 1200x630, the size link previews use. The motif is drawn on
+// a canvas of the same proportions at banner width, then scaled down.
+const SOCIAL_WIDTH = 1200;
+const SOCIAL_HEIGHT = 630;
+const SOCIAL_CANVAS_HEIGHT = Math.round((WIDTH * SOCIAL_HEIGHT) / SOCIAL_WIDTH);
 const OUTPUT_DIR = path.resolve("src/site/_images/hero");
+const SOCIAL_DIR = path.resolve("src/site/_images/social");
+const SOCIAL_LABELS = JSON.parse(await readFile(path.resolve("content/site.json"), "utf8")).socialCards || {};
+
+// The canvas frame() draws on. A motif keeps its banner coordinates and is
+// scaled and moved into place on the taller canvases.
+const CANVASES = {
+  banner: { height: HEIGHT },
+  slide: { height: SLIDE_HEIGHT, scale: SLIDE_SCALE, center: SLIDE_CENTER },
+  social: { height: SOCIAL_CANVAS_HEIGHT, scale: 1.75, center: [1880, 690] },
+};
+let canvas = CANVASES.banner;
 
 const NAVY_DEEP = "#0a1a36";
 const NAVY = "#0e2650";
@@ -56,7 +73,7 @@ function slab(cx, cy, w, d, t, { fill = "url(#slabTop)", opacity = 0.85, edge = 
 // Fine flowing lines that run under every motif, as on the TritonAI heroes.
 function flowLines(x0, y0, x1, y1, count = 9, spread = 70, opacity = 0.28) {
   // A slide shifts the motif left, so lines that ran off the edge must reach further.
-  if (drawingSlide && x1 >= WIDTH) x1 += 300;
+  if (canvas.scale && x1 >= WIDTH) x1 += 300;
   let out = "";
   for (let index = 0; index < count; index += 1) {
     const offset = (index - (count - 1) / 2) * (spread / count);
@@ -137,14 +154,11 @@ function grid(height, opacity = 0.05) {
   return `<g mask="url(#fadeLeft)">${out}</g><mask id="fadeLeft"><linearGradient id="fadeGrad" x1="0" x2="1"><stop offset="0" stop-color="#000"/><stop offset="0.6" stop-color="#fff"/></linearGradient><rect x="1300" y="0" width="1200" height="${height}" fill="url(#fadeGrad)"/></mask>`;
 }
 
-// Set while drawing a rotator slide; frame() then uses the slide canvas.
-let drawingSlide = false;
-
 function frame(motif, glow = [1950, 330, 560]) {
   const [gx, gy, gr] = glow;
-  const height = drawingSlide ? SLIDE_HEIGHT : HEIGHT;
-  const transform = drawingSlide
-    ? ` transform="translate(${round(SLIDE_CENTER[0] - gx * SLIDE_SCALE)} ${round(SLIDE_CENTER[1] - gy * SLIDE_SCALE)}) scale(${SLIDE_SCALE})"`
+  const { height, scale, center } = canvas;
+  const transform = scale
+    ? ` transform="translate(${round(center[0] - gx * scale)} ${round(center[1] - gy * scale)}) scale(${scale})"`
     : "";
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${height}" viewBox="0 0 ${WIDTH} ${height}">
     ${defs()}
@@ -317,6 +331,7 @@ const only = process.argv.slice(2);
 const names = only.length ? only : Object.keys(HEROES);
 const workDir = path.join(os.tmpdir(), `parasol-heroes-${process.pid}`);
 await mkdir(OUTPUT_DIR, { recursive: true });
+await mkdir(SOCIAL_DIR, { recursive: true });
 await mkdir(workDir, { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: WIDTH, height: SLIDE_HEIGHT } });
@@ -330,13 +345,40 @@ async function render(name, file, height, resize = []) {
   process.stdout.write(`${path.relative(process.cwd(), webp)}\n`);
 }
 
+const escapeText = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+// A share card: the motif with the site name, the section label, and the
+// campus name set in the Decorator typefaces on the clear left side.
+async function renderSocial(name) {
+  const label = SOCIAL_LABELS[name];
+  if (!label) throw new Error(`No socialCards label for ${name} in content/site.json`);
+  const svg = HEROES[name]().replace(/width="\d+" height="\d+"/, `width="${SOCIAL_WIDTH}" height="${SOCIAL_HEIGHT}"`);
+  await page.setViewportSize({ width: SOCIAL_WIDTH, height: SOCIAL_HEIGHT });
+  await page.setContent(`<html><head><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Teko:wght@600&display=block"><style>
+    body { margin: 0; background: ${NAVY_DEEP}; }
+    .card { height: ${SOCIAL_HEIGHT}px; position: relative; width: ${SOCIAL_WIDTH}px; }
+    .card svg { display: block; left: 0; position: absolute; top: 0; }
+    .text { bottom: 64px; color: #fff; left: 72px; position: absolute; width: 560px; }
+    .name { font: 600 132px/0.82 Teko, sans-serif; letter-spacing: 1px; }
+    .label { color: #d6e8f7; font: 700 38px/1.18 Roboto, sans-serif; margin-top: 18px; }
+    .campus { border-top: 4px solid ${GOLD}; color: #fff; font: 400 24px/1 Roboto, sans-serif; margin-top: 34px; padding-top: 18px; width: 240px; }
+  </style></head><body><div class="card">${svg}<div class="text"><div class="name">PARASOL</div><div class="label">${escapeText(label)}</div><div class="campus">UC San Diego</div></div></div></body></html>`, { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  const jpg = path.join(SOCIAL_DIR, `${name}.jpg`);
+  await page.screenshot({ path: jpg, type: "jpeg", quality: 86, clip: { x: 0, y: 0, width: SOCIAL_WIDTH, height: SOCIAL_HEIGHT } });
+  await page.setViewportSize({ width: WIDTH, height: SLIDE_HEIGHT });
+  process.stdout.write(`${path.relative(process.cwd(), jpg)}\n`);
+}
+
 try {
   for (const name of names) {
     if (!HEROES[name]) throw new Error(`Unknown hero: ${name}. Known: ${Object.keys(HEROES).join(", ")}`);
-    drawingSlide = false;
+    canvas = CANVASES.banner;
     await render(name, name, HEIGHT);
+    canvas = CANVASES.social;
+    await renderSocial(name);
     if (!SLIDES.includes(name)) continue;
-    drawingSlide = true;
+    canvas = CANVASES.slide;
     await render(name, `slide-${name}`, SLIDE_HEIGHT);
     await render(name, `slide-${name}-${SLIDE_MOBILE_WIDTH}`, SLIDE_HEIGHT, ["-resize", String(SLIDE_MOBILE_WIDTH), "0"]);
   }

@@ -1,7 +1,7 @@
 ---
 title: "GPU Access"
 path: /docs/gpu-access/index.html
-description: "From Fall 2026, a reservation system manages GPU access on PARASOL."
+description: "From Fall 2026, a reservation system manages GPU access on PARASOL. Choose a GPU class, reserve time, and plan the Service Units your sessions spend."
 eyebrow: "GPU Access"
 lastReviewed: 2026-09-29
 audiences: [students, instructors, researchers]

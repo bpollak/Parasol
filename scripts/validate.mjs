@@ -159,6 +159,7 @@ const brokenFragments = [];
 const accessibility = [];
 const metadata = [];
 const metadataTitles = new Map();
+const metadataDescriptions = new Map();
 const performance = [];
 const navigation = [];
 const decorator = [];
@@ -572,6 +573,26 @@ for (const page of htmlFiles) {
   const metaDescription = $("meta[name='description']").attr("content") || "";
   if (!metaDescription) metadata.push({ page: route, issue: "Missing description" });
   else if (metaDescription.length > 155) metadata.push({ page: route, issue: `Description exceeds 155 characters: ${metaDescription.length}` });
+  // Search engines show about 70 to 155 characters; a shorter one wastes the
+  // snippet. Pages kept out of search by their own robots rule are exempt.
+  const indexable = !/noindex/i.test(seoContent.routes?.[route]?.robots || "") && route !== "/404.html";
+  if (indexable && metaDescription) {
+    if (metaDescription.length < 70) metadata.push({ page: route, issue: `Description is shorter than 70 characters: ${metaDescription.length}` });
+    if (!metadataDescriptions.has(metaDescription)) metadataDescriptions.set(metaDescription, []);
+    metadataDescriptions.get(metaDescription).push(route);
+  }
+  if (indexable && title === brand) metadata.push({ page: route, issue: `Title is only the site name; say what the page is` });
+  if ($("meta[property='og:locale']").attr("content") !== "en_US") metadata.push({ page: route, issue: "Missing og:locale en_US" });
+  // Link previews need a raster card at 1200x630 that exists in the build.
+  const ogImage = $("meta[property='og:image']").attr("content") || "";
+  if (ogImage) {
+    if (!/\.(?:jpe?g|png)$/i.test(ogImage)) metadata.push({ page: route, issue: `Share image must be JPEG or PNG: ${ogImage}` });
+    if ($("meta[property='og:image:width']").attr("content") !== "1200" || $("meta[property='og:image:height']").attr("content") !== "630") {
+      metadata.push({ page: route, issue: "Share image must declare 1200x630" });
+    }
+    const ogImagePath = ogImage.startsWith(`${OFFICIAL_ORIGIN}/`) ? ogImage.slice(OFFICIAL_ORIGIN.length) : null;
+    if (!ogImagePath || !(await localAssetSize(ogImagePath, page))) metadata.push({ page: route, issue: `Share image is not in the build: ${ogImage}` });
+  }
   for (const property of ["og:title", "og:description", "og:url", "og:site_name", "og:image", "og:image:alt"]) {
     if (!$(`meta[property='${property}']`).attr("content")) metadata.push({ page: route, issue: `Missing ${property}` });
   }
@@ -590,6 +611,10 @@ for (const page of htmlFiles) {
       else {
         if (pageSchema.inLanguage !== "en-US") metadata.push({ page: route, issue: "JSON-LD must identify en-US content" });
         if (pageSchema.publisher?.["@id"] !== `${OFFICIAL_ORIGIN}/#organization`) metadata.push({ page: route, issue: "JSON-LD publisher must reference UC San Diego" });
+        if (pageSchema["@type"] === "TechArticle") {
+          if (!pageSchema.headline) metadata.push({ page: route, issue: "TechArticle JSON-LD is missing a headline" });
+          if ($("meta[property='og:type']").attr("content") !== "article") metadata.push({ page: route, issue: "A documentation article must set og:type article" });
+        }
       }
       if (route === "/") {
         const website = schemaNodes.find((node) => node?.["@type"] === "WebSite");
@@ -603,6 +628,9 @@ for (const page of htmlFiles) {
 
 for (const [title, routes] of metadataTitles) {
   if (routes.length > 1) metadata.push({ page: routes.join(", "), issue: `Duplicate title: ${title}` });
+}
+for (const [description, routes] of metadataDescriptions) {
+  if (routes.length > 1) metadata.push({ page: routes.join(", "), issue: `Duplicate description: ${description.slice(0, 60)}` });
 }
 
 {

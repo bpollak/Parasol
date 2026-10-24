@@ -1,7 +1,7 @@
 ---
 title: "Projects & Independent Study"
 path: /get-started/student-project.html
-description: "This page is for work on PARASOL outside a scheduled course."
+description: "For independent study, capstones, and club or team projects on PARASOL outside a scheduled course: who is eligible and how to request access."
 eyebrow: "Get started"
 lastReviewed: 2026-09-29
 audiences: [students, researchers]

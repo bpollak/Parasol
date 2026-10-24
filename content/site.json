@@ -276,5 +276,23 @@
     "/search/": "/_images/hero/docs.webp",
     "/404.html": "/_images/hero/home.webp"
   },
-  "heroImagesNote": "Hero art by path prefix; the longest matching prefix wins and a page's own bannerImage overrides it. Regenerate the art with `node scripts/render-heroes.mjs`."
+  "heroImagesNote": "Hero art by path prefix; the longest matching prefix wins and a page's own bannerImage overrides it. Regenerate the art with `node scripts/render-heroes.mjs`.",
+  "socialCards": {
+    "home": "GPU and data science computing for courses and research",
+    "about": "About PARASOL",
+    "why": "Why PARASOL",
+    "rename": "From DSMLP to PARASOL",
+    "works": "How PARASOL works",
+    "start": "Get started",
+    "docs": "Documentation",
+    "access": "Access",
+    "storage": "Workspaces and storage",
+    "jobs": "Running jobs",
+    "gpu": "GPU access",
+    "environments": "Environments",
+    "grading": "Grading",
+    "reference": "Reference",
+    "support": "Support"
+  },
+  "socialCardsNote": "Share-card label for each hero motif. scripts/render-heroes.mjs draws the cards into src/site/_images/social/; the build picks a page's card from its section's hero."
 }

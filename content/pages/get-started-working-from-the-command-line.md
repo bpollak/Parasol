@@ -1,7 +1,7 @@
 ---
 title: "Working from the Command Line"
 path: /get-started/working-from-the-command-line.html
-description: "This page is for reaching a course environment from a terminal."
+description: "For students whose course needs a terminal: reach a course environment over SSH, launch with launch.sh, choose a GPU class, and run batch jobs."
 eyebrow: "Get started"
 lastReviewed: 2026-09-29
 audiences: [students]

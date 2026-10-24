@@ -360,6 +360,17 @@ function renderPageHelp(page) {
   return `<aside class="docs-page-help" aria-label="Help with this page"><p><strong>Need help with something on this page?</strong> Email <a href="mailto:${escapeHtml(site.supportEmail)}">${escapeHtml(site.supportEmail)}</a> or see <a href="/support/index.html">Support</a>.</p></aside>`;
 }
 
+// Share cards are drawn at the size link previews expect.
+const SOCIAL_CARD_WIDTH = 1200;
+const SOCIAL_CARD_HEIGHT = 630;
+
+// A page's share card is the one drawn from its section's hero motif.
+function socialCardFor(route) {
+  const name = (heroImageFor(route) || "").match(/\/hero\/([\w-]+)\.webp$/)?.[1];
+  const label = name && site.socialCards?.[name];
+  return label ? { image: `/_images/social/${name}.jpg`, alt: `${site.name}: ${label}, UC San Diego.` } : null;
+}
+
 // content/site.json maps path prefixes to hero art; the longest match wins.
 function heroImageFor(route) {
   const normalized = route === "/index.html" ? "/" : route;
@@ -692,20 +703,32 @@ function transformHtml(html, relativePath, context) {
   const description = seo.description || generated?.description || $("meta[name='DESCRIPTION']").attr("content") || context.site.description;
   const canonicalPath = generated?.canonicalUrl || seo.canonicalUrl || route;
   const canonicalUrl = new URL(canonicalPath, OFFICIAL_ORIGIN).href;
-  const socialImagePath = seo.socialImage || generated?.socialImage || generated?.bannerImage || context.seo.defaultSocialImage;
+  // A page shares its section's card, drawn from the same motif as its hero.
+  const socialCard = socialCardFor(generated?.path || route);
+  const socialImagePath = seo.socialImage || generated?.socialImage || socialCard?.image || context.seo.defaultSocialImage;
   const socialImageUrl = new URL(socialImagePath, OFFICIAL_ORIGIN).href;
-  const socialImageAlt = seo.socialImageAlt || generated?.imageAlt || context.seo.defaultSocialImageAlt;
+  const socialImageAlt = seo.socialImageAlt || generated?.imageAlt || socialCard?.alt || context.seo.defaultSocialImageAlt;
+  const socialImageType = /\.png$/i.test(socialImagePath) ? "image/png" : /\.webp$/i.test(socialImagePath) ? "image/webp" : "image/jpeg";
+  // Ported documentation pages are articles; hubs and the home page are not.
+  const isArticle = generated?.format === "html";
+  const modified = seo.lastModified || generated?.lastReviewed || context.site.lastReviewed;
 
   $("title").text(title === context.site.name ? title : `${title} | ${context.site.name}`);
   upsertMeta($, "meta[name='description'], meta[name='DESCRIPTION']", { name: "description", content: description });
   upsertMeta($, "meta[name='PAGETITLE']", { name: "PAGETITLE", content: title });
   upsertMeta($, "meta[property='og:title']", { property: "og:title", content: title });
   upsertMeta($, "meta[property='og:description']", { property: "og:description", content: description });
-  upsertMeta($, "meta[property='og:type']", { property: "og:type", content: "website" });
+  upsertMeta($, "meta[property='og:type']", { property: "og:type", content: isArticle ? "article" : "website" });
+  upsertMeta($, "meta[property='og:locale']", { property: "og:locale", content: "en_US" });
+  $("meta[property='article:modified_time']").remove();
+  if (isArticle) $("head").append(`<meta property="article:modified_time" content="${escapeHtml(modified)}">`);
   upsertMeta($, "meta[property='og:url']", { property: "og:url", content: canonicalUrl });
   upsertMeta($, "meta[property='og:site_name']", { property: "og:site_name", content: context.site.name });
   upsertMeta($, "meta[property='og:image']", { property: "og:image", content: socialImageUrl });
   upsertMeta($, "meta[property='og:image:alt']", { property: "og:image:alt", content: socialImageAlt });
+  upsertMeta($, "meta[property='og:image:type']", { property: "og:image:type", content: socialImageType });
+  upsertMeta($, "meta[property='og:image:width']", { property: "og:image:width", content: String(SOCIAL_CARD_WIDTH) });
+  upsertMeta($, "meta[property='og:image:height']", { property: "og:image:height", content: String(SOCIAL_CARD_HEIGHT) });
   upsertMeta($, "meta[name='twitter:card']", { name: "twitter:card", content: "summary_large_image" });
   upsertMeta($, "meta[name='twitter:title']", { name: "twitter:title", content: title });
   upsertMeta($, "meta[name='twitter:description']", { name: "twitter:description", content: description });
@@ -753,8 +776,9 @@ function transformHtml(html, relativePath, context) {
     image: socialImageUrl,
     inLanguage: "en-US",
     publisher: { "@id": organizationId },
-    dateModified: seo.lastModified || generated?.lastReviewed || context.site.lastReviewed,
+    dateModified: modified,
   };
+  if (pageSchema["@type"] === "TechArticle") pageSchema.headline = title;
   if (isWebsite) pageSchema.alternateName = context.site.alternateNames;
   else pageSchema.isPartOf = { "@type": "WebSite", "@id": websiteId, name: context.site.name, url: OFFICIAL_ORIGIN };
   const organizationSchema = isWebsite

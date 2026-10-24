@@ -1,8 +1,11 @@
 {
   "schemaVersion": 1,
-  "defaultSocialImage": "/_images/hero/home.webp",
-  "defaultSocialImageAlt": "PARASOL: a canopy of translucent panels over a row of GPU servers, drawn in blue and cyan on navy.",
+  "defaultSocialImage": "/_images/social/home.jpg",
+  "defaultSocialImageAlt": "PARASOL: GPU and data science computing for courses and research, UC San Diego. A parasol canopy over a row of GPU servers, drawn in blue on navy.",
   "routes": {
+    "/": {
+      "title": "GPU and Data Science Computing at UC San Diego"
+    },
     "/search/index.html": {
       "robots": "noindex,follow"
     }

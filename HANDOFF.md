@@ -45,6 +45,7 @@ SITE_BASE_PATH=/Parasol npm run build && SITE_BASE_PATH=/Parasol npm run validat
 - **Add a page**: create the file, add it to `content/site.json`, rebuild. The validator fails on a page no menu lists.
 - **Hero art**: add or adjust a motif in `scripts/render-heroes.mjs`, run `node scripts/render-heroes.mjs <name>` (needs `cwebp`), and map a path prefix to it under `heroImages` in `content/site.json`.
 - **Banners** carry an eyebrow of a word or two and the title, nothing else. Put taglines and framing in the page body; the validator fails a banner with a description under the title.
+- **Share cards**: every hero motif is also drawn as a 1200x630 JPEG in `src/site/_images/social/`, labeled from `socialCards` in `content/site.json`. A page shares its section's card. The validator checks titles, description length and uniqueness, `og:locale`, the card size, and article metadata on documentation pages.
 - **Home rotator**: edit slides in `content/home/hero.json`. To draw a new slide, add the motif name to `SLIDES` in `scripts/render-heroes.mjs` and re-run it. The markup, `home-hero.js`, and the validator checks are ported from the TritonAI site; keep them in step with it.
 - **The validator** checks every internal link and `#fragment`, the redirect map, the old "DSMLP" name in prose, metadata, chrome integrity, and more. `VALIDATE_OFFLINE=1` skips the CDN reachability checks.
 
