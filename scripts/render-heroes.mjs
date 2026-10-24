@@ -6,11 +6,14 @@
 // content, fine cyan lines, and a single gold accent. The art is drawn as SVG
 // here and rasterized with the Chromium that Playwright already installs.
 //
-//   node scripts/render-heroes.mjs            # every hero
-//   node scripts/render-heroes.mjs gpu-access # one hero
+//   node scripts/render-heroes.mjs     # every hero and rotator slide
+//   node scripts/render-heroes.mjs gpu # one hero, and its slide if it has one
 //
 // Output: src/site/_images/hero/<name>.webp at 2500x625, the size the
-// TritonAI hero banners use. Requires `cwebp` (brew install webp).
+// TritonAI hero banners use. Motifs listed in SLIDES are also drawn as home
+// page rotator slides, slide-<name>.webp at 2500x920 and slide-<name>-828.webp,
+// the sizes the TritonAI homepage carousel uses. Requires `cwebp`
+// (brew install webp).
 import { execFileSync } from "node:child_process";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -19,6 +22,13 @@ import { chromium } from "playwright";
 
 const WIDTH = 2500;
 const HEIGHT = 625;
+// The homepage rotator frames each slide at 125:46. A slide redraws a motif
+// on that taller canvas, enlarged and centered behind the right of the text.
+const SLIDE_HEIGHT = 920;
+const SLIDE_MOBILE_WIDTH = 828;
+const SLIDE_SCALE = 1.3;
+const SLIDE_CENTER = [1800, 470];
+const SLIDES = ["home", "gpu", "rename"];
 const OUTPUT_DIR = path.resolve("src/site/_images/hero");
 
 const NAVY_DEEP = "#0a1a36";
@@ -45,6 +55,8 @@ function slab(cx, cy, w, d, t, { fill = "url(#slabTop)", opacity = 0.85, edge = 
 
 // Fine flowing lines that run under every motif, as on the TritonAI heroes.
 function flowLines(x0, y0, x1, y1, count = 9, spread = 70, opacity = 0.28) {
+  // A slide shifts the motif left, so lines that ran off the edge must reach further.
+  if (drawingSlide && x1 >= WIDTH) x1 += 300;
   let out = "";
   for (let index = 0; index < count; index += 1) {
     const offset = (index - (count - 1) / 2) * (spread / count);
@@ -118,21 +130,28 @@ function defs() {
 }
 
 // A faint grid on the right half, the "cluster" texture shared by every hero.
-function grid(opacity = 0.05) {
+function grid(height, opacity = 0.05) {
   let out = "";
-  for (let x = 1300; x <= WIDTH; x += 50) out += `<line x1="${x}" y1="0" x2="${x}" y2="${HEIGHT}" stroke="#7fc8ff" stroke-opacity="${opacity}"/>`;
-  for (let y = 25; y <= HEIGHT; y += 50) out += `<line x1="1300" y1="${y}" x2="${WIDTH}" y2="${y}" stroke="#7fc8ff" stroke-opacity="${opacity}"/>`;
-  return `<g mask="url(#fadeLeft)">${out}</g><mask id="fadeLeft"><linearGradient id="fadeGrad" x1="0" x2="1"><stop offset="0" stop-color="#000"/><stop offset="0.6" stop-color="#fff"/></linearGradient><rect x="1300" y="0" width="1200" height="${HEIGHT}" fill="url(#fadeGrad)"/></mask>`;
+  for (let x = 1300; x <= WIDTH; x += 50) out += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="#7fc8ff" stroke-opacity="${opacity}"/>`;
+  for (let y = 25; y <= height; y += 50) out += `<line x1="1300" y1="${y}" x2="${WIDTH}" y2="${y}" stroke="#7fc8ff" stroke-opacity="${opacity}"/>`;
+  return `<g mask="url(#fadeLeft)">${out}</g><mask id="fadeLeft"><linearGradient id="fadeGrad" x1="0" x2="1"><stop offset="0" stop-color="#000"/><stop offset="0.6" stop-color="#fff"/></linearGradient><rect x="1300" y="0" width="1200" height="${height}" fill="url(#fadeGrad)"/></mask>`;
 }
+
+// Set while drawing a rotator slide; frame() then uses the slide canvas.
+let drawingSlide = false;
 
 function frame(motif, glow = [1950, 330, 560]) {
   const [gx, gy, gr] = glow;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
+  const height = drawingSlide ? SLIDE_HEIGHT : HEIGHT;
+  const transform = drawingSlide
+    ? ` transform="translate(${round(SLIDE_CENTER[0] - gx * SLIDE_SCALE)} ${round(SLIDE_CENTER[1] - gy * SLIDE_SCALE)}) scale(${SLIDE_SCALE})"`
+    : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${height}" viewBox="0 0 ${WIDTH} ${height}">
     ${defs()}
-    <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#bg)"/>
-    <ellipse cx="${gx}" cy="${gy}" rx="${gr}" ry="${gr * 0.62}" fill="url(#glow)"/>
-    ${grid()}
-    ${motif}
+    <rect width="${WIDTH}" height="${height}" fill="url(#bg)"/>
+    <ellipse cx="${gx}" cy="${gy}" rx="${gr}" ry="${gr * 0.62}" fill="url(#glow)"${transform}/>
+    ${grid(height)}
+    <g${transform}>${motif}</g>
   </svg>`;
 }
 
@@ -300,16 +319,26 @@ const workDir = path.join(os.tmpdir(), `parasol-heroes-${process.pid}`);
 await mkdir(OUTPUT_DIR, { recursive: true });
 await mkdir(workDir, { recursive: true });
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: WIDTH, height: HEIGHT } });
+const page = await browser.newPage({ viewport: { width: WIDTH, height: SLIDE_HEIGHT } });
+
+async function render(name, file, height, resize = []) {
+  await page.setContent(`<html><body style="margin:0;background:${NAVY_DEEP}">${HEROES[name]()}</body></html>`);
+  const png = path.join(workDir, `${file}.png`);
+  await page.screenshot({ path: png, clip: { x: 0, y: 0, width: WIDTH, height } });
+  const webp = path.join(OUTPUT_DIR, `${file}.webp`);
+  execFileSync("cwebp", ["-quiet", "-q", "82", ...resize, png, "-o", webp]);
+  process.stdout.write(`${path.relative(process.cwd(), webp)}\n`);
+}
+
 try {
   for (const name of names) {
     if (!HEROES[name]) throw new Error(`Unknown hero: ${name}. Known: ${Object.keys(HEROES).join(", ")}`);
-    await page.setContent(`<html><body style="margin:0;background:${NAVY_DEEP}">${HEROES[name]()}</body></html>`);
-    const png = path.join(workDir, `${name}.png`);
-    await page.screenshot({ path: png, clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT } });
-    const webp = path.join(OUTPUT_DIR, `${name}.webp`);
-    execFileSync("cwebp", ["-quiet", "-q", "82", png, "-o", webp]);
-    process.stdout.write(`${path.relative(process.cwd(), webp)}\n`);
+    drawingSlide = false;
+    await render(name, name, HEIGHT);
+    if (!SLIDES.includes(name)) continue;
+    drawingSlide = true;
+    await render(name, `slide-${name}`, SLIDE_HEIGHT);
+    await render(name, `slide-${name}-${SLIDE_MOBILE_WIDTH}`, SLIDE_HEIGHT, ["-resize", String(SLIDE_MOBILE_WIDTH), "0"]);
   }
 } finally {
   await browser.close();

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "owner": "IT Services, Datahub team",
+  "source": "The PARASOL home page and the DSMLP documentation (2026-09-29 build)",
+  "lastReviewed": "2026-10-24",
+  "rotationIntervalMs": 7000,
+  "imageNote": "Slide art is decorative and carries empty alt text. Regenerate it with `node scripts/render-heroes.mjs`; the motifs drawn as slides are listed in SLIDES there.",
+  "slides": [
+    {
+      "id": "parasol",
+      "title": "PARASOL",
+      "accent": "GPU computing for UC San Diego",
+      "description": "Jupyter, RStudio, and GPUs for coursework, student projects, and research. Open it in your browser through Datahub or from a terminal.",
+      "image": "/_images/hero/slide-home.webp",
+      "mobileImage": "/_images/hero/slide-home-828.webp",
+      "link": "/get-started/index.html",
+      "linkLabel": "Find your starting page"
+    },
+    {
+      "id": "gpu-reservations",
+      "title": "GPUs on reservation",
+      "accent": "New for fall 2026",
+      "description": "Book a GPU window ahead of time, or launch on demand and the system creates a lease for you. Both draw on your workspace's Service Unit budget.",
+      "image": "/_images/hero/slide-gpu.webp",
+      "mobileImage": "/_images/hero/slide-gpu-828.webp",
+      "link": "/docs/gpu-access/reservations.html",
+      "linkLabel": "How reservations work"
+    },
+    {
+      "id": "from-dsmlp",
+      "title": "Formerly DSMLP",
+      "accent": "Same platform, new name",
+      "description": "Your sign-in, your files, and the Datahub address are the same as before. Every DSMLP documentation page now lives here.",
+      "image": "/_images/hero/slide-rename.webp",
+      "mobileImage": "/_images/hero/slide-rename-828.webp",
+      "link": "/about/from-dsmlp-to-parasol.html",
+      "linkLabel": "What the new name changes"
+    }
+  ]
+}

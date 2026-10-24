@@ -3,7 +3,6 @@ title: Support
 path: /support/index.html
 description: Who to contact about PARASOL, Datahub, or the Research Cluster, how to book a consultation, and what to include so a ticket can be resolved quickly.
 eyebrow: Support
-heroDescription: Start with the contact for your topic. Students in a course should ask their instructor or TA first.
 lastReviewed: 2026-10-24
 audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation overview "Support" and Getting Help (2026-09-29 build)
@@ -12,7 +11,7 @@ landingHub: true
 ---
 
 <section class="hub-section hub-section-intro" aria-labelledby="support-contacts-heading">
-<div class="hub-heading"><p class="home-kicker">Contacts</p><h2 id="support-contacts-heading">Who to ask</h2></div>
+<div class="hub-heading"><p class="home-kicker">Contacts</p><h2 id="support-contacts-heading">Who to ask</h2><p>Start with the contact for your topic. Students in a course should ask their instructor or TA first.</p></div>
 <div class="table-responsive">
 <table class="table table-striped">
 <thead><tr><th scope="col">Your question is about</th><th scope="col">Contact</th></tr></thead>

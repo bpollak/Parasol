@@ -3,7 +3,6 @@ title: Documentation
 path: /docs/index.html
 description: PARASOL technical documentation by topic, covering access, storage, running jobs, GPU reservations, software environments, grading, and reference.
 eyebrow: Documentation
-heroDescription: Detail that applies to more than one kind of user lives here, organized by subject. The Get Started guides link into it.
 lastReviewed: 2026-10-24
 audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation index (2026-09-29 build)
@@ -14,7 +13,7 @@ landingHub: true
 
 <!-- AGENT_SECTION: ux-docs-topics -->
 <section class="hub-section hub-section-intro" aria-labelledby="docs-topics-heading">
-<div class="hub-heading"><p class="home-kicker">Browse by topic</p><h2 id="docs-topics-heading">Technical documentation</h2><p>New to the platform? Read <a href="/about/how-parasol-works.html">How PARASOL Works</a> first, or pick a guide for your role under <a href="/get-started/index.html">Get Started</a>.</p></div>
+<div class="hub-heading"><p class="home-kicker">Browse by topic</p><h2 id="docs-topics-heading">Technical documentation</h2><p>Detail that applies to more than one kind of user lives here, organized by subject. The Get Started guides link into it.</p><p>New to the platform? Read <a href="/about/how-parasol-works.html">How PARASOL Works</a> first, or pick a guide for your role under <a href="/get-started/index.html">Get Started</a>.</p></div>
 <div class="row hub-action-grid hub-action-grid-three">
 <div class="col-md-4"><article class="panel panel-default hub-action-card"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span><h3>Access</h3><p>Datahub in the browser, the login node, remote editor setup, sign-in and session problems, and when access starts and ends.</p><a href="/docs/access/index.html">Access <span aria-hidden="true">→</span></a></article></div>
 <div class="col-md-4"><article class="panel panel-default hub-action-card"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span><h3>Workspaces and Storage</h3><p>What a workspace controls, directories and quotas, moving and sharing data, and datasets.</p><a href="/docs/workspaces-and-storage/index.html">Workspaces and storage <span aria-hidden="true">→</span></a></article></div>

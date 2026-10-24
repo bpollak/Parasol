@@ -3,7 +3,6 @@ title: About PARASOL
 path: /about/index.html
 description: What PARASOL is, who it serves, who runs it, and how it grew out of the Data Science and Machine Learning Platform (DSMLP).
 eyebrow: About
-heroDescription: PARASOL stands for Platform for Applied Research, Analytics, Science and Open Learning.
 lastReviewed: 2026-10-24
 audiences: [students, instructors, researchers, faculty, leaders]
 source: DSMLP documentation overview (2026-09-29 build) and the Halıcıoğlu School PARASOL announcement draft of 2026-10-28
@@ -18,7 +17,7 @@ landingHub: true
 <h2 id="about-intro-heading">A shared cluster for teaching and learning with data</h2>
 <p class="hub-lede">PARASOL is the computing platform behind Datahub. Students open Jupyter or RStudio in a browser, and the session runs in a container on a cluster of CPUs and GPUs that UC San Diego operates on campus.</p>
 <p>Courses use it from introductory data science to graduate machine learning, and in biology, music, the social sciences, and public health. The same cluster runs research outside a course, where it is also called the Research Cluster.</p>
-<p>Until fall 2026 the platform was called the Data Science and Machine Learning Platform, or DSMLP. The service did not change with the name.</p>
+<p>Until fall 2026 the platform was called the Data Science and Machine Learning Platform, or DSMLP. PARASOL stands for Platform for Applied Research, Analytics, Science and Open Learning. The service did not change with the name.</p>
 </div>
 <div class="col-md-5 hub-split-media">
 <aside class="dsmlp-resource-panel" aria-labelledby="about-numbers-heading"><p class="home-kicker">2025-26 academic year</p><h3 id="about-numbers-heading">Who used the platform</h3><ul><li>More than 140 classes</li><li>75 instructors</li><li>18,000 student enrollments</li></ul></aside>

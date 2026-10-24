@@ -259,7 +259,6 @@
     }
   ],
   "heroImages": {
-    "/": "/_images/hero/home.webp",
     "/about/": "/_images/hero/about.webp",
     "/about/why-parasol.html": "/_images/hero/why.webp",
     "/about/from-dsmlp-to-parasol.html": "/_images/hero/rename.webp",

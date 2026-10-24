@@ -9,6 +9,7 @@ const SOURCE_DIR = path.resolve("src/site");
 const CONTENT_DIR = path.resolve("content");
 const PAGE_DIR = path.join(CONTENT_DIR, "pages");
 const SEO_FILE = path.join(CONTENT_DIR, "seo.json");
+const HOME_HERO_FILE = path.join(CONTENT_DIR, "home/hero.json");
 const FACTS_FILE = path.join(CONTENT_DIR, "facts/public-facts.json");
 const REDIRECTS_FILE = path.join(CONTENT_DIR, "redirects/dsmlp-docs.json");
 const SHELL_FILE = path.join(SOURCE_DIR, "_shell.html");
@@ -372,6 +373,40 @@ function heroImageFor(route) {
   return match ? site.heroImages[match] : null;
 }
 
+// The homepage rotator, ported from the TritonAI site's renderHomeHero so the
+// two sites share one carousel structure, playback control, and validator.
+function renderHomeHero(hero) {
+  const multipleSlides = hero.slides.length > 1;
+  const indicators = multipleSlides ? hero.slides
+    .map(
+      (_, index) =>
+        `<li aria-hidden="true" class="${index === 0 ? "active" : ""}" data-slide-to="${index}" data-target="#heroslider"></li>`,
+    )
+    .join("") : "";
+  const slides = hero.slides
+    .map((slide, index) => {
+      const accent = slide.accent ? `<strong>${escapeHtml(slide.accent)}</strong><br>` : "";
+      const imageAttributes =
+        index === 0
+          ? `src="${escapeHtml(slide.image)}" fetchpriority="high"`
+          : `src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="${escapeHtml(slide.image)}" loading="lazy"`;
+      // Only the first slide paints on load, so only it gets the phone-sized file.
+      const heroImage = slide.mobileImage && index === 0
+        ? `<picture class="home-hero-media"><source media="(min-width: 768px)" srcset="${escapeHtml(slide.image)}"><img alt="${escapeHtml(slide.imageAlt || "")}" class="first-slide" src="${escapeHtml(slide.mobileImage)}" fetchpriority="high" decoding="async"></picture>`
+        : `<img alt="${escapeHtml(slide.imageAlt || "")}" class="first-slide" ${imageAttributes} decoding="async">`;
+      return `<div aria-label="${index + 1} out of ${hero.slides.length}" aria-roledescription="slide" aria-hidden="${index === 0 ? "false" : "true"}" class="item${index === 0 ? " active" : ""}" data-home-hero-id="${escapeHtml(slide.id)}" role="group">${heroImage}<div class="container"><div class="cr-item-container"><div class="row"><div class="col-sm-12"><div class="animated fadeInUp herotextbg-dark-opaque"><h2 class="rt-text-light hero-slide-heading" tabindex="${index === 0 ? "0" : "-1"}">${escapeHtml(slide.title)}</h2><p class="rt-text-light" tabindex="${index === 0 ? "0" : "-1"}">${accent}${escapeHtml(slide.description)}</p><a class="btn btn-lg btn-default rt-btn-yellow" data-h1="${escapeHtml(slide.title)}" data-module="hero-homepage" href="${escapeHtml(slide.link)}" role="button" tabindex="${index === 0 ? "0" : "-1"}">${escapeHtml(slide.linkLabel)}</a></div></div></div></div></div></div>`;
+    })
+    .join("");
+  const playbackControl = multipleSlides
+    ? `<div id="indicators-container"><button aria-label="carousel is playing, click to pause" data-home-hero-toggle id="toggleCarousel" type="button"><span aria-hidden="true" class="glyphicon glyphicon-pause"></span></button><ol aria-hidden="true" class="carousel-indicators">${indicators}</ol></div>`
+    : "";
+  const navigationControls = multipleSlides
+    ? `<a aria-controls="heroslider" aria-label="previous slide" class="left carousel-control" data-home-hero-direction="prev" data-slide="prev" href="#heroslider" role="button" tabindex="0"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span><span class="sr-only">Previous</span></a><a aria-controls="heroslider" aria-label="next slide" class="right carousel-control" data-home-hero-direction="next" data-slide="next" href="#heroslider" role="button" tabindex="0"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span><span class="sr-only">Next</span></a>`
+    : "";
+  const carouselAttributes = multipleSlides ? ` data-interval="${hero.rotationIntervalMs}" data-ride="carousel"` : "";
+  return `<div class="carousel slide jumbotron jumbotron-hero hm"${carouselAttributes} id="heroslider"><div aria-label="${multipleSlides ? `Revolving Banners with ${hero.slides.length} items` : `${escapeHtml(site.name)} introduction`}" class="carousel-inner" role="region" tabindex="0">${playbackControl}${slides}${navigationControls}</div></div>${multipleSlides ? '<script defer src="/_resources/js/home-hero.js"></script>' : ""}`;
+}
+
 function renderGeneratedPage(shellHtml, page, bodyHtml) {
   const $ = load(shellHtml, { decodeEntities: false });
   $("body").addClass("agent-page");
@@ -388,8 +423,12 @@ function renderGeneratedPage(shellHtml, page, bodyHtml) {
   const bannerPosition = page.bannerPosition || "80% center";
   const bannerClass = page.bannerMode === "photo" ? "" : " landing-hub-hero--abstract";
   const eyebrow = page.eyebrow ? `<p>${escapeHtml(page.eyebrow)}</p>` : "";
-  const mainContent = landingHub
-    ? `<div class="jumbotron jumbotron-fluid intro-banner landing-hub-hero${bannerClass}" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="cr-item-container"><div class="row"><div class="col-sm-12"><div class="landing-hub-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1>${page.heroDescription ? `<p class="discovery-hero-description">${escapeHtml(page.heroDescription)}</p>` : ""}</div></div></div></div></div></div>${page.path === "/index.html" ? "" : `<div class="container landing-hub-breadcrumbs"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div></div>`}<section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section>${renderLandingMobileSectionNav(site.navigation, page.path)}`
+  // A hub's banner carries only the eyebrow and title. Taglines and framing
+  // belong in the page body, where they are not set in yellow capitals.
+  const mainContent = page.path === "/index.html"
+    ? `${renderHomeHero(homeHero)}<div class="home-main-content"><section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section></div>${renderLandingMobileSectionNav(site.navigation, page.path)}`
+    : landingHub
+    ? `<div class="jumbotron jumbotron-fluid intro-banner landing-hub-hero${bannerClass}" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="cr-item-container"><div class="row"><div class="col-sm-12"><div class="landing-hub-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1></div></div></div></div></div></div><div class="container landing-hub-breadcrumbs"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div></div><section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section>${renderLandingMobileSectionNav(site.navigation, page.path)}`
     : `<div class="jumbotron jumbotron-fluid intro-banner about-subpage-hero" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="about-subpage-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1></div></div></div><div class="container"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div><div class="row about-subpage-layout">${renderSubpageMobileNav(site.navigation, page.path)}<section aria-label="Main Content" class="col-xs-9 main-section pull-right">${renderDocsStatus(page)}${renderPageContents(bodyHtml, page)}${bodyHtml}${renderSiblingPager(page)}${renderPageHelp(page)}</section>${renderSidebar(site.navigation, page.path)}</div></div>`;
   $("main#main-content").html(mainContent);
   return $.html();
@@ -855,6 +894,12 @@ function searchIndexFor(page) {
 const seo = await readJson(SEO_FILE);
 const facts = await readJson(FACTS_FILE);
 const redirects = await readJson(REDIRECTS_FILE);
+const homeHero = await readJson(HOME_HERO_FILE);
+requireFields(homeHero, ["schemaVersion", "owner", "source", "lastReviewed", "rotationIntervalMs", "slides"], "content/home/hero.json");
+homeHero.lastReviewed = isoDate(homeHero.lastReviewed);
+for (const [index, slide] of homeHero.slides.entries()) {
+  requireFields(slide, ["id", "title", "description", "image", "link", "linkLabel"], `homepage hero slide ${index + 1}`);
+}
 requireFields(site, ["name", "origin", "description", "lastReviewed", "supportEmail", "navigation"], "content/site.json");
 site.lastReviewed = isoDate(site.lastReviewed);
 requireFields(seo, ["schemaVersion", "defaultSocialImage", "defaultSocialImageAlt", "routes"], "content/seo.json");

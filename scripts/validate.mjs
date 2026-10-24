@@ -31,6 +31,7 @@ const siteContent = JSON.parse(await readFile(path.join(CONTENT_DIR, "site.json"
 const seoContent = JSON.parse(await readFile(path.join(CONTENT_DIR, "seo.json"), "utf8"));
 const factsContent = JSON.parse(await readFile(path.join(CONTENT_DIR, "facts/public-facts.json"), "utf8"));
 const redirectContent = JSON.parse(await readFile(path.join(CONTENT_DIR, "redirects/dsmlp-docs.json"), "utf8"));
+const homeHeroContent = JSON.parse(await readFile(path.join(CONTENT_DIR, "home/hero.json"), "utf8"));
 const OFFICIAL_ORIGIN = siteContent.origin;
 const requiredRemoteDependencies = [
   "https://cdn.ucsd.edu/cms/decorator-5/styles/bootstrap.min.css",
@@ -471,7 +472,8 @@ for (const page of htmlFiles) {
     const image = $(element);
     if (image.attr("alt") === undefined) accessibility.push({ page: route, issue: `Image missing alt attribute: ${image.attr("src")}` });
     const localImage = toLocalUrl(image.attr("src"), page);
-    if (localImage?.pathname.startsWith("/_images/")) {
+    // The active rotator slide paints on load, as on the TritonAI site.
+    if (localImage?.pathname.startsWith("/_images/") && !image.hasClass("first-slide")) {
       if (image.attr("loading") !== "lazy") performance.push({ page: route, issue: `Local image must load lazily: ${localImage.pathname}` });
       if (image.attr("decoding") !== "async") performance.push({ page: route, issue: `Local image must decode asynchronously: ${localImage.pathname}` });
     }
@@ -498,6 +500,46 @@ for (const page of htmlFiles) {
     if (level > previousLevel + 1) accessibility.push({ page: route, issue: `Heading level skips from h${previousLevel} to h${level}: ${$(element).text().trim().slice(0, 60)}` });
     previousLevel = level;
   });
+  // Banners hold an eyebrow and a title only; taglines go in the page body.
+  if ($("main#main-content .intro-banner .discovery-hero-description").length) {
+    accessibility.push({ page: route, issue: "Banner carries a tagline under the title; move it into the page body" });
+  }
+  // Homepage rotator checks, ported from the TritonAI validator.
+  if (route === "/") {
+    const heroSlides = homeHeroContent.slides || [];
+    const multipleHeroSlides = heroSlides.length > 1;
+    if ($("#heroslider").length !== 1) accessibility.push({ page: route, issue: "Homepage hero rotator is missing" });
+    if ($("#heroslider .item").length !== heroSlides.length) {
+      contentFindings.push({ source: route, issue: `Rendered hero slide count does not match content (${$("#heroslider .item").length} vs ${heroSlides.length})` });
+    }
+    if ($("#heroslider h1").length || $("#heroslider .hero-slide-heading").length !== heroSlides.length) {
+      accessibility.push({ page: route, issue: "Homepage carousel must use one h2 heading per slide and no h1 headings" });
+    }
+    if (!$("#home-intro-heading").is("h1")) accessibility.push({ page: route, issue: "Homepage h1 must be the intro heading below the rotator" });
+    if ($("#heroslider [data-module='hero-homepage']").first().text().trim() !== heroSlides[0]?.linkLabel) {
+      contentFindings.push({ source: route, issue: "Homepage hero CTA does not match structured content" });
+    }
+    if (multipleHeroSlides && $("[data-home-hero-toggle]").length !== 1) accessibility.push({ page: route, issue: "Homepage hero pause control is missing" });
+    if (!multipleHeroSlides && $("[data-home-hero-toggle], #heroslider .carousel-control").length) accessibility.push({ page: route, issue: "Single-slide homepage hero must not render carousel controls" });
+    const inactiveHeroImages = $("#heroslider .item:not(.active) img.first-slide");
+    if (multipleHeroSlides && (!inactiveHeroImages.length || inactiveHeroImages.filter("[data-src$='.webp']").length !== inactiveHeroImages.length)) {
+      performance.push({ page: route, issue: "Inactive hero images must use deferred optimized sources" });
+    }
+    const activeHeroImage = $("#heroslider .item.active img.first-slide");
+    const desktopHeroSource = $("#heroslider .item.active picture source[media='(min-width: 768px)']");
+    const mobileHeroPath = toLocalUrl(activeHeroImage.attr("src"), page)?.pathname;
+    const desktopHeroPath = toLocalUrl(desktopHeroSource.attr("srcset"), page)?.pathname;
+    const mobileHeroBytes = await localAssetSize(activeHeroImage.attr("src"), page);
+    if (mobileHeroPath !== heroSlides[0]?.mobileImage || !mobileHeroBytes || mobileHeroBytes > 100_000 || activeHeroImage.attr("fetchpriority") !== "high") {
+      performance.push({ page: route, issue: "Homepage must prioritize the mobile-sized hero image" });
+    }
+    if (desktopHeroPath !== heroSlides[0]?.image || desktopHeroPath === mobileHeroPath) {
+      performance.push({ page: route, issue: "Homepage hero must provide the full-width source at the desktop breakpoint" });
+    }
+    if ($("script[src$='/_resources/js/home-hero.js'][defer]").length !== (multipleHeroSlides ? 1 : 0)) {
+      performance.push({ page: route, issue: "Homepage rotator script is missing or not deferred" });
+    }
+  }
   if ($(".skip-to-main[href='#main-content']").length !== 1) accessibility.push({ page: route, issue: "Missing skip link to main content" });
   if ($("[autofocus]").length) accessibility.push({ page: route, issue: "autofocus is present" });
   if (/user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\.0)?\b/i.test($("meta[name='viewport']").attr("content") || "")) {

@@ -259,3 +259,14 @@ main#main-content .parasol-search-results mark {
     text-align: left;
   }
 }
+
+/* The cluster label in the home page diagram. It names a box in a figure, so it
+   is not a heading, but it keeps the size the diagram was drawn with. */
+main#main-content .dsmlp-map-core .dsmlp-map-core-name {
+  color: var(--triton-navy);
+  display: block;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+}

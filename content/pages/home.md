@@ -2,8 +2,6 @@
 title: PARASOL
 path: /index.html
 description: PARASOL is UC San Diego's shared GPU and data science computing platform for coursework, student projects, and research. It was formerly called DSMLP.
-eyebrow: Platform for Applied Research, Analytics, Science and Open Learning
-heroDescription: GPU computing for UC San Diego coursework, student projects, and research, reached through Datahub in your browser or from a terminal.
 lastReviewed: 2026-10-24
 audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation (dsmlp-docs-preview.ucsd.edu, build of 2026-09-29) and the Halıcıoğlu School PARASOL announcement draft of 2026-10-28
@@ -14,10 +12,10 @@ landingHub: true
 <section class="hub-section hub-section-intro dsmlp-intro" aria-labelledby="home-intro-heading">
 <div class="row hub-split hub-split-align-center">
 <div class="col-md-6 hub-split-copy">
-<p class="home-kicker">Formerly DSMLP</p>
-<h2 id="home-intro-heading">Computing for every course that needs it</h2>
+<p class="home-kicker">For students, instructors, and researchers</p>
+<h1 id="home-intro-heading">Computing for every course that needs it</h1>
 <p class="hub-lede">PARASOL gives UC San Diego students and instructors Jupyter, RStudio, and GPUs for scheduled classes, independent study, and student projects. Researchers use the same cluster for work outside a course.</p>
-<p>PARASOL is the new name for the Data Science and Machine Learning Platform (DSMLP). Your account, your files, and the Datahub address are the same as before. In 2025-26 the platform hosted more than 140 classes and 18,000 student enrollments.</p>
+<p>PARASOL, the Platform for Applied Research, Analytics, Science and Open Learning, is the new name for the Data Science and Machine Learning Platform (DSMLP). Your account, your files, and the Datahub address are the same as before. In 2025-26 the platform hosted more than 140 classes and 18,000 student enrollments.</p>
 <p class="dsmlp-intro-actions"><a class="btn btn-primary" href="https://datahub.ucsd.edu">Open Datahub</a> <a class="btn btn-default" href="https://reserve.dsmlp.ucsd.edu/">Reserve a GPU</a> <a class="btn btn-default" href="/get-started/index.html">Find your starting page</a></p>
 </div>
 <div class="col-md-6 hub-split-media">
@@ -28,7 +26,7 @@ landingHub: true
 <article><span class="glyphicon glyphicon-console" aria-hidden="true"></span><strong>Command line</strong><small>SSH, launch.sh, batch jobs, and VS Code</small></article>
 </div>
 <div class="dsmlp-map-connector" aria-hidden="true"><span>Launch a session</span><i></i></div>
-<div class="dsmlp-map-core"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span><div><p>Shared cluster</p><h3>PARASOL</h3><ul><li>Containers</li><li>CPU and GPU</li><li>Storage</li><li>Datasets</li></ul></div></div>
+<div class="dsmlp-map-core"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span><div><p>Shared cluster</p><strong class="dsmlp-map-core-name">PARASOL</strong><ul><li>Containers</li><li>CPU and GPU</li><li>Storage</li><li>Datasets</li></ul></div></div>
 <div class="dsmlp-map-connector" aria-hidden="true"><span>Supports</span><i></i></div>
 <div class="dsmlp-map-outcomes"><span>Courses and student projects</span><span>Approved research</span></div>
 <figcaption id="home-platform-caption">People reach PARASOL through Datahub in a browser or from a terminal. Each session runs in its own container on the shared cluster, with CPU, GPU, storage, and datasets for coursework, student projects, and approved research.</figcaption>

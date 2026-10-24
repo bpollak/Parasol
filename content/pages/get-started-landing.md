@@ -3,7 +3,6 @@ title: Get Started
 path: /get-started/index.html
 description: Find the PARASOL guide for your role, whether you take a course, teach one, run a student project, or do research, and learn how access is granted.
 eyebrow: Get started
-heroDescription: Each guide is written for one kind of reader and says up front what it assumes you already know.
 lastReviewed: 2026-10-24
 audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation overview "Where to Begin" (2026-09-29 build) and each audience guide
@@ -12,7 +11,7 @@ landingHub: true
 ---
 
 <section class="hub-section hub-section-intro" aria-labelledby="start-coursework-heading">
-<div class="hub-heading"><p class="home-kicker">Coursework</p><h2 id="start-coursework-heading">Taking or teaching a course</h2><p>Course access comes from the roster. Students do not request anything. Instructors request the course workspace before the term starts.</p></div>
+<div class="hub-heading"><p class="home-kicker">Coursework</p><h2 id="start-coursework-heading">Taking or teaching a course</h2><p>Each guide is written for one kind of reader and says up front what it assumes you already know.</p><p>Course access comes from the roster. Students do not request anything. Instructors request the course workspace before the term starts.</p></div>
 <div class="row hub-action-grid hub-action-grid-three">
 <div class="col-md-4"><article class="panel panel-default hub-action-card"><span class="glyphicon glyphicon-education" aria-hidden="true"></span><h3>Using Datahub in a Course</h3><p>For students enrolled in a course that uses Datahub. Assumes a web browser and nothing else.</p><a href="/get-started/student-in-a-course.html">Start in the browser <span aria-hidden="true">→</span></a></article></div>
 <div class="col-md-4"><article class="panel panel-default hub-action-card"><span class="glyphicon glyphicon-console" aria-hidden="true"></span><h3>Working from the Command Line</h3><p>For students whose course needs SSH, launch.sh, batch jobs, VS Code, or a GPU class the course menu lacks. Assumes a terminal.</p><a href="/get-started/working-from-the-command-line.html">Start in a terminal <span aria-hidden="true">→</span></a></article></div>
