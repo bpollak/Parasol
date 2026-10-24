@@ -15,13 +15,11 @@ body.docs-page main#main-content .main-section {
   line-height: 1.6;
 }
 
-body.docs-page main#main-content .main-section h2 {
-  margin-top: 2em;
-  scroll-margin-top: 1em;
-}
-
+/* Heading spacing comes from the shared TritonAI subpage styles, so docs
+   pages read with the same rhythm as the TritonAI site. Only the jump-link
+   offset is ours. */
+body.docs-page main#main-content .main-section h2,
 body.docs-page main#main-content .main-section h3 {
-  margin-top: 1.5em;
   scroll-margin-top: 1em;
 }
 
@@ -269,4 +267,19 @@ main#main-content .dsmlp-map-core .dsmlp-map-core-name {
   font-weight: 400;
   line-height: 1;
   margin: 0;
+}
+
+/* In the phone section menu, a topic that lists its own pages spans both
+   columns and lays its pages out in the same two-column grid beneath it. */
+main#main-content .about-mobile-section-nav .navbar-list > li.expanded {
+  grid-column: 1 / -1;
+}
+
+main#main-content .about-mobile-section-nav .navbar-list > li.expanded > ul {
+  display: grid;
+  gap: 0 22px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 8px 0 -12px;
+  padding: 0 0 0 16px;
 }

@@ -360,6 +360,10 @@ for (const page of htmlFiles) {
         return !link.length || normalizeRoute(toLocalUrl(link.attr("href"), page)?.pathname || "") === route;
       });
       if (navHrefs.has(route) && !currentSidebarItems.length) navigation.push({ page: route, issue: "Sidebar does not mark the current page" });
+      // Only the current page is highlighted. A parent topic stays a plain link.
+      if (sidebar.find("li.active").length > 1) {
+        navigation.push({ page: route, issue: `Sidebar highlights ${sidebar.find("li.active").length} entries; only the current page should be active` });
+      }
     }
     if ($("main#main-content .about-mobile-section-nav").length !== 1) navigation.push({ page: route, issue: "Subpage must include one mobile section menu" });
   } else if (landingHubPaths.has(route)) {

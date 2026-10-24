@@ -53,7 +53,7 @@ landingHub: true
 <p class="home-kicker">Who runs it</p>
 <h2 id="about-who-runs-heading">IT Services operates the platform</h2>
 <p>UC San Diego IT Services builds and runs PARASOL, including Datahub, the cluster, the reservation app, and support at datahub@ucsd.edu. IT Services also gives instructors guidance and training on setting up a course. Research IT helps researchers decide whether PARASOL or another campus platform fits their work.</p>
-<p>The Halıcıoğlu School of Data Science and Computing funded the fall 2026 GPU expansion, and its students and faculty have prioritized access to it.</p>
+<p>The Halıcıoğlu School of Data Science and Computing funded the GPU servers added in fall 2026. The new servers expand the platform for everyone who uses it, and the campus is grateful for the School's contribution. In recognition of that funding, the School's students and faculty have priority for inference work that runs on the added capacity.</p>
 </div>
 <div class="col-md-5 hub-split-media">
 <aside class="dsmlp-resource-panel" aria-labelledby="about-policy-heading"><p class="home-kicker">Conditions of use</p><h3 id="about-policy-heading">Read before you put data on the platform</h3><ul><li><a href="/docs/reference/policy.html#data-classification">Data classification limits</a></li><li><a href="/docs/reference/policy.html#use-of-shared-resources">Use of shared resources</a></li><li><a href="/docs/reference/policy.html#scheduled-maintenance">Scheduled maintenance</a></li><li><a href="/docs/reference/policy.html">Full policy</a></li></ul></aside>

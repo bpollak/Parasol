@@ -15,7 +15,7 @@ PARASOL is the campus response. It is the platform students already know, former
 
 ## What the name stands for
 
-PARASOL is short for **Platform for Applied Research, Analytics, Science and Open Learning**. The platform supports classroom GPU demand first, starting with prioritized access for Halıcıoğlu School of Data Science and Computing students and faculty.
+PARASOL is short for **Platform for Applied Research, Analytics, Science and Open Learning**. The platform supports classroom GPU demand first.
 
 ## What was added in fall 2026
 
@@ -25,6 +25,8 @@ Enabled by Taner Halıcıoğlu's founding gift, the Halıcıoğlu School added f
 - Nearly four times the platform's previous peak capacity for instruction
 - About 66,800 peak GPU-hours a year for coursework and student projects
 - More than 213,000 off-peak GPU-hours a year for approved research, capstones, and graduate work
+
+The added servers expand the platform for every course, project, and research group that uses it, and the campus is grateful to the School for funding them. In recognition of that contribution, Halıcıoğlu School students and faculty have priority for inference work that runs on the new capacity.
 
 [GPU Hardware and CUDA](/docs/gpu-access/gpu-hardware.html) lists every GPU model on the cluster, including the new ones, and the GPU class each one serves.
 

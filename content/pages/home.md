@@ -15,7 +15,7 @@ landingHub: true
 <p class="home-kicker">For students, instructors, and researchers</p>
 <h1 id="home-intro-heading">Computing for every course that needs it</h1>
 <p class="hub-lede">PARASOL gives UC San Diego students and instructors Jupyter, RStudio, and GPUs for scheduled classes, independent study, and student projects. Researchers use the same cluster for work outside a course.</p>
-<p>PARASOL, the Platform for Applied Research, Analytics, Science and Open Learning, is the new name for the Data Science and Machine Learning Platform (DSMLP). Your account, your files, and the Datahub address are the same as before. In 2025-26 the platform hosted more than 140 classes and 18,000 student enrollments.</p>
+<p>PARASOL, the Platform for Applied Research, Analytics, Science and Open Learning, is the new name for the Data Science and Machine Learning Platform (DSMLP). Your account, your files, and the Datahub address are the same as before.</p>
 <p class="dsmlp-intro-actions"><a class="btn btn-primary" href="https://datahub.ucsd.edu">Open Datahub</a> <a class="btn btn-default" href="https://reserve.dsmlp.ucsd.edu/">Reserve a GPU</a> <a class="btn btn-default" href="/get-started/index.html">Find your starting page</a></p>
 </div>
 <div class="col-md-6 hub-split-media">
@@ -33,6 +33,15 @@ landingHub: true
 </figure>
 </div>
 </div>
+</section>
+
+<section class="hub-section" aria-labelledby="home-usage-heading">
+<div class="hub-heading"><p class="home-kicker">2025-26 academic year</p><h2 id="home-usage-heading">More than 140 classes ran on the platform last year</h2></div>
+<ul class="row agent-metric-grid" aria-label="Platform use in the 2025-26 academic year">
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">140+</strong><span class="agent-metric-label">Classes</span><span class="agent-metric-note">From introductory data science to graduate machine learning</span></div></li>
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">18,000</strong><span class="agent-metric-label">Student enrollments</span><span class="agent-metric-note">Across every course that used the platform</span></div></li>
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">75</strong><span class="agent-metric-label">Instructors</span><span class="agent-metric-note">Teaching with Datahub and PARASOL</span></div></li>
+</ul>
 </section>
 
 <!-- AGENT_SECTION: ux-home-starting-points -->

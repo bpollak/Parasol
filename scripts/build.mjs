@@ -175,34 +175,30 @@ function renderSidebarItems(navigation, route) {
   const activeDescendantChild = children.find((child) =>
     child.href !== route && navigationContainsRoute(child, route)
   );
-  const descendantNavLinks = (item) =>
-    (item.items || [])
-      .map((grandchild) =>
-        grandchild.href === route
-          ? `<li class="${(grandchild.items || []).length ? "expanded active" : "active"}">${escapeHtml(grandchild.label)}${(grandchild.items || []).length ? `<ul>${childNavLinks(grandchild)}</ul>` : ""}</li>`
-          : navigationContainsRoute(grandchild, route)
-            ? `<li class="expanded active">${escapeHtml(grandchild.label)}<ul>${descendantNavLinks(grandchild)}</ul></li>`
-            : `<li><a href="${escapeHtml(grandchild.href)}">${escapeHtml(grandchild.label)}</a></li>`
+  // A topic with pages of its own nests them under it, as the Decorator
+  // two-column template does, so only the current page is highlighted.
+  // Listing them at the topic's level made the topic active too, and the
+  // highlight landed on the topic instead of the page being read.
+  const nestedSidebarLinks = (item) => {
+    const pages = (item.items || [])
+      .filter((child) => child.href !== item.href)
+      .map((child) =>
+        child.items?.length && navigationContainsRoute(child, route)
+          ? nestedSidebarLinks(child)
+          : child.href === route
+            ? `<li class="active">${escapeHtml(child.label)}</li>`
+            : `<li><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a></li>`
       )
       .join("");
-  const childNavLinks = (item) =>
-    (item.items || [])
-      .map((child) => `<li><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a></li>`)
-      .join("");
-  const flattenedSidebarLinks = (item) => {
-    const childLinks = (child) =>
-      child.items?.length
-        ? `<li class="${navigationContainsRoute(child, route) ? "expanded active no-indent" : ""}"><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a><ul>${childNavLinks(child)}</ul></li>`
-        : child.href === route
-          ? `<li class="active no-indent">${escapeHtml(child.label)}</li>`
-          : `<li><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a></li>`;
-    return `<li class="expanded active no-indent"><a href="${escapeHtml(item.href)}">${escapeHtml(item.label)}</a></li>${(item.items || []).map(childLinks).join("")}`;
+    return item.href === route
+      ? `<li class="expanded active">${escapeHtml(item.label)}<ul>${pages}</ul></li>`
+      : `<li class="expanded"><a href="${escapeHtml(item.href)}">${escapeHtml(item.label)}</a><ul>${pages}</ul></li>`;
   };
   if (activeChild) {
     return children
       .map((child) => {
         if (child.href === route) {
-          if (child.items?.length) return flattenedSidebarLinks(child);
+          if (child.items?.length) return nestedSidebarLinks(child);
           return `<li class="active">${escapeHtml(child.label)}</li>`;
         }
         return `<li><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a></li>`;
@@ -214,7 +210,7 @@ function renderSidebarItems(navigation, route) {
     return children
       .map((child) => {
         if (child === activeDescendantChild) {
-          return flattenedSidebarLinks(child);
+          return nestedSidebarLinks(child);
         }
         return `<li><a href="${escapeHtml(child.href)}">${escapeHtml(child.label)}</a></li>`;
       })
