@@ -7,7 +7,6 @@ lastReviewed: 2026-10-24
 audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation (2026-09-29 build), the published DSMLP documentation sitemap, and the Halıcıoğlu School PARASOL announcement draft of 2026-10-28
 canonicalUrl: /about/from-dsmlp-to-parasol.html
-bannerImage: /_images/hero-abstract/use-cases.webp
 ---
 
 PARASOL is the new name for the Data Science and Machine Learning Platform (DSMLP). The platform works exactly as it did. If you used DSMLP or Datahub before, you do not need to do anything.

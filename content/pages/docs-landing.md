@@ -10,9 +10,6 @@ source: DSMLP documentation index (2026-09-29 build)
 canonicalUrl: /docs/index.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/
 landingHub: true
-bannerImage: /_images/hero-abstract/build.webp
-bannerPosition: center
-bannerMode: abstract
 ---
 
 <!-- AGENT_SECTION: ux-docs-topics -->

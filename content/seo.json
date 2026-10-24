@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
-  "defaultSocialImage": "/_images/campus/scripps-pier-1200.webp",
-  "defaultSocialImageAlt": "A rainbow over Scripps Pier in La Jolla at sunset.",
+  "defaultSocialImage": "/_images/hero/home.webp",
+  "defaultSocialImageAlt": "PARASOL: a canopy of translucent panels over a row of GPU servers, drawn in blue and cyan on navy.",
   "routes": {
-    "/search/index.html": { "robots": "noindex,follow" }
+    "/search/index.html": {
+      "robots": "noindex,follow"
+    }
   }
 }

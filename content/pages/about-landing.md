@@ -9,9 +9,6 @@ audiences: [students, instructors, researchers, faculty, leaders]
 source: DSMLP documentation overview (2026-09-29 build) and the Halıcıoğlu School PARASOL announcement draft of 2026-10-28
 canonicalUrl: /about/index.html
 landingHub: true
-bannerImage: /_images/hero-abstract/about.webp
-bannerPosition: center
-bannerMode: abstract
 ---
 
 <section class="hub-section hub-section-intro" aria-labelledby="about-intro-heading">

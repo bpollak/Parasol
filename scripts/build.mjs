@@ -363,6 +363,15 @@ function renderPageHelp(page) {
   return `<aside class="docs-page-help" aria-label="Help with this page"><p><strong>Need help with something on this page?</strong> Email <a href="mailto:${escapeHtml(site.supportEmail)}">${escapeHtml(site.supportEmail)}</a> or see <a href="/support/index.html">Support</a>.</p></aside>`;
 }
 
+// content/site.json maps path prefixes to hero art; the longest match wins.
+function heroImageFor(route) {
+  const normalized = route === "/index.html" ? "/" : route;
+  const match = Object.keys(site.heroImages || {})
+    .filter((prefix) => (prefix === "/" ? normalized === "/" : normalized === prefix || normalized.startsWith(prefix)))
+    .sort((a, b) => b.length - a.length)[0];
+  return match ? site.heroImages[match] : null;
+}
+
 function renderGeneratedPage(shellHtml, page, bodyHtml) {
   const $ = load(shellHtml, { decodeEntities: false });
   $("body").addClass("agent-page");
@@ -374,9 +383,10 @@ function renderGeneratedPage(shellHtml, page, bodyHtml) {
   if (landingHub) $("body").addClass("landing-hub-page");
   if (subpage) $("body").addClass("about-subpage");
   if (page.format === "html") $("body").addClass("docs-page");
-  const bannerImage = page.bannerImage || DEFAULT_BANNER;
-  const bannerPosition = page.bannerPosition || "center";
-  const bannerClass = page.bannerMode === "abstract" ? " landing-hub-hero--abstract" : "";
+  const bannerImage = page.bannerImage || heroImageFor(page.path) || DEFAULT_BANNER;
+  // The hero art keeps its motif on the right, so phones crop toward it.
+  const bannerPosition = page.bannerPosition || "80% center";
+  const bannerClass = page.bannerMode === "photo" ? "" : " landing-hub-hero--abstract";
   const eyebrow = page.eyebrow ? `<p>${escapeHtml(page.eyebrow)}</p>` : "";
   const mainContent = landingHub
     ? `<div class="jumbotron jumbotron-fluid intro-banner landing-hub-hero${bannerClass}" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="cr-item-container"><div class="row"><div class="col-sm-12"><div class="landing-hub-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1>${page.heroDescription ? `<p class="discovery-hero-description">${escapeHtml(page.heroDescription)}</p>` : ""}</div></div></div></div></div></div>${page.path === "/index.html" ? "" : `<div class="container landing-hub-breadcrumbs"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div></div>`}<section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section>${renderLandingMobileSectionNav(site.navigation, page.path)}`

@@ -9,8 +9,6 @@ audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation overview "Support" and Getting Help (2026-09-29 build)
 canonicalUrl: /support/index.html
 landingHub: true
-bannerImage: /_images/campus/geisel-library.webp
-bannerPosition: center 40%
 ---
 
 <section class="hub-section hub-section-intro" aria-labelledby="support-contacts-heading">

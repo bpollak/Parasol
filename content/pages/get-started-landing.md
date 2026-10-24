@@ -9,9 +9,6 @@ audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation overview "Where to Begin" (2026-09-29 build) and each audience guide
 canonicalUrl: /get-started/index.html
 landingHub: true
-bannerImage: /_images/hero-abstract/learn.webp
-bannerPosition: center
-bannerMode: abstract
 ---
 
 <section class="hub-section hub-section-intro" aria-labelledby="start-coursework-heading">

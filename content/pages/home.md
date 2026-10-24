@@ -9,8 +9,6 @@ audiences: [students, instructors, teaching-assistants, researchers, faculty]
 source: DSMLP documentation (dsmlp-docs-preview.ucsd.edu, build of 2026-09-29) and the Halıcıoğlu School PARASOL announcement draft of 2026-10-28
 canonicalUrl: /index.html
 landingHub: true
-bannerImage: /_images/campus/scripps-pier-1200.webp
-bannerPosition: center 60%
 ---
 
 <section class="hub-section hub-section-intro dsmlp-intro" aria-labelledby="home-intro-heading">

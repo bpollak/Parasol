@@ -7,7 +7,6 @@ lastReviewed: 2026-10-24
 audiences: [students, instructors, researchers, faculty, leaders]
 source: Halıcıoğlu School PARASOL announcement draft (Tiffany Fox, dated 2026-10-28, not yet released); DSMLP documentation GPU hardware page (2026-09-29 build)
 canonicalUrl: /about/why-parasol.html
-bannerImage: /_images/hero-abstract/ai-tools.webp
 ---
 
 Training a model, fine-tuning one, or running a large analysis takes GPUs. As more courses teach machine learning, more students need them, and the campus platform has not always had enough to go around. Some students have paid for cloud GPU time out of their own pockets to finish coursework and projects.

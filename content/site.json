@@ -257,5 +257,25 @@
       "href": "/support/index.html",
       "items": []
     }
-  ]
+  ],
+  "heroImages": {
+    "/": "/_images/hero/home.webp",
+    "/about/": "/_images/hero/about.webp",
+    "/about/why-parasol.html": "/_images/hero/why.webp",
+    "/about/from-dsmlp-to-parasol.html": "/_images/hero/rename.webp",
+    "/about/how-parasol-works.html": "/_images/hero/works.webp",
+    "/get-started/": "/_images/hero/start.webp",
+    "/docs/": "/_images/hero/docs.webp",
+    "/docs/access/": "/_images/hero/access.webp",
+    "/docs/workspaces-and-storage/": "/_images/hero/storage.webp",
+    "/docs/running-jobs/": "/_images/hero/jobs.webp",
+    "/docs/gpu-access/": "/_images/hero/gpu.webp",
+    "/docs/environments/": "/_images/hero/environments.webp",
+    "/docs/grading/": "/_images/hero/grading.webp",
+    "/docs/reference/": "/_images/hero/reference.webp",
+    "/support/": "/_images/hero/support.webp",
+    "/search/": "/_images/hero/docs.webp",
+    "/404.html": "/_images/hero/home.webp"
+  },
+  "heroImagesNote": "Hero art by path prefix; the longest matching prefix wins and a page's own bannerImage overrides it. Regenerate the art with `node scripts/render-heroes.mjs`."
 }
