@@ -10,11 +10,18 @@ canonicalUrl: /docs/gpu-access/service-units-and-budgets.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/service-units-and-budgets/
 format: html
 ---
-<p>From Fall 2026, GPU time on PARASOL is metered in Service Units (SU), and each
+<p class="lead">From Fall 2026, GPU time on PARASOL is metered in Service Units (SU), and each
 workspace member has a budget of them.</p>
+<dl class="docs-glance">
+<div><dt>Default budget</dt><dd>10 SU per week per member, in every workspace</dd></div>
+<div><dt>Renews</dt><dd>Monday 00:00 Pacific time, weekly by default</dd></div>
+<div><dt>Off-peak</dt><dd>50% off, 1 AM to 4 PM Pacific time</dd></div>
+<div><dt>Free to cancel</dt><dd>At least 24 hours before the start</dd></div>
+</dl>
 <h2 id="what-a-service-unit-is">What a Service Unit Is</h2>
 <p>A <strong>Service Unit</strong> (SU) is a usage credit for GPU time. Each GPU class carries
-an hourly SU rate, and every reservation is priced from that rate. The scheme
+an hourly SU rate, and every reservation is priced from that rate.</p>
+<p>The scheme
 follows the HPC allocation model: a budget of credits, drawn down as GPU time
 is used and renewed on a cycle.
 <a href="/docs/reference/coming-from-hpc.html">Coming from HPC</a> lists HPC terms and their
@@ -70,12 +77,18 @@ covers storage charges.</p>
 <p>Launching a GPU session without a booking creates an <strong>on-demand lease</strong>: a
 reservation made on the spot, which draws Service Units exactly as a booked
 window would. This applies whether the reservation app is ever opened.</p>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>There is no free exploratory launch. Launching an eligible GPU session is
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>No free exploratory launch</strong></p><p>There is no free exploratory launch. Launching an eligible GPU session is
 what authorizes the spend, and nothing prompts for confirmation.</p></div>
 <p>A lease covers the session's declared runtime plus 10 minutes, and is charged
 when it is granted. A session that declares no runtime is given 1 hour, so it
 holds a lease of 1 hour 10 minutes. The declared runtime is separate from the
-6-hour runtime limit, which stops the pod. When the session ends, the lease is
+6-hour runtime limit, which stops the pod.</p>
+<ol class="docs-flow" aria-label="How an on-demand lease is charged">
+<li><span class="docs-flow-label">Launch</span><strong>The lease is granted</strong><p>It is charged for the declared runtime plus 10 minutes.</p></li>
+<li><span class="docs-flow-label">Run</span><strong>The session holds the GPU</strong><p>It is charged at the same rate whether or not it is used.</p></li>
+<li><span class="docs-flow-label">Stop</span><strong>The lease is cancelled</strong><p>The charge is recalculated from the time used.</p></li>
+</ol>
+<p>When the session ends, the lease is
 cancelled and the charge is recalculated:</p>
 <ul>
 <li>The time used is charged in full.</li>
@@ -91,6 +104,7 @@ session stops after 40 minutes, about 0.67 SU is kept.</p>
 and is no longer protected; see <a href="/docs/gpu-access/what-ends-a-session.html#overstay">Overstay</a>. A
 longer guarantee comes from <a href="/docs/gpu-access/reservations.html#extend">Extend</a>, which is a booking
 and is charged like one.</p>
+<p>Charges that are easy to miss:</p>
 <ul>
 <li>An unused session is charged at the same rate as a used one. The charge is
   for holding the GPU, not for the work done on it.</li>
@@ -111,24 +125,24 @@ and is charged like one.</p>
   <a href="/docs/running-jobs/launch-sh-reference.html#node-selection">Node Selection</a>.</li>
 </ul>
 <h2 id="limiting-the-spend">Limiting the Spend</h2>
-<p>Stop sessions that are not in use. From the browser, use
+<p><strong>Stop sessions that are not in use.</strong> From the browser, use
 <strong>File → Hub Control Panel → Stop My Server</strong>. From a terminal, run
 <code>kubectl delete pod &lt;pod-id&gt;</code>.
 <a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>
 describes the browser procedure.</p>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Logging out does not stop a session, and closing VS Code does not release a
 pod.</p></div>
-<p>Request the smallest GPU class the work fits in. A larger class is not faster
+<p><strong>Request the smallest GPU class the work fits in.</strong> A larger class is not faster
 for a model that fits in a smaller one, and it costs more per hour; see
 <a href="#what-an-hour-costs">What an Hour Costs</a>.
 <a href="/docs/gpu-access/gpu-classes.html#choosing-a-class">Choosing a Class</a> covers class selection.</p>
-<p>Check the remaining balance before a long run, not after it; see
+<p><strong>Check the remaining balance before a long run, not after it</strong>; see
 <a href="#remaining-balance">Remaining Balance</a>.</p>
-<p>A booked window costs no more than an on-demand lease for the same hours.
+<p><strong>A booked window costs no more than an on-demand lease for the same hours.</strong>
 <a href="/docs/gpu-access/reservations.html">Reservations</a> describes booking. Off-peak hours are
 discounted. See <a href="#peak--off-peak-hours">Peak &amp; Off-Peak Hours</a>.</p>
 <h2 id="the-size-of-a-budget">The Size of a Budget</h2>
-<p>Every workspace gives each member 10 SU per week by default, in course and
+<p>Every workspace gives each member <strong>10 SU per week by default</strong>, in course and
 research workspaces alike, and in <code>ORG_ON_DEMAND</code>, the default workspace. The
 instructor or researcher can ask for a different figure.
 <a href="#changing-a-budget">Changing a Budget</a> lists the routes for changing a budget.</p>
@@ -136,18 +150,23 @@ instructor or researcher can ask for a different figure.
 GPU-hours of <code>medium</code> at the full rate, or 20 off-peak.</p>
 <p>A budget belongs to a workspace, not to a person. A person who is a student in
 one course, a TA in another, and a member of a lab holds a separate budget in
-each, on that workspace's cycle. A reservation draws on the budget of the
-workspace it is made under: the workspace chosen in the booking wizard, or, for
-an on-demand lease, the workspace the pod's <code>dsmlp/course</code> label names.
+each, on that workspace's cycle.</p>
+<p>A reservation draws on the budget of the
+workspace it is made under:</p>
+<ul>
+<li>For a booking, the workspace chosen in the booking wizard.</li>
+<li>For an on-demand lease, the workspace the pod's <code>dsmlp/course</code> label names.
 <code>launch.sh -W</code> sets that label, and a pod that names no workspace is charged to
-<code>ORG_ON_DEMAND</code>. See
+<code>ORG_ON_DEMAND</code>.</li>
+</ul>
+<p>See
 <a href="/docs/gpu-access/reservations.html#the-default-workspace">The Default Workspace</a> and
 <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#belonging-to-several-workspaces">Belonging to Several Workspaces</a>.</p>
 <h3 id="budgets-and-workspace-quotas">Budgets and Workspace Quotas</h3>
 <p>A budget limits how much GPU time a member may spend. A workspace's quota
 limits how many GPUs of a class the workspace may hold at once. See
 <a href="/docs/gpu-access/quotas-and-availability.html">Quotas, Cohorts &amp; Availability</a>. Either can stop
-a launch, for different reasons. Remaining budget does not mean a GPU is free.</p>
+a launch, for different reasons. <strong>Remaining budget does not mean a GPU is free.</strong></p>
 <p>A budget window and a workspace quota are independent. A quota can change from
 week to week, for example during a deadline surge, without any change to the
 budget.</p>
@@ -190,17 +209,24 @@ The rates in force for Fall 2026:</p>
 </tr>
 </tbody>
 </table></div>
-<p>For example, 3 hours of two <code>medium</code> GPUs at the full rate costs 6 SU. The
+<p>For example, 3 hours of two <code>medium</code> GPUs at the full rate costs 6 SU.</p>
+<p>The
 <strong>Rates</strong> page in the reservation app is the authority on current rates; see
 <a href="#the-rates-page">The Rates Page</a>. The booking wizard shows a booking's cost
 before it is confirmed.</p>
 <h3 id="peak--off-peak-hours">Peak &amp; Off-Peak Hours</h3>
 <p>Service Unit rates are discounted by 50% in the off-peak hours, 1 AM to 4 PM
 Pacific time, on every day of the week, weekends included. The peak hours run
-from 4 PM to 1 AM. The discounted hours are marked on the <strong>Rates</strong> page, which
+from 4 PM to 1 AM.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-certificate"></span><p class="docs-card-title">Off-peak</p><p>An off-peak window is also more likely to be available. At midday there usually is no walk-up queue.</p>
+<dl class="docs-card-facts"><div><dt>Hours</dt><dd>1 AM to 4 PM Pacific</dd></div><div><dt>Rate</dt><dd>Discounted by 50%</dd></div></dl></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-time"></span><p class="docs-card-title">Peak</p><p>On a busy deadline evening there is a walk-up queue.</p>
+<dl class="docs-card-facts"><div><dt>Hours</dt><dd>4 PM to 1 AM</dd></div><div><dt>Rate</dt><dd>The full rate</dd></div></dl></article>
+</div>
+<p>The discounted hours are marked on the <strong>Rates</strong> page, which
 shows them for each day of the week, and by an amber strip on the booking
-wizard's timeline. An off-peak window is also more likely to be available. On a
-busy deadline evening there is a walk-up queue; at midday there usually is not.</p>
+wizard's timeline.</p>
 <p>Batch and background jobs, which run unattended, are the work most easily
 moved off-peak, for example by starting them overnight. An interactive
 debugging session is not easily moved.
@@ -222,7 +248,8 @@ are discounted hours. Point at a bar for its exact rate, and use <strong>‹</st
 <strong>›</strong> to move between weeks.</p>
 <p><strong>Show rate summary table</strong> lists each class's discount windows. The table can
 list a discount window that does not apply in the week shown; the chart is
-exact. The Rates page gives rates in <code>SU/hr</code> and the booking wizard in
+exact.</p>
+<p>The Rates page gives rates in <code>SU/hr</code> and the booking wizard in
 <code>SU/GPU·h</code>. Both are per GPU.</p>
 <h2 id="budget-windows--cadences">Budget Windows &amp; Cadences</h2>
 <p>A Service Unit budget renews weekly by default, in every workspace: from
@@ -313,8 +340,9 @@ the budget, and a line below it gives the figures:</p>
 </tr>
 </tbody>
 </table></div>
-<p>The bar and the figure beside it leave out <strong>Cancelled</strong>, so they do not add up
-to <strong>Remaining</strong> when a penalty has been kept. In team mode the block reads
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>The bar leaves out penalties</strong></p><p>The bar and the figure beside it leave out <strong>Cancelled</strong>, so they do not add up
+to <strong>Remaining</strong> when a penalty has been kept.</p></div>
+<p>In team mode the block reads
 <strong>Team budget</strong>, and a workspace with a pool shows a <strong>Group pool</strong> row. An
 increase an administrator applies changes <strong>Budget</strong> without any other notice.</p>
 <p>The booking wizard also shows a budget meter above its timeline. There, "used"
@@ -322,7 +350,8 @@ means everything charged to that window: ended, open, and kept penalties.</p>
 <h2 id="the-group-pool">The Group Pool</h2>
 <p>A workspace may hold a pool budget alongside its members' own budgets. A
 reservation draws on both. The pool also limits workspace managers, and can
-refuse a booking when the member's own budget still has room. Pool budgets are
+refuse a booking when the member's own budget still has room.</p>
+<p>Pool budgets are
 expected to be uncommon in course workspaces. The PI of a research group can
 state whether the group has one configured.</p>
 <h2 id="changing-a-budget">Changing a Budget</h2>
@@ -330,24 +359,28 @@ state whether the group has one configured.</p>
 PI) may not edit any budget, including that of the workspace they manage.
 <a href="/docs/reference/managing-a-group.html">Managing a Group</a> lists manager privileges.</p>
 <p>To change a budget, the manager requests it by ticket to
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, stating the workspace, what the
-work is, and the date by which it matters.
-<a href="/docs/reference/getting-help.html#administrative-requests">Administrative Requests</a>
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, stating:</p>
+<ul class="docs-checklist">
+<li>The workspace</li>
+<li>What the work is</li>
+<li>The date by which it matters</li>
+</ul>
+<p><a href="/docs/reference/getting-help.html#administrative-requests">Administrative Requests</a>
 describes the request format.</p>
 <p>A booking a manager makes on a member's behalf does not add to the member's
 budget. It is charged to the member.</p>
 <h2 id="the-cancellation-penalty">The Cancellation Penalty</h2>
-<p>Cancelling a booking at least 24 hours before its start costs nothing. Any other
-cancellation keeps part of the booking's cost:</p>
-<ol>
-<li>The time already used is charged in full.</li>
-<li>The unused time that falls within the next 24 hours is counted. Unused time
-   beyond that is free.</li>
-<li>An exemption of half the used and counted time together, at most 8 hours, is
-   free.</li>
-<li>If the counted time is no more than the exemption, nothing more is charged.
+<p><strong>Cancelling a booking at least 24 hours before its start costs nothing.</strong> Any other
+cancellation keeps part of the booking's cost, worked out in this order:</p>
+<ol class="docs-steps">
+<li><span class="docs-step-title">The time used</span><p>The time already used is charged in full.</p></li>
+<li><span class="docs-step-title">The counted time</span><p>The unused time that falls within the next 24 hours is counted. Unused time
+   beyond that is free.</p></li>
+<li><span class="docs-step-title">The exemption</span><p>An exemption of half the used and counted time together, at most 8 hours, is
+   free.</p></li>
+<li><span class="docs-step-title">The charge</span><p>If the counted time is no more than the exemption, nothing more is charged.
    Otherwise the charge is the cost of the counted time, multiplied by the
-   counted time less the exemption, divided by the counted time.</li>
+   counted time less the exemption, divided by the counted time.</p></li>
 </ol>
 <p>The counted time is priced at the rates of the hours it covers, off-peak
 discounts included. Examples on one <code>medium</code> GPU at the full rate, where 1 SU is
@@ -394,11 +427,15 @@ one hour:</p>
 </tr>
 </tbody>
 </table></div>
-<p>Two consequences follow. A booking cancelled before it starts keeps half the
+<p>Two consequences follow:</p>
+<ul>
+<li>A booking cancelled before it starts keeps half the
 cost of its hours that fall within the next 24 hours; where more than 16 of its
-hours fall in that span, it keeps all but 8 hours' worth of them. Handing back
+hours fall in that span, it keeps all but 8 hours' worth of them.</li>
+<li>Handing back
 the rest of a booking in progress is free only when the rest is no longer than
-the time already used, and no more than 8 hours.</p>
+the time already used, and no more than 8 hours.</li>
+</ul>
 <p>A no-show is charged on the same scale, at the moment the booking is declared a
 no-show; see <a href="/docs/gpu-access/reservations.html#the-claim-window">The Claim Window</a>. An on-demand
 lease is charged on the same scale, except that unused time in its first 2 hours
@@ -407,7 +444,9 @@ is free; see <a href="#on-demand-lease-charges">On-Demand Lease Charges</a>.</p>
 budget window until the window renews. A waiver frees it at once. Penalties are
 assessed in Service Units. No money is billed.</p>
 <h3 id="cancelling-a-booking">Cancelling a Booking</h3>
-<p>On <strong>My Reservations</strong>, select <strong>Cancel</strong> on the reservation. The dialog states
+<ol class="docs-steps">
+<li><span class="docs-step-title">Select Cancel</span><p>On <strong>My Reservations</strong>, select <strong>Cancel</strong> on the reservation.</p></li>
+<li><span class="docs-step-title">Read the cost</span><p>The dialog states
 what the cancellation will cost:</p>
 <ul>
 <li>For a booking that starts within 24 hours:
@@ -418,22 +457,29 @@ what the cancellation will cost:</p>
 <li>For a booking in progress: <code>You will be credited X SU.</code>, and a warning that
   pods running under the booking will be stopped.</li>
 <li>For a booking more than 24 hours away: no notice, because nothing is charged.</li>
-</ul>
-<p>Select <strong>Yes, Cancel</strong> to confirm. Cancelling a booking in progress deletes the
+</ul></li>
+<li><span class="docs-step-title">Confirm</span><p>Select <strong>Yes, Cancel</strong> to confirm.</p></li>
+</ol>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Cancelling stops running sessions</strong></p><p>Cancelling a booking in progress deletes the
 sessions running under it; see
-<a href="/docs/reference/reservation-events.html#reservationcancelled"><code>ReservationCancelled</code></a>.</p>
+<a href="/docs/reference/reservation-events.html#reservationcancelled"><code>ReservationCancelled</code></a>.</p></div>
 <h3 id="cancelling-in-advance">Cancelling in Advance</h3>
 <p>A booking cancelled at least 24 hours before its start costs nothing, and the
-capacity returns to the pool. Release a window as soon as it is known that it
-will not be used.</p>
+capacity returns to the pool. <strong>Release a window as soon as it is known that it
+will not be used.</strong></p>
 <h3 id="having-a-charge-waived">Having a Charge Waived</h3>
 <p>A workspace manager may waive a penalty: for a course, the instructor or TA; for
 a lab, the PI. Waiver requests go to the manager. A member cannot waive a
 penalty on their own cancellation.</p>
-<p>A manager waives a penalty when cancelling a member's booking, with <strong>Waive this
-penalty</strong>, or afterwards, with the waive button on the cancelled reservation on
+<p>A manager waives a penalty in one of two ways:</p>
+<ul>
+<li>When cancelling a member's booking, with <strong>Waive this
+penalty</strong>.</li>
+<li>Afterwards, with the waive button on the cancelled reservation on
 <strong>Group Reservations</strong>. A penalty from a teammate's cancellation in team mode is
-waived afterwards in the same way. A manager's waiver clears the member's share
+waived afterwards in the same way.</li>
+</ul>
+<p>A manager's waiver clears the member's share
 of the penalty. Where the workspace has a pool, only an administrator clears the
 pool's share. See <a href="#the-group-pool">The Group Pool</a>.</p>
 <p>A waiver is a judgment about circumstances, such as an illness, a booking made
@@ -447,11 +493,14 @@ was assessed in circumstances that warrant relief, write to
 window renews. A pending GPU session waits with an <code>OnDemandLeaseDenied</code> event
 that quotes the budget and names the time it renews; see
 <a href="/docs/reference/reservation-events.html#ondemandleasedenied">Reservation Events</a>.</p>
-<p>A budget on the default weekly window renews each Monday. In a course, the
+<p>A budget on the default weekly window renews each Monday. The routes to more depend on the workspace:</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><p class="docs-card-title">In a course</p><p>The
 instructor or TA can request an increase by ticket. See
 <a href="#changing-a-budget">Changing a Budget</a>. A booking the instructor or TA makes on
-the member's behalf is charged to the member, so it does not help.</p>
-<p>In a research workspace, write to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>,
+the member's behalf is charged to the member, so it does not help.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-book"></span><p class="docs-card-title">In a research workspace</p><p>Write to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>,
 naming the work and the date by which it must be done. Where the deadline
 permits, waiting for the budget window to renew is also an option. See
-<a href="#budget-windows--cadences">Budget Windows &amp; Cadences</a>.</p>
+<a href="#budget-windows--cadences">Budget Windows &amp; Cadences</a>.</p></article>
+</div>

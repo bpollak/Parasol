@@ -10,22 +10,38 @@ canonicalUrl: /about/how-parasol-works.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/overview/
 format: html
 ---
-<p>Start here if you are new to Datahub and PARASOL, the platform formerly called the Data Science &amp; Machine Learning Platform (DSMLP). Find out what the service offers every course and lab, the
+<p class="lead">Start here if you are new to Datahub and PARASOL, the platform formerly called the Data Science &amp; Machine Learning Platform (DSMLP). Find out what the service offers every course and lab, the
 constraints that apply to all work on it, and the page to begin with for your
 role.</p>
+<dl class="docs-glance">
+<div><dt>Organized into</dt><dd>Workspaces: one per course, one per lab, or a general catch-all</dd></div>
+<div><dt>Course session</dt><dd>Typically begins at 2 CPU cores and 4GB RAM</dd></div>
+<div><dt>GPUs</dt><dd>Five classes, organized by size</dd></div>
+<div><dt>GPU access</dt><dd>A reservation system, from Fall 2026</dd></div>
+</dl>
 <h2 id="datahub-dsmlp-and-the-research-cluster">Datahub, PARASOL, and the Research Cluster</h2>
 <p>UC San Diego's Datahub and PARASOL
 provide thousands of undergraduates, graduate students, and their instructors
 with access to Jupyter, RStudio, and other computational resources for scheduled
-classes, formal independent study, and student projects. The same cluster runs
-research work and, in that context, is also called the <strong>Research Cluster</strong>.</p>
+classes, formal independent study, and student projects.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-globe"></span><p class="docs-card-title">Datahub</p><p><strong>Datahub</strong> is the web interface, at
+<a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-tasks"></span><p class="docs-card-title">PARASOL</p><p><strong>PARASOL</strong> is the cluster that
+runs Datahub sessions, and it is also reachable from a terminal.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><p class="docs-card-title">Research Cluster</p><p>The same cluster runs
+research work and, in that context, is also called the <strong>Research Cluster</strong>.</p></article>
+</div>
+<p><strong>Datahub and the PARASOL cluster are a single service, and the same files are present in both.</strong></p>
 <p>The platforms are used in courses ranging from introductory Data Science
 lectures to graduate-level applied machine learning, and in curricula in
 Biology, Music, Social Sciences, and Public Health. In AY 2025-26, the platforms
 hosted more than 140 classes, 75 instructors, and 18,000 student enrollments.</p>
-<p><strong>Datahub</strong> is the web interface, at
-<a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>. <strong>PARASOL</strong> is the cluster that
-runs Datahub sessions, and it is also reachable from a terminal. Datahub and the PARASOL cluster are a single service, and the same files are present in both.</p>
+<ul class="row agent-metric-grid" aria-label="Platform use in AY 2025-26">
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">140+</strong><span class="agent-metric-label">Classes</span><span class="agent-metric-note">AY 2025-26</span></div></li>
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">75</strong><span class="agent-metric-label">Instructors</span><span class="agent-metric-note">AY 2025-26</span></div></li>
+<li class="col-sm-4"><div class="agent-metric-card"><strong class="agent-metric-value">18,000</strong><span class="agent-metric-label">Student enrollments</span><span class="agent-metric-note">AY 2025-26</span></div></li>
+</ul>
 <h2 id="where-to-begin">Where to Begin</h2>
 <p>Each audience has its own starting page.</p>
 <div class="table-responsive"><table class="table table-striped">
@@ -103,10 +119,13 @@ classes.
 <a href="/docs/gpu-access/workloads-by-gpu-class.html">Workloads by GPU Class</a> gives examples of
 the work each class suits.</p>
 <h3 id="storage">Storage</h3>
-<p>Each member has a per-user, per-workspace home directory; a shared area readable
-by everyone in the workspace; and a per-user, cluster-wide private area
-available in every workspace.
-<a href="/docs/workspaces-and-storage/your-files-and-quotas.html#where-files-live">Where Files Live</a>
+<p>Each member has three areas.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><p class="docs-card-title">Home directory</p><p>Per-user and per-workspace.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-folder-open"></span><p class="docs-card-title">Shared area</p><p>Readable by everyone in the workspace.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-lock"></span><p class="docs-card-title">Private area</p><p>Per-user and cluster-wide, available in every workspace.</p></article>
+</div>
+<p><a href="/docs/workspaces-and-storage/your-files-and-quotas.html#where-files-live">Where Files Live</a>
 lists the directories.
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#workspace-and-personal-quotas">Workspace and Personal Quotas</a>
 gives the quotas for course and research home directories.
@@ -123,33 +142,39 @@ the images.</p>
 as VS Code connected to a cluster container. <a href="/docs/access/index.html">Access</a>
 describes each route.</p>
 <h2 id="gpu-reservations">GPU Reservations</h2>
-<p>From Fall 2026, access to GPUs is managed by a reservation system. A booking,
+<p>From Fall 2026, access to GPUs is managed by a reservation system.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-calendar"></span><p class="docs-card-title">A booking</p><p>A booking,
 made in the reservation app at
 <a href="https://reserve.dsmlp.ucsd.edu/">reserve.dsmlp.ucsd.edu</a>, holds capacity for a
 specific window, and for the length of that window sessions are admitted ahead
-of the walk-up queue. Ad-hoc,
-on-demand use without a booking is also supported.
-<a href="/docs/gpu-access/reservations.html">Reservations</a> describes booking. Reservations,
+of the walk-up queue.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-flash"></span><p class="docs-card-title">On-demand use</p><p>Ad-hoc,
+on-demand use without a booking is also supported.</p></article>
+</div>
+<p><a href="/docs/gpu-access/reservations.html">Reservations</a> describes booking. Reservations,
 per-group quotas, and Service Unit budgets are the mechanisms that manage
 contention for GPUs. See <a href="/docs/gpu-access/index.html">GPU Access</a>.</p>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>An on-demand launch draws on the Service Unit budget as a booked window does,
 and launching an eligible session authorizes that spend. See
 <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>.</p></div>
 <h2 id="platform-constraints">Platform Constraints</h2>
-<h3 id="root-access">Root Access</h3>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-lock"></span><h3 id="root-access">Root Access</h3>
 <p>Containers run unprivileged, under the member's own UID, with no root or sudo
 inside the container. See
-<a href="/docs/environments/customizing-your-environment.html#root-access-and-system-packages">Root Access and System Packages</a>.
-<code>sudo apt-get install</code> fails by design, and the failure is not a fault to
-report.</p>
-<h3 id="computation-on-the-login-node">Computation on the Login Node</h3>
+<a href="/docs/environments/customizing-your-environment.html#root-access-and-system-packages">Root Access and System Packages</a>.</p>
+<p><code>sudo apt-get install</code> fails by design, and the failure is not a fault to
+report.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-log-in"></span><h3 id="computation-on-the-login-node">Computation on the Login Node</h3>
 <p>The login node is for launching jobs and moving files, and running computation
 on it is prohibited. See
-<a href="/docs/access/the-login-node.html#what-the-login-node-is-for">What the Login Node Is For</a>.</p>
-<h3 id="idle-gpu-sessions">Idle GPU Sessions</h3>
+<a href="/docs/access/the-login-node.html#what-the-login-node-is-for">What the Login Node Is For</a>.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-time"></span><h3 id="idle-gpu-sessions">Idle GPU Sessions</h3>
 <p>An idle GPU session still holds its GPU, and the session is reclaimed once it
 has been idle long enough. See
-<a href="/docs/gpu-access/what-ends-a-session.html#what-counts-as-idle">What Counts as Idle</a>.</p>
+<a href="/docs/gpu-access/what-ends-a-session.html#what-counts-as-idle">What Counts as Idle</a>.</p></article>
+</div>
 <h2 id="support">Support</h2>
 <p>Questions and feedback go to the contact for the topic.</p>
 <div class="table-responsive"><table class="table table-striped">

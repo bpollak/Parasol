@@ -10,29 +10,41 @@ canonicalUrl: /docs/grading/choosing-a-grading-tool.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/grading/choosing-a-grading-tool/
 format: html
 ---
-<p>Choose a grading tool for your course before the quarter starts: nbgrader runs
+<p class="lead">Choose a grading tool for your course <strong>before the quarter starts</strong>: nbgrader runs
 inside Datahub, while Otter-Grader and the Gradescope autograder run on
 Gradescope. If you choose nbgrader, grade in JupyterLab, the supported
 interface.</p>
+<dl class="docs-glance">
+<div><dt>Runs on Datahub</dt><dd>nbgrader</dd></div>
+<div><dt>Runs on Gradescope</dt><dd>Otter-Grader and the Gradescope autograder</dd></div>
+<div><dt>Supported by IT Services</dt><dd>nbgrader</dd></div>
+<div><dt>Grade nbgrader in</dt><dd>JupyterLab</dd></div>
+</dl>
 <h2 id="grading-tools">Grading Tools</h2>
-<h3 id="nbgrader">nbgrader</h3>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><h3 id="nbgrader">nbgrader</h3>
 <p>nbgrader is the in-platform tool. Assignments are created, distributed,
 collected, autograded, and manually graded inside Datahub, through the
 Formgrader interface. Students complete and submit their work without leaving
 the platform. <a href="/docs/grading/notebook-grading-workflow.html">Notebook Grading Workflow</a>
 describes the workflow.</p>
-<h3 id="otter-grader">Otter-Grader</h3>
+<dl class="docs-card-facts"><div><dt>Supported by</dt><dd>IT Services</dd></div><div><dt>Grades reach Canvas</dt><dd>By manual CSV upload</dd></div></dl></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-check"></span><h3 id="otter-grader">Otter-Grader</h3>
 <p>Otter-Grader runs on the Gradescope autograder and grades Jupyter notebooks
 submitted through Gradescope. It generates the notebook tests and produces PDFs
 for manual grading.</p>
-<h3 id="gradescope-autograder">Gradescope Autograder</h3>
+<dl class="docs-card-facts"><div><dt>Supported by</dt><dd>Gradescope / community</dd></div><div><dt>Grades reach Canvas</dt><dd>Through Gradescope</dd></div></dl></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-console"></span><h3 id="gradescope-autograder">Gradescope Autograder</h3>
 <p>The Gradescope autograder, used without Otter-Grader, is the general-purpose
 option. It has native support for languages beyond Python, including C, C#,
 Java, and MySQL. Neither nbgrader nor Otter-Grader offers this.</p>
+<dl class="docs-card-facts"><div><dt>Supported by</dt><dd>Gradescope</dd></div><div><dt>Grades reach Canvas</dt><dd>Through Gradescope</dd></div></dl></article>
+</div>
 <h3 id="support-for-each-tool">Support for Each Tool</h3>
-<p>IT Services supports nbgrader. Questions about Gradescope or Otter-Grader
+<p><strong>IT Services supports nbgrader.</strong> Questions about Gradescope or Otter-Grader
 behavior go to Gradescope or the Otter community, not to IT Services, even for
-a course hosted on Datahub. For a course using any of the three tools, IT
+a course hosted on Datahub.</p>
+<p>For a course using any of the three tools, IT
 Services can help with the Datahub side: the image, the data, and the
 environment students work in.</p>
 <h2 id="comparison-of-grading-tools">Comparison of Grading Tools</h2>
@@ -141,8 +153,8 @@ instructors who have used each tool.
 <a href="/docs/reference/getting-help.html">Getting Help</a> lists contact routes.</p>
 <h3 id="timing-of-the-choice">Timing of the Choice</h3>
 <p>Assignment structure, test authoring, and student instructions all differ
-between the tools, so changing tools mid-term is costly. Settle the choice
-before the quarter starts, during the setup window. Course setup dates are on
+between the tools, so changing tools mid-term is costly. <strong>Settle the choice
+before the quarter starts, during the setup window.</strong> Course setup dates are on
 <a href="/docs/access/when-access-starts-and-ends.html">When Access Starts &amp; Ends</a>.</p>
 <h2 id="nbgrader-on-datahub">nbgrader on Datahub</h2>
 <p>nbgrader runs entirely in the Jupyter interface, so the interface a grader or
@@ -150,9 +162,10 @@ student uses determines whether its controls are available.
 <a href="#interface-support-for-nbgrader">Interface Support for nbgrader</a> lists support
 by interface.</p>
 <h3 id="shared-grader-account">Shared Grader Account</h3>
-<p>Each Datahub course is issued one shared grader account. nbgrader works only
-from that account, not from an instructor's or a TA's own account, and everyone
-who grades shares it. Formgrader appears only for the shared grader account,
+<p>Each Datahub course is issued one shared grader account. <strong>nbgrader works only
+from that account</strong>, not from an instructor's or a TA's own account, and everyone
+who grades shares it.</p>
+<p>Formgrader appears only for the shared grader account,
 whichever interface is in use.
 <a href="/docs/reference/managing-a-group.html">Managing a Group</a> describes the account.</p>
 <h3 id="student-feedback">Student Feedback</h3>
@@ -160,9 +173,9 @@ whichever interface is in use.
 cells. After grades are released, students see a score breakdown for those
 cells and any feedback that course staff generate.</p>
 <h3 id="grades-and-academic-records">Grades and Academic Records</h3>
-<p>Students' grades and academic records are protected information. The
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>Students' grades and academic records are protected information. The
 platform's data rules in <a href="/docs/reference/policy.html">Policy</a> apply to them as to
-any other data.</p>
+any other data.</p></div>
 <h2 id="interface-support-for-nbgrader">Interface Support for nbgrader</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -195,7 +208,7 @@ any other data.</p>
 </tr>
 </tbody>
 </table></div>
-<p>JupyterLab is the default interface and the supported interface for grading.</p>
+<p><strong>JupyterLab is the default interface and the supported interface for grading.</strong></p>
 <h3 id="experimental-interfaces">Experimental Interfaces</h3>
 <p>Notebook 7 and NBClassic are experimental. If either misbehaves, switch back to
 JupyterLab and report the problem to
@@ -236,13 +249,14 @@ so instructions written for Notebook 6 still describe it correctly.</p>
 <p>From a notebook, the <strong>Open In</strong> dropdown offers Notebook 7 and NBClassic.</p>
 <p>From the URL, <code>/lab</code> opens JupyterLab and <code>/tree</code> opens the Notebook-style tree
 view:</p>
-<pre class="docs-code"><code class="language-text">https://datahub.ucsd.edu/user/&lt;username&gt;/lab
-https://datahub.ucsd.edu/user/&lt;username&gt;/tree</code></pre>
-<p>Switching interfaces does not restart anything or lose work. When a grading
-control is missing, switching interfaces is a safe first step.</p>
+<figure class="docs-command"><figcaption>Interface URLs on Datahub</figcaption><pre class="docs-code"><code class="language-text">https://datahub.ucsd.edu/user/&lt;username&gt;/lab
+https://datahub.ucsd.edu/user/&lt;username&gt;/tree</code></pre></figure>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Tip</strong></p><p>Switching interfaces does not restart anything or lose work. When a grading
+control is missing, switching interfaces is a safe first step.</p></div>
 <h2 id="older-screenshots">Older Screenshots</h2>
 <p>Upstream nbgrader documentation shows Formgrader running in JupyterLab, which
-matches the current interface. Older IT Services material, and any course
+matches the current interface.</p>
+<p>Older IT Services material, and any course
 handout written before the 2024.4 images, shows Notebook 6: the classic
 interface, without the JupyterLab panel on the left-hand side. The buttons and
 the workflow are the same in both.</p>

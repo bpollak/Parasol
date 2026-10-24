@@ -10,10 +10,16 @@ canonicalUrl: /docs/running-jobs/checkpointing.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/running-jobs/checkpointing/
 format: html
 ---
-<p>A container can stop for reasons unrelated to faulty code: the runtime limit,
+<p class="lead">A container can stop for reasons unrelated to faulty code: the runtime limit,
 idle culling, preemption, and maintenance. Checkpoint and log a long or
 unattended run so that it can resume after a stop and so that its logs show
 what happened.</p>
+<dl class="docs-glance">
+<div><dt>Runtime limit</dt><dd>6 hours by default, 12 if set at launch</dd></div>
+<div><dt>Preemption notice</dt><dd>Usually about 15 minutes</dd></div>
+<div><dt>Warning file</dt><dd><code>/etc/podinfo/annotations</code></dd></div>
+<div><dt>Grace period</dt><dd>600 seconds for pods started by <code>launch.sh</code></dd></div>
+</dl>
 <h2 id="what-can-end-a-run">What Can End a Run</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -82,7 +88,7 @@ describes directory locations.</p>
 <p>Do not write checkpoints into a shared or course-wide directory unintentionally.
 Its quota serves the whole class, not one run.</p>
 <h3 id="wall-clock-schedule">Wall-Clock Schedule</h3>
-<p>Checkpointing on wall-clock time, rather than only at the end of each epoch,
+<p><strong>Checkpointing on wall-clock time</strong>, rather than only at the end of each epoch,
 bounds the work an interruption can lose. The runtime limit ends a run
 regardless of epoch boundaries, and with per-epoch checkpoints an epoch that
 takes 90 minutes loses 90 minutes of work at each interruption. A checkpoint
@@ -95,9 +101,10 @@ be supplied by hand at each restart.</p>
 <p>Checkpoints are large, and home directories have quotas. See
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#workspace-and-personal-quotas">Workspace and Personal Quotas</a>.
 Bound the number of checkpoints kept. The last two and the best one are usually
-enough. Delete an old checkpoint only after the new one is complete. A job that
+enough.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Delete the old checkpoint last</strong></p><p>Delete an old checkpoint only after the new one is complete. A job that
 deletes the old checkpoint first can lose all saved progress to one interruption
-during the save.</p>
+during the save.</p></div>
 <h2 id="what-a-resumable-checkpoint-contains">What a Resumable Checkpoint Contains</h2>
 <p>A checkpoint that holds only the model weights does not resume the same run.
 Each component in this table other than the weights is state the optimizer or
@@ -160,11 +167,16 @@ its configuration cannot be identified later.</p>
 <p>An interruption can end a process while it is writing a checkpoint. Single-file
 and sharded checkpoints are protected against this in different ways.</p>
 <h3 id="single-file-checkpoints">Single-File Checkpoints</h3>
-<p>Write a single-file checkpoint to a temporary path, flush it, then rename it.
-<code>os.replace</code> is atomic within one filesystem, so the visible path always holds
+<p>Write a single-file checkpoint to a temporary path, flush it, then rename it.</p>
+<ol class="docs-flow" aria-label="An atomic single-file save">
+<li><span class="docs-flow-label">Write</span><strong>Save to a temporary path</strong><p>The example writes to <code>{path}.tmp</code>.</p></li>
+<li><span class="docs-flow-label">Flush</span><strong>Make the data durable</strong><p>Flush and <code>fsync</code> before the rename.</p></li>
+<li><span class="docs-flow-label">Rename</span><strong>Replace the visible path</strong><p><code>os.replace</code>, atomic within one filesystem only.</p></li>
+</ol>
+<p><code>os.replace</code> is atomic within one filesystem, so the visible path always holds
 either the complete old checkpoint or the complete new one, never a truncated
 file:</p>
-<pre class="docs-code"><code class="language-python">import os, torch
+<figure class="docs-command"><figcaption>An atomic save in Python</figcaption><pre class="docs-code"><code class="language-python">import os, torch
 
 def save_atomic(state: dict, path: str) -&gt; None:
     tmp = f"{path}.tmp"
@@ -177,39 +189,39 @@ def save_atomic(state: dict, path: str) -&gt; None:
     try:
         os.fsync(dfd)              # and the rename itself is durable
     finally:
-        os.close(dfd)</code></pre>
+        os.close(dfd)</code></pre></figure>
 <p>A checkpoint written directly to its final path and interrupted during the write
 fails to load with <code>RuntimeError: unexpected EOF</code>.</p>
 <h3 id="sharded-checkpoints">Sharded Checkpoints</h3>
 <p>A distributed checkpoint is a directory of per-rank shards, and no atomic rename
 covers all of them at once. Complete the save, then publish it, in one of two
 ways:</p>
-<ul>
-<li>Write into a scratch directory, and rename the directory once every rank has
-  finished.</li>
-<li>Write an explicit <code>DONE</code> marker last, and have the resume path ignore any
-  directory without one.</li>
-</ul>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-folder-open"></span><p class="docs-card-title">Rename the directory</p><p>Write into a scratch directory, and rename the directory once every rank has
+  finished.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-flag"></span><p class="docs-card-title">Write a <code>DONE</code> marker</p><p>Write an explicit <code>DONE</code> marker last, and have the resume path ignore any
+  directory without one.</p></article>
+</div>
 <p>With <code>torch.distributed.checkpoint</code>, the <code>.metadata</code> file is written after the
 shards, so its absence indicates that a directory is incomplete. Depend on an
 explicit marker rather than on <code>.metadata</code>.</p>
 <h2 id="checkpoint-frequency">Checkpoint Frequency</h2>
 <h3 id="the-youngdaly-interval">The Young/Daly Interval</h3>
-<p>The Young/Daly interval is <code>sqrt(2 · C · MTBF)</code>, where <code>C</code> is the wall-clock
+<p>The Young/Daly interval is <strong><code>sqrt(2 · C · MTBF)</code></strong>, where <code>C</code> is the wall-clock
 cost of one checkpoint and <code>MTBF</code> is the mean time between interruptions. It
 balances saving so often that the saves dominate the run against saving so
 rarely that each interruption costs hours.</p>
 <h3 id="interval-from-checkpoint-cost">Interval from Checkpoint Cost</h3>
 <p>Under a reservation system that announces its interruptions, the interval can be
 set from <code>C</code> alone. A common target is checkpoint overhead below about 5% of step
-time, which for a synchronous save means an interval of roughly <code>20 × C</code>. That
+time, which for a synchronous save means an interval of <strong>roughly <code>20 × C</code></strong>. That
 interval covers interruptions that are not announced, such as a node failure, an
 out-of-memory kill, or a collective that times out. Announced interruptions are
 covered by the warning in
 <a href="#the-termination-warning">The Termination Warning</a>. A checkpoint written on the
 warning limits the loss to one step rather than one interval.</p>
-<p>Measure <code>C</code> once on the storage the checkpoint is actually written to, and log
-the value. Assumed values of <code>C</code> are consistently optimistic.</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Measure <code>C</code></strong></p><p>Measure <code>C</code> once on the storage the checkpoint is actually written to, and log
+the value. Assumed values of <code>C</code> are consistently optimistic.</p></div>
 <h3 id="asynchronous-checkpoints">Asynchronous Checkpoints</h3>
 <p>Where <code>C</code> is large, use asynchronous checkpointing before lengthening the
 interval. <code>torch.distributed.checkpoint</code> offers <code>dcp.async_save</code>, which stages
@@ -221,8 +233,8 @@ continues. The blocking part of the save drops to roughly the staging copy.</p>
 <li>Only one save may be outstanding at a time. Wait on the previous future before
   issuing the next, or the memory use multiplies.</li>
 </ul>
-<p>An asynchronous save that was never flushed is not a checkpoint. Wait on the
-outstanding future before exiting on a preemption.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>An asynchronous save that was never flushed is not a checkpoint. Wait on the
+outstanding future before exiting on a preemption.</p></div>
 <h2 id="the-termination-warning">The Termination Warning</h2>
 <p>The reservation controller marks a session it may need to stop before stopping
 it. The mark is a set of annotations written onto the pod. It appears only while
@@ -231,6 +243,12 @@ holding, or the class has less than its headroom free, and the session is one of
 the candidates that could supply it. Every candidate is marked, not only the
 sessions that will be stopped. See
 <a href="/docs/gpu-access/what-ends-a-session.html#preemption">Preemption</a>.</p>
+<ol class="docs-flow" aria-label="From the termination warning to a stop">
+<li><span class="docs-flow-label">Marked</span><strong>The controller writes the warning</strong><p>For a booking starting in the next 30 minutes, or a class short of headroom.</p></li>
+<li><span class="docs-flow-label">About 2 minutes</span><strong>The container can read it</strong><p>In <code>/etc/podinfo/annotations</code>. Checkpoint on the warning first.</p></li>
+<li><span class="docs-flow-label">Earliest stop</span><strong>The session may be stopped at any time</strong><p>Usual notice is about 15 minutes, with no minimum. The warning may be withdrawn first.</p></li>
+<li><span class="docs-flow-label">Stop</span><strong><code>SIGTERM</code>, then a grace period</strong><p>600 seconds for pods started by <code>launch.sh</code>, then a forced stop.</p></li>
+</ol>
 <h3 id="warning-timings">Warning Timings</h3>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -263,7 +281,7 @@ sessions that will be stopped. See
 </tbody>
 </table></div>
 <h3 id="the-runtime-guarantee">The Runtime Guarantee</h3>
-<p>A session inside its runtime guarantee is never stopped, however short of
+<p><strong>A session inside its runtime guarantee is never stopped</strong>, however short of
 capacity the cluster is. The mark can still appear during the guarantee, when
 the booking that needs the capacity starts after the guarantee ends. The warning
 then states that the reclaim is queued for the moment the guarantee ends. A
@@ -271,7 +289,7 @@ warning of this kind arrives while the guarantee is still running, which leaves
 the most time to checkpoint.
 <a href="/docs/gpu-access/what-ends-a-session.html#end-of-a-reservation-window">End of a Reservation Window</a>
 describes the end of a guaranteed window.</p>
-<p>A job is not stopped at <code>guaranteed-until</code>. It keeps running until another
+<p><strong>A job is not stopped at <code>guaranteed-until</code>.</strong> It keeps running until another
 reservation needs the capacity, so exiting at the guarantee gives up run time
 that remains available. From <code>guaranteed-until</code> onward, the job can be stopped
 on notice it does not control. Shorten the checkpoint interval at that point.</p>
@@ -309,9 +327,9 @@ on notice it does not control. Shorten the checkpoint interval at that point.</p
 </tbody>
 </table></div>
 <p>The message takes one of two forms:</p>
-<pre class="docs-code"><code class="language-text">At risk of preemption: this pod is at or nearing the end of its GPU runtime guarantee and may be terminated as early as 2026-09-23 11:45:00 PDT to free GPUs for a reservation starting at 2026-09-23 12:00:00 PDT (risk 0.50). Extend or re-book the reservation to retain capacity.</code></pre>
-<pre class="docs-code"><code class="language-text">At risk of preemption: this pod is at or nearing the end of its GPU runtime guarantee and may be terminated as early as 2026-09-23 11:45:00 PDT to keep GPUs free for on-demand jobs (risk 1.00). Extend or re-book the reservation to retain capacity.</code></pre>
-<p><code>termination-warning-at</code> is the earliest possible stop, not a scheduled one. The
+<figure class="docs-command"><figcaption>A reservation starting at a given time</figcaption><pre class="docs-code"><code class="language-text">At risk of preemption: this pod is at or nearing the end of its GPU runtime guarantee and may be terminated as early as 2026-09-23 11:45:00 PDT to free GPUs for a reservation starting at 2026-09-23 12:00:00 PDT (risk 0.50). Extend or re-book the reservation to retain capacity.</code></pre></figure>
+<figure class="docs-command"><figcaption>GPUs kept free for on-demand jobs</figcaption><pre class="docs-code"><code class="language-text">At risk of preemption: this pod is at or nearing the end of its GPU runtime guarantee and may be terminated as early as 2026-09-23 11:45:00 PDT to keep GPUs free for on-demand jobs (risk 1.00). Extend or re-book the reservation to retain capacity.</code></pre></figure>
+<p><strong><code>termination-warning-at</code> is the earliest possible stop</strong>, not a scheduled one. The
 shortfall it was computed from may be gone before that moment arrives, in which
 case nothing happens and the annotations are removed. Treat the moment as the
 start of a period in which the session may be stopped at any time, not as a
@@ -322,43 +340,46 @@ moment. The controller removes the three warning annotations once the risk has
 passed, usually within a few minutes. A <code>termination-warning-at</code> in the past, on
 a session that is still running, means the session can be stopped at any
 moment. The controller does not read any of the annotations back to decide
-anything. Each decision is recomputed from live reservation state. Code that
-reads the annotations handles each one being missing, ignores a value that does
-not parse rather than failing, and re-reads each value instead of caching it at
-startup.</p>
+anything. Each decision is recomputed from live reservation state.</p>
+<p>Code that reads the annotations:</p>
+<ul class="docs-checklist"><li>Handles each one being missing</li><li>Ignores a value that does not parse, and does not fail on it</li><li>Re-reads each value, and does not cache it at startup</li></ul>
 <h3 id="canceling-a-pending-termination">Canceling a Pending Termination</h3>
-<p><strong>Extend</strong> in the reservation app, if it is granted, cancels a pending
+<p>Either of these cancels a pending termination:</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-time"></span><p class="docs-card-title">Extend</p><p><strong>Extend</strong> in the reservation app, if it is granted, cancels a pending
 termination at any point until the pod is deleted: the session moves onto a new
 booking and is guaranteed again. Extend can be refused when the GPUs are needed
-for a booking that follows. The controller re-checks every session's live guarantee before it selects
-any session to stop, so an Extend recorded before the selection always takes
-precedence. See <a href="/docs/gpu-access/reservations.html#extend">Extend</a>.</p>
-<p>A new booking that starts exactly when the current guarantee ends, for the same
+for a booking that follows.</p><p>See <a href="/docs/gpu-access/reservations.html#extend">Extend</a>.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-calendar"></span><p class="docs-card-title">A back-to-back booking</p><p>A new booking that starts exactly when the current guarantee ends, for the same
 class, number of GPUs, and workspace, also cancels it. A booking with a gap
-protects the session only once it opens, which can be after the stop. See
-<a href="/docs/gpu-access/what-ends-a-session.html#back-to-back-bookings">Back-to-Back Bookings</a>.</p>
+protects the session only once it opens, which can be after the stop.</p><p>See
+<a href="/docs/gpu-access/what-ends-a-session.html#back-to-back-bookings">Back-to-Back Bookings</a>.</p></article>
+</div>
+<p>The controller re-checks every session's live guarantee before it selects
+any session to stop, so an Extend recorded before the selection always takes
+precedence.</p>
 <h2 id="reading-the-warning-from-inside-a-container">Reading the Warning From Inside a Container</h2>
 <p>Every pod on PARASOL carries its annotations in the file
 <code>/etc/podinfo/annotations</code>. The cluster's admission controller adds the
 downward-API volume that holds the file to each pod it admits, whether the pod
 was started by <code>launch.sh</code>, by Datahub, from a hand-written manifest, or by a
 Job or Deployment. The kubelet refreshes the file as the values change.</p>
-<p>Do not add a volume at <code>/etc/podinfo</code> to a hand-written manifest. A second mount
-at the same path can cause the pod to be refused.</p>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>Do not add a volume at <code>/etc/podinfo</code> to a hand-written manifest. A second mount
+at the same path can cause the pod to be refused.</p></div>
 <p>The file carries every annotation the session has, including the reservation
 behind it, its GPU class, and when it was admitted. Each annotation is on its
 own line as <code>key="value"</code>. The value is quoted, and any quote or backslash
 inside it is escaped:</p>
-<pre class="docs-code"><code class="language-console">$ grep '^galends/termination-warning' /etc/podinfo/annotations
+<figure class="docs-command"><figcaption>List the warning annotations</figcaption><pre class="docs-code"><code class="language-console">$ grep '^galends/termination-warning' /etc/podinfo/annotations
 galends/termination-warning-at="2026-08-21T17:30:16Z"
-galends/termination-warning-risk="0.33"</code></pre>
+galends/termination-warning-risk="0.33"</code></pre></figure>
 <p>One value can be read with <code>sed</code>:</p>
-<pre class="docs-code"><code class="language-bash">sed -n 's|^galends/termination-warning-at="\(.*\)"$|\1|p' /etc/podinfo/annotations</code></pre>
+<figure class="docs-command"><figcaption>Read one value with <code>sed</code></figcaption><pre class="docs-code"><code class="language-bash">sed -n 's|^galends/termination-warning-at="\(.*\)"$|\1|p' /etc/podinfo/annotations</code></pre></figure>
 <h3 id="absent-annotations">Absent Annotations</h3>
 <p>An annotation that is not set has no line in the file. The file itself exists
 from the pod's first second, and the three warning annotations are absent while
-the session is not at risk. Test for a warning by looking for the annotation's
-line, not for the file.</p>
+the session is not at risk. <strong>Test for a warning by looking for the annotation's
+line, not for the file.</strong></p>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>A test on the file itself, such as <code>-f</code> or <code>-e</code>, is true from the pod's first
 second. A loop guarded on the file exits immediately on every run, and does
 so silently.</p></div>
@@ -370,7 +391,7 @@ the volume is refreshed.</p>
 <h3 id="refresh-delay">Refresh Delay</h3>
 <p>The kubelet updates the file on its own sync loop, which adds to the
 controller's own cadence. The warning therefore reaches the container some time
-into the notice period, not at its start: usually about 2 minutes after the
+into the notice period, not at its start: <strong>usually about 2 minutes</strong> after the
 controller writes it.</p>
 <p>Polling every 15 to 30 seconds is sufficient. To watch the file with <code>inotify</code>,
 watch the directory rather than the file, because the file is swapped
@@ -388,7 +409,7 @@ describes idle culling.</p>
 <p>A batch job that processes work in units, such as shards, epochs, or sweeps,
 usually needs only to stop starting new units. Check for the warning between
 units, never inside one:</p>
-<pre class="docs-code"><code class="language-bash">ANNOTATIONS=${ANNOTATIONS:-/etc/podinfo/annotations}
+<figure class="docs-command"><figcaption>Check for the warning between units</figcaption><pre class="docs-code"><code class="language-bash">ANNOTATIONS=${ANNOTATIONS:-/etc/podinfo/annotations}
 
 # Prints the value of galends/&lt;name&gt;, or nothing when the annotation is absent.
 # The file exists from the start, so test for the line, never for the file.
@@ -402,8 +423,8 @@ for shard in "${SHARDS[@]}"; do
         exit 75                 # EX_TEMPFAIL, for whatever submitted the job
     fi
     process_shard "$shard"      # each shard commits its own output
-done</code></pre>
-<p>Re-read the file on every pass through the loop, and do not store the result. A
+done</code></pre></figure>
+<p><strong>Re-read the file on every pass through the loop, and do not store the result.</strong> A
 warning can be withdrawn when the window is extended, the incoming booking never
 claims its capacity, or the session is re-linked to another reservation. The
 annotation's line then disappears from the file. A job that stored the first
@@ -415,7 +436,7 @@ test and log the result instead of acting on it.</p>
 during the backward pass captures inconsistent state, and under distributed
 training a save is a collective operation that every rank has to enter in the
 same iteration:</p>
-<pre class="docs-code"><code class="language-python">import ast
+<figure class="docs-command"><figcaption>Read the warning and guarantee annotations</figcaption><pre class="docs-code"><code class="language-python">import ast
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -450,8 +471,8 @@ def stop_expected(lead_seconds):
         instant = _instant(key)
         if instant is not None and (instant - now).total_seconds() &lt;= lead_seconds:
             return True
-    return False</code></pre>
-<pre class="docs-code"><code class="language-python">warned = False
+    return False</code></pre></figure>
+<figure class="docs-command"><figcaption>Checkpoint at a step boundary</figcaption><pre class="docs-code"><code class="language-python">warned = False
 
 for step, batch in enumerate(loader, start=resume_step):
     train_step(batch)
@@ -462,7 +483,7 @@ for step, batch in enumerate(loader, start=resume_step):
 
     if step % CHECKPOINT_EVERY == 0 or (urgent and not warned):
         save_atomic(state(step), CHECKPOINT_PATH)
-    warned = urgent                        # re-arms if the warning is withdrawn</code></pre>
+    warned = urgent                        # re-arms if the warning is withdrawn</code></pre></figure>
 <p>The loop depends on four elements:</p>
 <ul>
 <li><code>lead_seconds</code> is derived from the measured cost of a checkpoint, not guessed.
@@ -479,31 +500,35 @@ for step, batch in enumerate(loader, start=resume_step):
   checkpoint can lose an hour of work.</li>
 </ul>
 <h3 id="stopping-voluntarily">Stopping Voluntarily</h3>
-<p>For a batch job, stopping voluntarily is a legitimate response and usually the
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-log-out"></span><p class="docs-card-title">Batch job: stop voluntarily</p><p>For a batch job, stopping voluntarily is a legitimate response and usually the
 better one. Checkpointing, exiting cleanly, and letting a submission system
-resubmit the job hands back the capacity the incoming booking needs, chooses the
-stopping point, and avoids depending on the grace period. For an interactive
+resubmit the job:</p>
+<ul><li>Hands back the capacity the incoming booking needs</li><li>Chooses the stopping point</li><li>Avoids depending on the grace period</li></ul></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-repeat"></span><p class="docs-card-title">Interactive session: checkpoint and continue</p><p>For an interactive
 session, checkpointing and continuing is usually the better response. The risk
 figure is not a certainty, the warning is frequently withdrawn, and a notebook
-that checkpoints and continues is usually still running afterwards.</p>
+that checkpoints and continues is usually still running afterwards.</p></article>
+</div>
 <h3 id="the-risk-figure">The Risk Figure</h3>
 <p><code>termination-warning-risk</code> is a band, not a probability. It describes the share
 of the candidate sessions that has to be stopped, on the assumption that the
 choice among them is arbitrary. Where selection follows a policy instead, the
 number is only an indication. Use it in coarse thresholds, such as "possible"
-and "likely". Where checkpoints are cheap, save on any warning and disregard the
-risk figure.</p>
+and "likely".</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Tip</strong></p><p>Where checkpoints are cheap, save on any warning and disregard the
+risk figure.</p></div>
 <h3 id="the-grace-period">The Grace Period</h3>
 <p>A preempted or evicted pod is deleted in the ordinary way: <code>SIGTERM</code>, then a
 grace period, then a forced stop. Pods started by <code>launch.sh</code> have a grace
-period of 600 seconds, or 10 minutes. A <code>SIGTERM</code> handler that saves a
+period of <strong>600 seconds, or 10 minutes</strong>. A <code>SIGTERM</code> handler that saves a
 checkpoint is a useful fallback where the save finishes well within that time,
 and it is the only chance to save before an eviction, which has no warning. The
 grace period begins only after the decision to stop the pod has been made, so
 for a preemption the warning comes earlier. Checkpoint on the warning first.</p>
 <h2 id="resuming">Resuming</h2>
 <h3 id="selecting-the-checkpoint-to-load">Selecting the Checkpoint to Load</h3>
-<p>Load the newest complete checkpoint, which is not always the newest path. The
+<p><strong>Load the newest complete checkpoint</strong>, which is not always the newest path. The
 marker written by the save path distinguishes the two. See
 <a href="#atomic-checkpoint-writes">Atomic Checkpoint Writes</a>. On any load error, fall
 back to the previous checkpoint. That fallback is the reason for keeping more
@@ -518,15 +543,15 @@ lists the components.</p>
 holding anything beyond plain tensors and containers needs those types
 allowlisted through <code>torch.serialization.safe_globals</code>. Use
 <code>torch.serialization.safe_globals</code> rather than <code>weights_only=False</code>, which
-permits arbitrary code execution on load. Where only weights are needed,
+<strong>permits arbitrary code execution on load</strong>. Where only weights are needed,
 <code>safetensors</code> avoids the issue. <code>safetensors</code> stores tensors only, so optimizer
 state still goes through <code>torch.save</code>.</p>
 <h3 id="testing-the-resume-path">Testing the Resume Path</h3>
 <p>Test the resume path deliberately:</p>
-<ol>
-<li>Kill a run at a random step.</li>
-<li>Restart it.</li>
-<li>Check that the loss curve is continuous across the restart.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Kill a run at a random step</span></li>
+<li><span class="docs-step-title">Restart it</span></li>
+<li><span class="docs-step-title">Check that the loss curve is continuous across the restart</span></li>
 </ol>
 <h2 id="checkpointing-by-job-shape">Checkpointing by Job Shape</h2>
 <div class="table-responsive"><table class="table table-striped">
@@ -571,15 +596,15 @@ its own cannot be debugged after it ends. Output from <code>print</code> stateme
 background run goes nowhere that can be read.</p>
 <h3 id="redirecting-output">Redirecting Output</h3>
 <p>The simplest form of logging is a shell redirect:</p>
-<pre class="docs-code"><code class="language-bash">python run.py all &gt; log.txt 2&gt;&amp;1 &amp;</code></pre>
+<figure class="docs-command"><figcaption>Redirect output and errors to a file</figcaption><pre class="docs-code"><code class="language-bash">python run.py all &gt; log.txt 2&gt;&amp;1 &amp;</code></pre></figure>
 <p><code>2&gt;&amp;1</code> is needed because <code>&gt;</code> alone captures standard output, and tracebacks
-arrive on standard error. Add <code>python -u</code> as well. Python buffers output to a
+arrive on standard error. <strong>Add <code>python -u</code> as well.</strong> Python buffers output to a
 file, and without <code>-u</code> an interrupted job can lose its last several minutes of
 log.</p>
 <h3 id="the-logging-module">The <code>logging</code> Module</h3>
 <p>The <code>logging</code> module timestamps every line and records which file and function
 produced it, which makes the log searchable:</p>
-<pre class="docs-code"><code class="language-python"># randdiv.py
+<figure class="docs-command"><figcaption><code>randdiv.py</code>, logging with timestamps</figcaption><pre class="docs-code"><code class="language-python"># randdiv.py
 import logging
 import numpy as np
 
@@ -597,15 +622,15 @@ def myfunc():
     else:
         return a / b
 
-print([myfunc() for _ in range(100)])</code></pre>
+print([myfunc() for _ in range(100)])</code></pre></figure>
 <p>A line in <code>log.txt</code> then reads
 <code>2022-10-30 23:37:11,815,815 root INFO zerodivisionerror preempted</code>, which
 records when it happened and where it came from. <code>filemode='a'</code> appends, so a
 resumed run adds to the existing log instead of erasing it.</p>
 <h3 id="logging-interruptions">Logging Interruptions</h3>
-<p>Log four values for correlation with an interruption: wall-clock time, the epoch
-or step, the path of the last checkpoint written, and whether a termination
-warning was present. When a run ends unexpectedly, these values locate the
+<p>Log four values for correlation with an interruption:</p>
+<ul class="docs-checklist"><li>Wall-clock time</li><li>The epoch or step</li><li>The path of the last checkpoint written</li><li>Whether a termination warning was present</li></ul>
+<p>When a run ends unexpectedly, these values locate the
 restart point and show whether the ending was announced.</p>
 <h2 id="logs-that-outlive-the-pod">Logs That Outlive the Pod</h2>
 <p><code>kubectl logs &lt;pod-name&gt;</code> reads from the pod, so it stops working once the pod
@@ -614,7 +639,7 @@ and a preempted pod. Use it to inspect a pod that is running, not to keep a
 record.</p>
 <p>A file in a home directory persists after the pod is deleted. For unattended
 work, redirect output into one:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium -B -- bash -c 'python -u ./train.py &gt; run.log 2&gt;&amp;1'</code></pre>
+<figure class="docs-command"><figcaption>Write a batch job's output to a file in the home directory</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium -B -- bash -c 'python -u ./train.py &gt; run.log 2&gt;&amp;1'</code></pre></figure>
 <p><code>run.log</code> is then readable from the login node while the job is still running,
 and after it is gone. <a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a> describes
 batch mode. <a href="/docs/running-jobs/watching-your-job.html">Watching a Running Job</a> describes monitoring

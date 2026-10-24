@@ -10,9 +10,15 @@ canonicalUrl: /docs/gpu-access/what-ends-a-session.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/what-ends-a-session/
 format: html
 ---
-<p>A session ends for one of five causes other than its own code: idle culling,
+<p class="lead">A session ends for one of five causes other than its own code: idle culling,
 the runtime limit, preemption, eviction, or maintenance. None of them is a
 crash, and none of them loses saved work.</p>
+<dl class="docs-glance">
+<div><dt>Idle cull</dt><dd>About 30 minutes unused, up to 6 hours when quiet</dd></div>
+<div><dt>Runtime limit</dt><dd>6 hours, or 12 hours where set at launch</dd></div>
+<div><dt>Preemption notice</dt><dd>Usually about 15 minutes, with no minimum</dd></div>
+<div><dt>Saved work</dt><dd>Not lost by any of the five causes</dd></div>
+</dl>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -62,7 +68,7 @@ session that has been working hard receives a grace period of up to an hour
 after the GPU goes quiet before the idle clock starts.</p>
 <p>Idle culling applies to every GPU class. CPU-only sessions are not culled by
 this mechanism.</p>
-<p>A session is idle only when every condition in this table holds at once. If
+<p><strong>A session is idle only when every condition in this table holds at once.</strong> If
 any one of them fails, the culler treats the session as busy.</p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -96,6 +102,12 @@ is idle, because it holds no GPU memory.</p>
 <p>The CPU condition uses the maximum over the last hour, not the current value. A
 job that does a burst of work every forty minutes is not culled between bursts.</p>
 <h3 id="the-timings">The Timings</h3>
+<ol class="docs-flow" aria-label="From launch to an idle cull">
+<li><span class="docs-flow-label">Start</span><strong>Never culled at first</strong><p>No session is culled in its first 45 minutes.</p></li>
+<li><span class="docs-flow-label">Grace</span><strong>The GPU goes quiet</strong><p>15 to 60 minutes pass before the quiet time counts as idle.</p></li>
+<li><span class="docs-flow-label">Idle</span><strong>The idle clock runs</strong><p>30 minutes, or 6 hours when the class is underloaded.</p></li>
+<li><span class="docs-flow-label">Cull</span><strong>The session is shut down</strong><p>A warning starts when 30 minutes remain.</p></li>
+</ol>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -128,18 +140,22 @@ job that does a burst of work every forty minutes is not culled between bursts.<
 </table></div>
 <p>The 6-hour threshold is a property of the GPU class, not of the session. It
 applies when every node behind the GPU class is under 75% allocated on CPU,
-memory, and GPU at the same time. The same idle session can therefore be culled
-after 6 hours on a quiet evening and after 30 minutes in week 10. Do not plan
-work around the 6-hour threshold.</p>
+memory, and GPU at the same time.</p>
+<p>The same idle session can therefore be culled
+after 6 hours on a quiet evening and after 30 minutes in week 10. <strong>Do not plan
+work around the 6-hour threshold.</strong></p>
 <h3 id="warnings--pod-status">Warnings &amp; Pod Status</h3>
 <p>A session is warned before it is culled. The warning starts when 30 minutes
 remain before the cull.</p>
 <p>The idle status is recorded on the pod and can be read from the command line:</p>
-<pre class="docs-code"><code class="language-bash">kubectl get pods
-kubectl describe pod &lt;pod-id&gt;</code></pre>
-<p>Under <code>Annotations</code>, <code>dsmlp/idle-gpu-status</code> reads <code>ok</code>, <code>idle</code> or <code>warning</code>, and
-<code>dsmlp/idle-gpu-cull-deadline</code> gives the time at which the session would be
-culled if nothing changes.</p>
+<figure class="docs-command"><figcaption>Read the idle status of a pod</figcaption><pre class="docs-code"><code class="language-bash">kubectl get pods
+kubectl describe pod &lt;pod-id&gt;</code></pre></figure>
+<p>Under <code>Annotations</code>:</p>
+<ul>
+<li><code>dsmlp/idle-gpu-status</code> reads <code>ok</code>, <code>idle</code> or <code>warning</code>.</li>
+<li><code>dsmlp/idle-gpu-cull-deadline</code> gives the time at which the session would be
+culled if nothing changes.</li>
+</ul>
 <p>The cull deadline is a projection. It is recalculated on every pass, moves as
 conditions change, and is removed as soon as the session does GPU work again.</p>
 <div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>A missing annotation does not indicate a healthy session. It means the
@@ -151,11 +167,13 @@ threshold applies.</p>
 <h3 id="effects-of-idle-culling">Effects of Idle Culling</h3>
 <p>A cull is a deliberate stop, not a crash or a fault in the code. It requires no
 report and no fix.</p>
-<p>The container is deleted. The home directory, the <code>private/</code> area, and the
-workspace's shared directories are not.</p>
-<p>Anything held only in the session's memory is lost, such as a notebook kernel's
-variables or a model trained for two hours and not saved. Checkpoint long runs.</p>
-<p>A culled session requires no cleanup before a relaunch.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-trash"></span><p class="docs-card-title">Lost</p><p>The container is deleted.</p><p>Anything held only in the session's memory is lost, such as a notebook kernel's
+variables or a model trained for two hours and not saved.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-floppy-saved"></span><p class="docs-card-title">Kept</p><p>The home directory, the <code>private/</code> area, and the
+workspace's shared directories are not deleted.</p></article>
+</div>
+<p>Checkpoint long runs. A culled session requires no cleanup before a relaunch.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#where-files-live">Where Files Live</a>, <a href="/docs/running-jobs/checkpointing.html">Checkpointing &amp; Logging Long Runs</a></p>
 <h3 id="background-and-batch-jobs">Background and Batch Jobs</h3>
 <p>Idle culling tests whether the GPU is in use, not whether a session is attached
@@ -165,7 +183,7 @@ to it. The culler treats each of these as an idle session:</p>
 <li>A batch job whose Python process has already exited</li>
 <li>A <code>nohup</code>-ed script that is waiting on a download</li>
 </ul>
-<p>A job that is computing on the GPU is never culled, however long it runs and
+<p><strong>A job that is computing on the GPU is never culled</strong>, however long it runs and
 whether or not anyone is watching it. Backgrounding an active training run does
 not expose it to idle culling. A GPU session held open for later use is culled.</p>
 <p>See also: <a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a></p>
@@ -185,13 +203,19 @@ holding its GPU and drawing on the budget, until it is stopped with
 <strong>File → Hub Control Panel → Stop My Server</strong>.</p></div>
 <p>See also: <a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>, <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a></p>
 <h2 id="end-of-a-reservation-window">End of a Reservation Window</h2>
-<p>The close of a reservation window does not stop the session running in it.
+<p><strong>The close of a reservation window does not stop the session running in it.</strong>
 Where no one else needs the capacity, the session continues to run.</p>
 <p>The window defines what was charged for and what is guaranteed. A session's
 <strong>runtime guarantee</strong> runs to the end of its reservation, and on through any
 booking that directly follows it; see
 <a href="#back-to-back-bookings">Back-to-Back Bookings</a>. After the guarantee ends, the
 session runs without it.</p>
+<ol class="docs-flow" aria-label="From a protected session to preemption">
+<li><span class="docs-flow-label">Protected</span><strong>Inside the guarantee</strong><p>A session inside its guarantee is never preempted.</p></li>
+<li><span class="docs-flow-label">Window ends</span><strong>The session keeps running</strong><p>The close of the window does not stop it.</p></li>
+<li><span class="docs-flow-label">Overstay</span><strong>Running unprotected</strong><p>No Service Units are drawn. Extend brings it back under a guarantee.</p></li>
+<li><span class="docs-flow-label">Preemption</span><strong>Stopped if its GPU is needed</strong><p>Usually with about 15 minutes' notice, and sometimes less.</p></li>
+</ol>
 <h3 id="the-countdown">The Countdown</h3>
 <p>In the Fall 2026 standard images, JupyterLab shows the session's status in the
 status bar at the bottom of the window. While the session is inside its
@@ -226,7 +250,8 @@ the guarantee. Its color follows the session's state:</p>
 <p>The indicator is hidden when there is nothing to report.</p>
 <p><img alt="The JupyterLab status bar reading Job protected 59:55, below a notification that says GPU resources reserved until 10:56 AM, with a Details link." src="/_images/docs/jupyterlab-reservation-status.png" class="img-responsive docs-figure"></p>
 <p>Selecting the indicator, or running <strong>Show Job Reservation/Resource Status</strong>
-from the command palette, opens a dialog with the full detail. A brief
+from the command palette, opens a dialog with the full detail.</p>
+<p>A brief
 notification appears when the session is admitted, when it moves to a
 different reservation, and when it starts running past its guarantee. While the
 session is at risk, a notification with a <strong>Details</strong> link stays on screen. It
@@ -247,15 +272,20 @@ From that point, the session can be stopped, extended, or left running.</p>
 <p>A booking that starts exactly when the current one ends, for the same GPU
 class, the same number of GPUs, and the same workspace, extends the guarantee at
 once. The two bookings stay separate reservations in the reservation app.</p>
-<p>Any other later booking protects a running session only once it opens. A
+<p>Any other later booking protects a running session only once it opens:</p>
+<ul>
+<li>A
 session on an on-demand lease moves onto the booking as soon as it opens, and
-records a <code>ReservationRelinked</code> event. A session on another booking moves onto
+records a <code>ReservationRelinked</code> event.</li>
+<li>A session on another booking moves onto
 it once the booking is open and the session's own guarantee has ended, and
-records an <code>OverstayRelinked</code> event. Between the end of the guarantee and the
+records an <code>OverstayRelinked</code> event.</li>
+</ul>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>The gap is unprotected</strong></p><p>Between the end of the guarantee and the
 opening of the later booking, the session is unprotected, and another member's
 booking that starts in that gap can stop it up to 15 minutes before that
 booking starts. <a href="/docs/gpu-access/reservations.html#extend">Extend</a> is the reliable way to keep a
-running session guaranteed.</p>
+running session guaranteed.</p></div>
 <p>See also: <a href="/docs/running-jobs/checkpointing.html">Checkpointing &amp; Logging Long Runs</a></p>
 <h3 id="overstay">Overstay</h3>
 <p><strong>Overstay</strong> is running a session past the end of its runtime guarantee.
@@ -273,8 +303,8 @@ guarantee. A longer window arranged in advance is the alternative to overstay;
 see <a href="/docs/gpu-access/reservations.html#routes-to-more-time">Routes to More Time</a>.</p>
 <h2 id="preemption">Preemption</h2>
 <p><strong>Preemption</strong> is the ending of a session that is past its runtime guarantee,
-because its GPU is needed. It is a capacity outcome, not a fault. A session
-inside its guarantee is never preempted.</p>
+because its GPU is needed. It is a capacity outcome, not a fault. <strong>A session
+inside its guarantee is never preempted.</strong></p>
 <h3 id="what-triggers-preemption">What Triggers Preemption</h3>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -298,10 +328,21 @@ inside its guarantee is never preempted.</p>
 waits.</p>
 <h3 id="which-sessions-are-stopped">Which Sessions Are Stopped</h3>
 <p>Only sessions past their guarantee are candidates. Among them, sessions are
-chosen by the type of reservation they ran under: best-effort first, then
-on-demand leases, then bookings. Within a type, the choice is random.
+chosen by the type of reservation they ran under, in this order:</p>
+<ol>
+<li>Best-effort</li>
+<li>On-demand leases</li>
+<li>Bookings</li>
+</ol>
+<p>Within a type, the choice is random.
 Sessions are stopped until enough GPUs are free.</p>
 <h3 id="notice-before-preemption">Notice Before Preemption</h3>
+<ol class="docs-flow" aria-label="From the termination warning to a forced stop">
+<li><span class="docs-flow-label">Warn</span><strong>Termination-warning annotations</strong><p>Usually about 15 minutes of notice, with no minimum.</p></li>
+<li><span class="docs-flow-label">Delete</span><strong>The pod receives <code>SIGTERM</code></strong><p>The pod is deleted in the ordinary way.</p></li>
+<li><span class="docs-flow-label">Grace</span><strong>A grace period</strong><p>10 minutes for pods started by <code>launch.sh</code>.</p></li>
+<li><span class="docs-flow-label">Stop</span><strong>A forced stop</strong><p>Saved work survives. Anything held only in memory does not.</p></li>
+</ol>
 <p>A session that may be preempted is first marked with termination-warning
 annotations on its pod. The notice is usually about 15 minutes, and there is no
 minimum. The pod is then deleted in the ordinary way: <code>SIGTERM</code>, a grace period
@@ -313,7 +354,7 @@ describes reading and acting on the warning.</p>
 pod is deleted.</p>
 <p>See also: <a href="/docs/reference/reservation-events.html#preempted">Reservation Events</a></p>
 <h2 id="eviction">Eviction</h2>
-<p>A running session is deleted, with no warning beforehand, in two cases:</p>
+<p>A running session is deleted, <strong>with no warning beforehand</strong>, in two cases:</p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -335,20 +376,26 @@ pod is deleted.</p>
 <p>Before deleting a session for a cancellation, the reservation system moves it
 onto another open booking of the same member, where one matches and has room.
 A session moved that way keeps running and records a <code>ReservationRelinked</code>
-event instead. Both eviction events are type <code>Normal</code>, and the pod is gone by
+event instead.</p>
+<p>Both eviction events are type <code>Normal</code>, and the pod is gone by
 the time they can be read, so read them with <code>kubectl get events</code>.</p>
 <p>See also: <a href="/docs/reference/reservation-events.html#events-when-a-pod-is-stopped">Reservation Events</a></p>
 <h2 id="maintenance-closures">Maintenance Closures</h2>
 <p>Two maintenance regimes apply: instructional maintenance and Research Cluster
 maintenance. The schedule for both is published under
-<a href="/docs/reference/policy.html#scheduled-maintenance">Scheduled Maintenance</a>. Do not
-start a 12-hour run that would overlap an announced maintenance window.</p>
+<a href="/docs/reference/policy.html#scheduled-maintenance">Scheduled Maintenance</a>. <strong>Do not
+start a 12-hour run that would overlap an announced maintenance window.</strong></p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-wrench"></span><p class="docs-card-title"><a href="#instructional-maintenance">Instructional maintenance</a></p><p>Usually affects a subset of worker nodes, so running work is generally unaffected. A running job can still be terminated when a node is drained.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-off"></span><p class="docs-card-title"><a href="#research-cluster-maintenance">Research Cluster maintenance</a></p><p>Terminates all running jobs. Notices come from rcd-support@ucsd.edu.</p></article>
+</div>
 <h3 id="instructional-maintenance">Instructional Maintenance</h3>
 <p>Campus policy requires prompt patching of servers. The instructional
 maintenance window is reserved for that patching and is not a scheduled outage.</p>
 <p>Instructional maintenance usually affects a subset of worker nodes. Scheduling
 policy tries to place jobs on nodes that will not be touched, so running work is
-generally unaffected. During the window, the platform may operate at reduced
+generally unaffected.</p>
+<p>During the window, the platform may operate at reduced
 capacity, and, depending on the work being done, the whole cluster can be
 briefly inaccessible. A running job can still be terminated, because some
 updates require a node to be drained.</p>
@@ -357,10 +404,10 @@ vulnerability requires immediate action. Critical updates occasionally require
 work outside the window. ITS notifies instructors and TAs of such work as far in
 advance as possible.</p>
 <h3 id="research-cluster-maintenance">Research Cluster Maintenance</h3>
-<p>Research Cluster maintenance terminates all running jobs. Jobs are not drained,
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>All running jobs end</strong></p><p>Research Cluster maintenance terminates all running jobs. Jobs are not drained,
 migrated, or deferred to another node. A multi-day training run started the day
 before is lost when the window opens, together with everything not written to
-disk.</p>
+disk.</p></div>
 <p>Windows are placed to avoid the start and end of a quarter, midterm periods, and
 known conference deadlines, and each notice is followed by a reminder shortly
 before the day. This placement reflects past practice, not a published

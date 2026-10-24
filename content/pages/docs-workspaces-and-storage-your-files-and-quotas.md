@@ -10,14 +10,20 @@ canonicalUrl: /docs/workspaces-and-storage/your-files-and-quotas.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/workspaces-and-storage/your-files-and-quotas/
 format: html
 ---
-<p>Find where your files are in a session, check your storage quotas, and free
+<p class="lead">Find where your files are in a session, check your storage quotas, and free
 space when a full quota stops a session from starting. Files that seem to be
 missing are usually intact in another directory. Data too large for a home
 directory goes on external storage.</p>
+<dl class="docs-glance">
+<div><dt>Personal quota</dt><dd>5 GB instructional, 100 GB research</dd></div>
+<div><dt>Course home directories</dt><dd>5-10 GB, set per workspace</dd></div>
+<div><dt>Check usage</dt><dd><strong>disk-quota-service</strong> under <strong>Services</strong></dd></div>
+<div><dt>Chargeable</dt><dd>Storage above 1 TB</dd></div>
+</dl>
 <h2 id="where-files-live">Where Files Live</h2>
 <p>The directory in view depends on the route into the session, browser or
-terminal, and on the workspace. Files that appear to be missing are usually
-intact in a directory other than the one on screen.</p>
+terminal, and on the workspace. <strong>Files that appear to be missing are usually
+intact in a directory other than the one on screen.</strong></p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -89,10 +95,10 @@ project team, or a capstone group. Course teams are created from Canvas group
 sets. Membership changes take a few hours to reach the cluster.</p>
 <h3 id="mounting-team-data-from-the-command-line">Mounting Team Data from the Command Line</h3>
 <p>From the command line, teams are mounted only when requested:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -G list      # list the teams the account belongs to
-launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -G &lt;teamid&gt;  # launch with that team's data</code></pre>
-<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><code>-G</code> is the group flag and <code>-g</code> is the GPU count. See
-<a href="/docs/running-jobs/launch-sh-reference.html#team-selection">Team Selection</a>.<p></p></div>
+<figure class="docs-command"><figcaption>List your teams, then launch with one</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -G list      # list the teams the account belongs to
+launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -G &lt;teamid&gt;  # launch with that team's data</code></pre></figure>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p><code>-G</code> is the group flag and <code>-g</code> is the GPU count. See
+<a href="/docs/running-jobs/launch-sh-reference.html#team-selection">Team Selection</a>.</p></div>
 <h3 id="team-directory-names">Team Directory Names</h3>
 <p>Team directory names are generated, not chosen, and can contain spaces and
 brackets. For example, a capstone team directory can be named
@@ -100,7 +106,8 @@ brackets. For example, a capstone team directory can be named
 written into a script.</p>
 <h2 id="filesystem-shared-with-the-login-node">Filesystem Shared with the Login Node</h2>
 <p>The container a job runs in and the login node, <code>dsmlp-login</code>, mount the same
-storage. A file written in one is visible in the other. A repository cloned on
+storage. <strong>A file written in one is visible in the other.</strong></p>
+<p>A repository cloned on
 the login node is present when the container starts, and output written inside
 the container remains available to copy with <code>scp</code> after the job ends. No
 staging or copy step is required.</p>
@@ -108,32 +115,19 @@ staging or copy step is required.</p>
 <p>On <code>dsmlp-login</code>, <code>~</code> is the personal area, the same directory that appears as
 <code>private/</code> inside a container. A course home directory is in a different
 location and does not appear in <code>~</code>. The <code>workspace</code> command locates it:</p>
-<pre class="docs-code"><code class="language-bash">workspace -l               # list available workspaces and the path to each home
-workspace -c &lt;WORKSPACE&gt;   # change to that workspace's home directory</code></pre>
+<figure class="docs-command"><figcaption>Run on dsmlp-login</figcaption><pre class="docs-code"><code class="language-bash">workspace -l               # list available workspaces and the path to each home
+workspace -c &lt;WORKSPACE&gt;   # change to that workspace's home directory</code></pre></figure>
 <p>The paths have the form <code>/dsmlp/workspaces-fs0*/&lt;WORKSPACE&gt;/home/&lt;username&gt;</code>.
 Team files are under the same prefix, with <code>/teams</code> in place of <code>/home</code>. The
 directory may not appear in a listing until it is entered with <code>cd</code>.</p>
 <h2 id="workspace-and-personal-quotas">Workspace and Personal Quotas</h2>
 <p>Storage draws on two separate quota pools. The state of one pool does not
 indicate the state of the other.</p>
-<div class="table-responsive"><table class="table table-striped">
-<thead>
-<tr>
-<th>Pool</th>
-<th>What counts against it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Workspace</td>
-<td>The workspace home, plus <code>public/</code> and <code>teams/</code></td>
-</tr>
-<tr>
-<td>Personal</td>
-<td><code>private/</code>, in every workspace</td>
-</tr>
-</tbody>
-</table></div>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-th-large"></span><p class="docs-card-title">Workspace pool</p><p>The workspace home, plus <code>public/</code> and <code>teams/</code></p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><p class="docs-card-title">Personal pool</p><p><code>private/</code>, in every workspace</p>
+<dl class="docs-card-facts"><div><dt>Instructional account</dt><dd>5 GB</dd></div><div><dt>Research account</dt><dd>100 GB</dd></div></dl></article>
+</div>
 <p>The personal quota belongs to the account rather than to any course. It is
 5 GB on an instructional account and 100 GB on a research account.</p>
 <p>Course home directories are 5-10 GB, toward the lower end for very large
@@ -141,32 +135,32 @@ classes. Research home directories are on the order of 100 GB, set when the
 account is provisioned. Both values are set per workspace rather than per
 person. The value that applies to a given account is the one the disk quota
 service reports. See <a href="#checking-usage">Checking Usage</a>.</p>
-<p>Storage above 1 TB is chargeable. Compute is not.</p>
+<p><strong>Storage above 1 TB is chargeable.</strong> Compute is not.</p>
 <h2 id="checking-usage">Checking Usage</h2>
 <p>The disk quota service reports usage against quota and displays the workspace
 ID that terminal commands require. It is reachable from a browser even when the
 notebook does not start:</p>
-<ol>
-<li>Go to <a href="https://datahub.ucsd.edu/hub/spawn">datahub.ucsd.edu/hub/spawn</a>.</li>
-<li>Open the <strong>Services</strong> tab.</li>
-<li>Choose <strong>disk-quota-service</strong>.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Go to <a href="https://datahub.ucsd.edu/hub/spawn">datahub.ucsd.edu/hub/spawn</a></span></li>
+<li><span class="docs-step-title">Open the Services tab</span></li>
+<li><span class="docs-step-title">Choose disk-quota-service</span></li>
 </ol>
 <p>Once an environment is running, the same service is available from the
 <strong>Services</strong> menu in the navigation bar.</p>
 <p>In a terminal, <code>du</code> reports where the space is used:</p>
-<pre class="docs-code"><code class="language-bash">du -h --max-depth 1</code></pre>
+<figure class="docs-command"><figcaption>Run in a terminal</figcaption><pre class="docs-code"><code class="language-bash">du -h --max-depth 1</code></pre></figure>
 <p>Run it in the workspace home first, then in the largest directory it reports.</p>
-<p>A "disk quota exceeded" message is sent by email. When that message has
-arrived, the full disk is the cause of any other failure in the environment.</p>
+<p>A "disk quota exceeded" message is sent by email. <strong>When that message has
+arrived, the full disk is the cause of any other failure in the environment.</strong></p>
 <h2 id="common-causes-of-a-full-quota">Common Causes of a Full Quota</h2>
 <h3 id="jupyter-trash">Jupyter Trash</h3>
 <p>Deleting a file in the Jupyter interface moves it to <code>.local/share/Trash</code>,
 where it continues to count against the quota. Trash is purged automatically
 after 7 days. To reclaim the space sooner:</p>
-<ol>
-<li>Open a terminal.</li>
-<li>Change to <code>.local/share/Trash</code> with <code>cd</code>.</li>
-<li>Delete the files there with <code>rm</code>.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Open a terminal</span></li>
+<li><span class="docs-step-title">Change to <code>.local/share/Trash</code> with <code>cd</code></span></li>
+<li><span class="docs-step-title">Delete the files there with <code>rm</code></span></li>
 </ol>
 <h3 id="vscode-server"><code>.vscode-server</code></h3>
 <p>Remote editing installs a server into <code>.vscode-server</code> in the home directory.
@@ -189,14 +183,15 @@ member reads them in place. See
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>A full quota can prevent the environment from starting, which also removes
 the file browser that would otherwise be used to clear it.</p></div>
 <p>Files can then be removed from the login node:</p>
-<pre class="docs-code"><code class="language-bash">ssh &lt;user&gt;@dsmlp-login.ucsd.edu
+<figure class="docs-command"><figcaption>Free space from the login node</figcaption><pre class="docs-code"><code class="language-bash">ssh &lt;user&gt;@dsmlp-login.ucsd.edu
 workspace -l                 # find the workspace ID and its path
 workspace -c &lt;WORKSPACE&gt;     # change to that workspace's home
 du -h --max-depth 1          # find what is large
-rm &lt;files&gt;                   # remove it</code></pre>
-<p>On the login node, <code>~</code> is the personal area, not a course home. Removing files
+rm &lt;files&gt;                   # remove it</code></pre></figure>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>On the login node, <code>~</code> is the personal area, not a course home. Removing files
 there frees space in the personal pool and has no effect on a full workspace
-pool. Once usage drops below the quota, environments start normally again.
+pool.</p></div>
+<p>Once usage drops below the quota, environments start normally again.
 <a href="/docs/access/the-login-node.html#what-the-login-node-is-for">What the Login Node Is For</a>
 describes the login node.</p>
 <h2 id="asking-for-more-space">Asking for More Space</h2>
@@ -226,7 +221,7 @@ describes the login node.</p>
 </tr>
 </tbody>
 </table></div>
-<p>Before requesting an increase, confirm that the space is in use. Empty the Trash
+<p><strong>Before requesting an increase, confirm that the space is in use.</strong> Empty the Trash
 and remove any personal copy of a shared dataset. See
 <a href="#common-causes-of-a-full-quota">Common Causes of a Full Quota</a>.</p>
 <h2 id="storage-outside-the-quota-pools">Storage Outside the Quota Pools</h2>
@@ -278,7 +273,7 @@ what fits where.</p>
 <a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a>, which is also the address
 for the Research Cluster and for Universal Scale Storage generally. Include in
 the request:</p>
-<ul>
+<ul class="docs-checklist">
 <li>What the data is, and any licensing or classification that applies to it. See
   <a href="/docs/workspaces-and-storage/datasets.html#restricted--licensed-datasets">Restricted &amp; Licensed Datasets</a>.</li>
 <li>How much data exists now, and how fast it grows.</li>
@@ -295,5 +290,5 @@ Drive, OneDrive, and commercial object storage under the University's billing
 arrangements can hold data, but a job reaches them by transfer, not by mount.
 <a href="/docs/workspaces-and-storage/moving-and-sharing-data.html">Moving &amp; Sharing Data</a> describes transfer methods.</p>
 <h3 id="backups">Backups</h3>
-<p>A mount is not a backup, and neither is a home directory. Keep the authoritative
-copy of anything irreplaceable on storage whose backup terms are known.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>A mount is not a backup, and neither is a home directory. Keep the authoritative
+copy of anything irreplaceable on storage whose backup terms are known.</p></div>

@@ -10,7 +10,7 @@ canonicalUrl: /docs/reference/glossary.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/glossary/
 format: html
 ---
-<p>Look up a term used in the PARASOL documentation. Entries are in
+<p class="lead">Look up a term used in the PARASOL documentation. Entries are in
 alphabetical order, and each links to the page that covers the term in full.</p>
 <h2 id="a-c">A-C</h2>
 <div class="table-responsive"><table class="table table-striped">

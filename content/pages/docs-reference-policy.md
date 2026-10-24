@@ -10,25 +10,31 @@ canonicalUrl: /docs/reference/policy.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/policy/
 format: html
 ---
-<p>Check the conditions for using PARASOL before you put data on the
+<p class="lead">Check the conditions for using PARASOL before you put data on the
 platform, host a service that people outside it can reach, or set a deadline
 that could fall in a maintenance window.</p>
+<dl class="docs-glance">
+<div><dt>P4 data</dt><dd>Prohibited, with no review path and no exception</dd></div>
+<div><dt>P3 data</dt><dd>May be permitted after review</dd></div>
+<div><dt>Login node</dt><dd>Running computation on it is prohibited</dd></div>
+<div><dt>Instructional maintenance</dt><dd>Tuesdays, 6-8 AM</dd></div>
+</dl>
 <h2 id="data-classification">Data Classification</h2>
 <p>P3 and P4 are University
 <a href="https://security.ucop.edu/policies/institutional-information-and-it-resource-classification.html">classification levels</a>.
 The University's classification is the authority on which level applies to a
 dataset.</p>
 <h3 id="p4-data">P4 Data</h3>
-<p>P4 data is prohibited. Highly sensitive information, such as clinical records or
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>P4 data is prohibited</strong></p><p>P4 data is prohibited. Highly sensitive information, such as clinical records or
 export-controlled material, must not be placed on PARASOL. There is no
-review path and no exception.</p>
+review path and no exception.</p></div>
 <h3 id="p3-data">P3 Data</h3>
 <p>P3 data may be permitted after review. Legally or contractually protected
 information is not categorically excluded, but it must be raised with the
 contacts in
 <a href="#contacts-for-classification-questions">Contacts for Classification Questions</a>
-before any of it reaches the cluster. Depending on the nature of the data,
-vetting may take 4-6 weeks or longer.</p>
+before any of it reaches the cluster.</p>
+<p>Depending on the nature of the data, vetting may take <strong>4-6 weeks or longer</strong>.</p>
 <h3 id="examples-by-kind-of-data">Examples by Kind of Data</h3>
 <p>ITS documentation gives these examples:</p>
 <div class="table-responsive"><table class="table table-striped">
@@ -58,10 +64,13 @@ vetting may take 4-6 weeks or longer.</p>
 </tbody>
 </table></div>
 <h3 id="contacts-for-classification-questions">Contacts for Classification Questions</h3>
-<p>For instruction and coursework, email
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>. For research, email Research IT at
-<a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a>.
-See
+<ul>
+<li>For instruction and coursework, email
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</li>
+<li>For research, email Research IT at
+<a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a>.</li>
+</ul>
+<p>See
 <a href="/docs/workspaces-and-storage/datasets.html#restricted--licensed-datasets">Restricted &amp; Licensed Datasets</a>.
 <a href="/docs/reference/getting-help.html">Getting Help</a> lists other support routes.</p>
 <h2 id="appropriate-use">Appropriate Use</h2>
@@ -80,16 +89,21 @@ areas are the sanctioned route for sharing. See
 <a href="/docs/workspaces-and-storage/moving-and-sharing-data.html#inside-the-workspace">Inside the Workspace</a>.</p>
 <h2 id="hosting-externally-available-services">Hosting Externally Available Services</h2>
 <p>PARASOL should not be used to host externally available services or
-applications, except as required for coursework or projects. A class demo, a
-project web application, or a service an assignment requires is in scope. A
+applications, except as required for coursework or projects.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-ok-circle"></span><p class="docs-card-title">In scope</p><p>A class demo, a
+project web application, or a service an assignment requires is in scope.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span><p class="docs-card-title">Out of scope</p><p>A
 production service, a persistent public endpoint, or anything whose outage
-someone outside the University would notice is out of scope.
-<a href="/docs/access/the-login-node.html#reaching-a-notebook-or-a-service">Reaching a Notebook or a Service</a>
+someone outside the University would notice is out of scope.</p></article>
+</div>
+<p><a href="/docs/access/the-login-node.html#reaching-a-notebook-or-a-service">Reaching a Notebook or a Service</a>
 describes access to a service running in a container.</p>
 <h3 id="availability-and-reliability">Availability and Reliability</h3>
 <p>A compute node can be drained for patching, a pod can be preempted, and a
 session has a deadline. These conditions apply primarily to the compute nodes
-that execute user jobs. Critical components such as networking, file storage,
+that execute user jobs.</p>
+<p>Critical components such as networking, file storage,
 and backups are maintained to Enterprise IT standards.</p>
 <h2 id="use-of-shared-resources">Use of Shared Resources</h2>
 <p>The practices in this section are requests rather than rules, with the exception
@@ -98,7 +112,8 @@ of the prohibition in
 <h3 id="stopping-unused-sessions">Stopping Unused Sessions</h3>
 <p>Sessions that are not in use are expected to be stopped. GPU cards are assigned
 to containers exclusively, and a card attached to an idle session is unusable by
-any other user. Logging out, closing the tab, or closing a laptop leaves a
+any other user.</p>
+<p>Logging out, closing the tab, or closing a laptop leaves a
 session running; stop it with <strong>File → Hub Control Panel → Stop My Server</strong>, or
 delete the pod from the login node. See
 <a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>.</p>
@@ -146,13 +161,14 @@ sets out charges for storage.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#mounting-external-storage">Mounting External Storage</a></p>
 <h2 id="scheduled-maintenance">Scheduled Maintenance</h2>
 <h3 id="instructional-maintenance">Instructional Maintenance</h3>
-<p>Maintenance on the instructional side runs Tuesdays, 6-8 AM. The work is usually
+<p>Maintenance on the instructional side runs <strong>Tuesdays, 6-8 AM</strong>. The work is usually
 limited to a subset of worker nodes, in which case running jobs are unaffected.
-Do not plan a deadline within this window. Infrequent 'Critical' updates may
+Do not plan a deadline within this window.</p>
+<p>Infrequent 'Critical' updates may
 require downtime outside the window; ITS notifies instructors of such downtime
 as soon as is practical.</p>
 <h3 id="research-cluster-maintenance">Research Cluster Maintenance</h3>
 <p>The Research Cluster maintenance window is quarterly, at the break between
-terms, with about 7 days' notice. All running jobs are terminated.
+terms, with about 7 days' notice. <strong>All running jobs are terminated.</strong>
 <a href="/docs/gpu-access/what-ends-a-session.html#maintenance-closures">Maintenance Closures</a>
 describes the effect on sessions.</p>

@@ -10,14 +10,20 @@ canonicalUrl: /docs/access/the-login-node.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/access/the-login-node/
 format: html
 ---
-<p><code>dsmlp-login.ucsd.edu</code> is a login node for launching jobs and transferring
+<p class="lead"><code>dsmlp-login.ucsd.edu</code> is a login node for launching jobs and transferring
 files. Running computation on it is prohibited.</p>
+<dl class="docs-glance">
+<div><dt>Username</dt><dd>The AD username, without <code>@ucsd.edu</code></dd></div>
+<div><dt>Duo</dt><dd>Challenged once every 8 hours</dd></div>
+<div><dt>VPN</dt><dd>Not required for SSH to the login node</dd></div>
+<div><dt>CPU limit</dt><dd>At most 10% of one CPU core</dd></div>
+</dl>
 <h2 id="connecting-over-ssh">Connecting over SSH</h2>
 <p>Launching containers, requesting GPUs, running jobs that outlive a connection,
 and attaching an editor all begin with an SSH connection to the login node:</p>
-<pre class="docs-code"><code class="language-bash">ssh &lt;username&gt;@dsmlp-login.ucsd.edu</code></pre>
+<figure class="docs-command"><figcaption>Connect to the login node</figcaption><pre class="docs-code"><code class="language-bash">ssh &lt;username&gt;@dsmlp-login.ucsd.edu</code></pre></figure>
 <p>The username is the Active Directory (AD) username, which is the part of the
-address before <code>@ucsd.edu</code>. The full address is not accepted. The password is
+address before <code>@ucsd.edu</code>. <strong>The full address is not accepted.</strong> The password is
 the AD password.</p>
 <h3 id="duo-authentication">Duo Authentication</h3>
 <p>Duo follows the password and is challenged once every 8 hours. A second
@@ -27,9 +33,9 @@ passcode is needed instead, write to <a href="mailto:datahub@ucsd.edu">datahub@u
 for a workaround.</p>
 <h3 id="vpn-requirement">VPN Requirement</h3>
 <p>The VPN is not required for SSH to the login node. <code>ssh</code> to
-<code>dsmlp-login.ucsd.edu</code> works from anywhere, on or off campus. An SSH tunnel or
-the VPN is needed only to reach a port inside a container, such as a Jupyter
-server started by a launch script.</p>
+<code>dsmlp-login.ucsd.edu</code> works from anywhere, on or off campus.</p>
+<p>An SSH tunnel or the VPN is needed only to reach a port inside a container,
+such as a Jupyter server started by a launch script.</p>
 <p>See also: <a href="#reaching-a-notebook-or-a-service">Reaching a Notebook or a Service</a></p>
 <h2 id="what-the-login-node-is-for">What the Login Node Is For</h2>
 <p><code>dsmlp-login.ucsd.edu</code> is a jumpbox. It is for launching containers on cluster
@@ -64,38 +70,46 @@ prohibited.</p>
 <p>See also: <a href="#prohibited-uses-of-the-login-node">Prohibited Uses of the Login Node</a></p>
 <h2 id="prohibited-uses-of-the-login-node">Prohibited Uses of the Login Node</h2>
 <p>Manual job execution on <code>dsmlp-login</code> is prohibited by policy. Prohibited work
-includes Python scripts, Java projects, notebooks, training runs, and data
-conversions.</p>
+includes:</p>
+<ul>
+<li>Python scripts</li>
+<li>Java projects</li>
+<li>Notebooks</li>
+<li>Training runs</li>
+<li>Data conversions</li>
+</ul>
 <p>Running an editor's server component on <code>dsmlp-login</code> is not permitted. Running
 VS Code directly on the login node is specifically prohibited. The supported
 configuration places VS Code in a container. See
-<a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a>. Automated jobs find and stop VS
-Code and other remote-editor processes on the login node.</p>
+<a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a>.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Remote editors are stopped automatically</strong></p><p>Automated jobs find and stop VS Code and other remote-editor processes on the
+login node.</p></div>
 <h3 id="cpu-limit-on-the-login-node">CPU Limit on the Login Node</h3>
-<p>CPU-intensive work on the login node is throttled to at most 10% of one CPU
-core, so it runs slowly. Move work that runs slowly there into a container. Do
+<p>CPU-intensive work on the login node is throttled to <strong>at most 10% of one CPU
+core</strong>, so it runs slowly. Move work that runs slowly there into a container. Do
 data processing, compiling, and debugging in a container. See
 <a href="#running-work-in-a-container">Running Work in a Container</a>.</p>
 <h2 id="the-login-node--the-cluster-nodes">The Login Node &amp; the Cluster Nodes</h2>
-<p>Each container is assigned CPU, RAM, and GPU of its own and is isolated from
-other users' processes. The login node is shared: the resources one session
-uses there are taken from every other user signed in.</p>
-<p>Every user passes through the login node. A loaded login node degrades
-launching for everyone signed in, not only for one job.</p>
-<p>Many CPU cores, tens of gigabytes of memory, and a GPU are available on the
-cluster nodes through a launch script.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-log-in"></span><p class="docs-card-title">The login node</p><p>The login node is shared: the resources one session uses there are taken from
+every other user signed in.</p><p>Every user passes through the login node. A loaded login node degrades
+launching for everyone signed in, not only for one job.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-tasks"></span><p class="docs-card-title">A container on the cluster nodes</p><p>Each container is assigned CPU, RAM, and GPU of its own and is isolated from
+other users' processes.</p><p>Many CPU cores, tens of gigabytes of memory, and a GPU are available on the
+cluster nodes through a launch script.</p></article>
+</div>
 <h2 id="running-work-in-a-container">Running Work in a Container</h2>
 <p>After connecting, launch a container and run work in it:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt;     # GPU-capable image
-launch.sh -h                          # print the flag summary</code></pre>
+<figure class="docs-command"><figcaption>Run on the login node after connecting</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt;     # GPU-capable image
+launch.sh -h                          # print the flag summary</code></pre></figure>
 <p>Short jobs also run in a container. Starting a container takes seconds.</p>
 <p>See also: <a href="/get-started/working-from-the-command-line.html">Working from the Command Line</a></p>
 <h3 id="launch-modes">Launch Modes</h3>
 <p>A launch runs in one of three modes, depending on whether the session is
 attended:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt;                    # interactive: a shell in a container
+<figure class="docs-command"><figcaption>Interactive, background, and batch launches</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt;                    # interactive: a shell in a container
 launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -b                 # background: keeps running after a disconnect
-launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -B -- python train.py   # batch: runs to completion, then exits</code></pre>
+launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -B -- python train.py   # batch: runs to completion, then exits</code></pre></figure>
 <p>See also: <a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a></p>
 <h3 id="shared-filesystem">Shared Filesystem</h3>
 <p>The login node and the container share a filesystem. A file copied to the
@@ -105,9 +119,9 @@ login node once the job is over. No copying step is needed between them.</p>
 <h2 id="connecting-without-a-password">Connecting Without a Password</h2>
 <p>An SSH key pair removes the password prompt from repeated connections. Generate
 a pair on the local machine and install the public key on the login node:</p>
-<pre class="docs-code"><code class="language-bash">ssh-keygen -t ed25519
+<figure class="docs-command"><figcaption>Run on the local machine</figcaption><pre class="docs-code"><code class="language-bash">ssh-keygen -t ed25519
 cat ~/.ssh/id_ed25519.pub | ssh &lt;username&gt;@dsmlp-login.ucsd.edu \
-  "mkdir -p ~/.ssh &amp;&amp; chmod 700 ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys &amp;&amp; chmod 600 ~/.ssh/authorized_keys"</code></pre>
+  "mkdir -p ~/.ssh &amp;&amp; chmod 700 ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys &amp;&amp; chmod 600 ~/.ssh/authorized_keys"</code></pre></figure>
 <p>Naming the key type with <code>-t</code> fixes the file name, which the second command
 must match. The type a bare <code>ssh-keygen</code> picks has changed between OpenSSH
 releases.</p>
@@ -118,19 +132,19 @@ was set.</p>
 <p>A remote editor requires a key pair. VS Code connects through a ProxyCommand
 that cannot prompt for a password, and the editor's connection terminates
 inside the container rather than on the login node. <code>launch.sh -H</code> carries the
-key installed on the login node into the container at launch.
-<a href="/docs/access/remote-editor-setup.html#the-key-pair">The Key Pair</a> covers the Windows commands,
+key installed on the login node into the container at launch.</p>
+<p><a href="/docs/access/remote-editor-setup.html#the-key-pair">The Key Pair</a> covers the Windows commands,
 the local file permissions, the SSH agent, and the <code>IdentityFile</code> directive.</p>
 <h2 id="running-a-launch-script-over-ssh">Running a Launch Script over SSH</h2>
 <p>A launch script can be invoked directly over SSH. A job is submitted this way
 from a script on a local machine rather than by hand:</p>
-<pre class="docs-code"><code class="language-bash">ssh &lt;username&gt;@dsmlp-login.ucsd.edu /opt/launch-sh/bin/launch.sh &lt;flags&gt;</code></pre>
+<figure class="docs-command"><figcaption>Submit a job from a local machine</figcaption><pre class="docs-code"><code class="language-bash">ssh &lt;username&gt;@dsmlp-login.ucsd.edu /opt/launch-sh/bin/launch.sh &lt;flags&gt;</code></pre></figure>
 <p>See also: <a href="/docs/running-jobs/launch-sh-reference.html"><code>launch.sh</code> Reference</a></p>
 <h2 id="a-second-shell-with-kubesh">A Second Shell with <code>kubesh</code></h2>
 <p><code>kubesh</code>, run on the login node, opens a second shell in a running container
 without starting a second container:</p>
-<pre class="docs-code"><code class="language-bash">kubectl get pods          # find the pod
-kubesh &lt;pod-id&gt;           # enter it</code></pre>
+<figure class="docs-command"><figcaption>Run on the login node</figcaption><pre class="docs-code"><code class="language-bash">kubectl get pods          # find the pod
+kubesh &lt;pod-id&gt;           # enter it</code></pre></figure>
 <p>This is the supported way to watch a job that is already running. A second
 launch starts a second container with its own resources rather than attaching
 to the first.</p>
@@ -138,8 +152,9 @@ to the first.</p>
 <h2 id="reaching-a-notebook-or-a-service">Reaching a Notebook or a Service</h2>
 <p>A Jupyter server or any other service listening inside a container is not
 directly reachable from a personal machine. Two SSH tunnel forms reach it, and
-they target different ports. The two forms are not interchangeable. Using the
-wrong form is the usual reason a tunnel does not work.</p>
+they target different ports.</p>
+<p><strong>The two forms are not interchangeable.</strong> Using the wrong form is the usual
+reason a tunnel does not work.</p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -159,34 +174,42 @@ wrong form is the usual reason a tunnel does not work.</p>
 </tbody>
 </table></div>
 <h3 id="tunnel-to-a-port-on-the-login-node">Tunnel to a Port on the Login Node</h3>
-<p>The output of a launch ends with a URL naming a port on
-<code>dsmlp-login.ucsd.edu</code>. Forward that port from a second terminal on the local
-machine:</p>
-<pre class="docs-code"><code class="language-bash">ssh -N -L 8889:dsmlp-login.ucsd.edu:&lt;port&gt; &lt;user&gt;@dsmlp-login.ucsd.edu</code></pre>
-<p><code>http://localhost:8889/user/&lt;username&gt;/tree/</code> then opens the session, and the
+<ol class="docs-steps">
+<li><span class="docs-step-title">Find the port in the launch output</span><p>The output of a launch ends with a URL naming a port on
+<code>dsmlp-login.ucsd.edu</code>.</p></li>
+<li><span class="docs-step-title">Forward that port</span><p>Run this from a second terminal on the local machine:</p>
+<figure class="docs-command"><figcaption>Run in a second local terminal</figcaption><pre class="docs-code"><code class="language-bash">ssh -N -L 8889:dsmlp-login.ucsd.edu:&lt;port&gt; &lt;user&gt;@dsmlp-login.ucsd.edu</code></pre></figure></li>
+<li><span class="docs-step-title">Open the session</span><p><code>http://localhost:8889/user/&lt;username&gt;/tree/</code> then opens the session, and the
 token from the launch output authenticates it. Replacing <code>tree</code> with <code>lab</code> in
-that URL opens JupyterLab, which adds a terminal and an editor.</p>
+that URL opens JupyterLab, which adds a terminal and an editor.</p></li>
+</ol>
 <h3 id="tunnel-to-a-port-inside-the-container">Tunnel to a Port Inside the Container</h3>
 <p>For a service started by hand inside the container, the tunnel targets the
 loopback address:</p>
-<pre class="docs-code"><code class="language-bash">ssh -N -L localhost:&lt;port&gt;:127.0.0.1:&lt;port&gt; &lt;user&gt;@dsmlp-login.ucsd.edu</code></pre>
+<figure class="docs-command"><figcaption>Tunnel to a service inside the container</figcaption><pre class="docs-code"><code class="language-bash">ssh -N -L localhost:&lt;port&gt;:127.0.0.1:&lt;port&gt; &lt;user&gt;@dsmlp-login.ucsd.edu</code></pre></figure>
 <p><code>localhost:&lt;port&gt;</code> in a browser then reaches the service.</p>
 <h3 id="tunnel-terminal-output">Tunnel Terminal Output</h3>
-<p><code>-N</code> means "no command", so a working tunnel prints nothing. A silent terminal
-indicates success, not a hang. Keep the terminal open for as long as the tunnel
+<p><code>-N</code> means "no command", so a working tunnel prints nothing. <strong>A silent terminal
+indicates success, not a hang.</strong> Keep the terminal open for as long as the tunnel
 is needed. <code>Ctrl+C</code> closes the tunnel.</p>
 <h3 id="closing-the-tunnel-and-the-container">Closing the Tunnel and the Container</h3>
 <p>Closing a tunnel does not stop the container. Stopping the container does not
-close the tunnel. At the end of a session, quit Jupyter or <code>exit</code> the
-container, then press <code>Ctrl+C</code> in the tunnel's terminal.</p>
+close the tunnel. At the end of a session:</p>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Quit Jupyter or <code>exit</code> the container</span></li>
+<li><span class="docs-step-title">Close the tunnel</span><p>Press <code>Ctrl+C</code> in the tunnel's terminal.</p></li>
+</ol>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>A container that has only been disconnected from may still be running and
 still holding a GPU.</p></div>
 <p>See also: <a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a></p>
 <h3 id="the-vpn-alternative">The VPN Alternative</h3>
 <p>With a connection to the campus VPN, the launch URL works as printed and no
-tunnel is required. Either route works. The VPN involves fewer steps to
-remember. A tunnel involves less to install and does not route the rest of the
-machine's traffic through campus.</p>
+tunnel is required. Either route works.</p>
+<ul>
+<li>The VPN involves fewer steps to remember.</li>
+<li>A tunnel involves less to install and does not route the rest of the
+machine's traffic through campus.</li>
+</ul>
 <p>A tunnel or the VPN is needed only for container ports, such as a Jupyter
 server started by <code>launch.sh</code>. Neither is needed for <code>ssh</code> to the login node or
 for Datahub in a browser.</p>
@@ -195,7 +218,7 @@ for Datahub in a browser.</p>
 <p><code>kubectl port-forward</code> connects the login node to a port inside a pod. It
 covers the case where the container publishes nothing itself, such as a custom
 image with an overridden entrypoint:</p>
-<pre class="docs-code"><code class="language-bash">kubectl port-forward pods/&lt;pod-name&gt; &lt;port&gt;:8888</code></pre>
+<figure class="docs-command"><figcaption>Run on the login node</figcaption><pre class="docs-code"><code class="language-bash">kubectl port-forward pods/&lt;pod-name&gt; &lt;port&gt;:8888</code></pre></figure>
 <p>Combined with a
 <a href="#tunnel-to-a-port-on-the-login-node">Tunnel to a Port on the Login Node</a>, the
 port is reachable from a local machine.</p>

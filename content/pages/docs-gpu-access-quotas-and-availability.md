@@ -10,9 +10,15 @@ canonicalUrl: /docs/gpu-access/quotas-and-availability.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/quotas-and-availability/
 format: html
 ---
-<p>Use this page when a GPU launch waits, or when the reservation calendar offers
+<p class="lead">Use this page when a GPU launch waits, or when the reservation calendar offers
 nothing although your workspace has quota to spare. Find out which capacity
 limit applies and how to get more GPU capacity.</p>
+<dl class="docs-glance">
+<div><dt>A quota</dt><dd>The most GPUs of each class a workspace may hold at one time</dd></div>
+<div><dt>Borrowing</dt><dd>Idle capacity beyond quota, for any hour within 12 hours of booking</dd></div>
+<div><dt>Live status</dt><dd>datahub.ucsd.edu/hub/status, no sign-in needed</dd></div>
+<div><dt>More quota</dt><dd>A ticket to datahub@ucsd.edu</dd></div>
+</dl>
 <h2 id="what-a-quota-is">What a Quota Is</h2>
 <p>A <strong>quota</strong> is the maximum number of GPUs of each class that a workspace may
 hold at one time. A quota is not a reservation of hardware, not an individual
@@ -22,7 +28,7 @@ or lab draws on the same ceiling. A launch refused because the workspace is at
 its limit means that other members hold the capacity. The quota sets how much
 capacity the workspace has, and Service Units divide it fairly between members.
 See <a href="/docs/gpu-access/service-units-and-budgets.html">Service Units &amp; Budgets</a>.</p>
-<p>Quotas are set per GPU class. A workspace at its <code>medium</code> limit may still have
+<p><strong>Quotas are set per GPU class.</strong> A workspace at its <code>medium</code> limit may still have
 <code>small</code> headroom. A workspace is granted particular classes, and a request for a
 class it was not granted is refused whatever is idle. Spare capacity in one
 class cannot be lent to another, so a busy <code>medium</code> class says nothing about
@@ -31,17 +37,20 @@ class cannot be lent to another, so a busy <code>medium</code> class says nothin
 <p>Quotas are date-aware and can be set week by week or day by day. A course's
 share can be raised for the span of a project deadline and revert automatically
 afterward. A lab's share can be raised the same way for a conference deadline.</p>
-<p>A dated change requires the dates in advance. For courses, the quarterly survey
+<p><strong>A dated change requires the dates in advance.</strong></p>
+<ul>
+<li>For courses, the quarterly survey
 asks instructors and TAs about assignment scope, GPU sizes, and deadlines. The
 answers allow a quota to be raised for week 9 before the surge begins.
 <a href="/get-started/instructor-or-ta.html">Teaching with PARASOL</a> covers course GPU
-planning.
-For research workspaces, include the date in the request; see
-<a href="#requesting-a-quota-increase">Requesting a Quota Increase</a>.</p>
+planning.</li>
+<li>For research workspaces, include the date in the request; see
+<a href="#requesting-a-quota-increase">Requesting a Quota Increase</a>.</li>
+</ul>
 <h2 id="borrowing-beyond-quota">Borrowing Beyond Quota</h2>
 <p>Quotas are not hard ceilings, and borrowing is enabled on the cluster. A
 booking or an on-demand lease may use idle capacity beyond its workspace's quota
-for any hour within 12 hours of the moment it is made. Hours further ahead are
+for <strong>any hour within 12 hours of the moment it is made</strong>. Hours further ahead are
 held to the quota. A group that has exhausted its share can still obtain GPUs
 that would otherwise be idle.</p>
 <p>Borrowing is opportunistic. A group borrows whatever capacity is idle at the
@@ -49,7 +58,8 @@ moment it asks. Once a booking or lease is admitted, the borrowed capacity is
 protected like any other reservation for its full length.</p>
 <p>Borrowing has two tiers, and course workspaces always hold the senior tier. The
 junior tier may borrow only the capacity above a deeper reserve floor. The tier
-matters only when a reservation is made, not after it is admitted. Groups that
+matters only when a reservation is made, not after it is admitted.</p>
+<p>Groups that
 contribute hardware to the cluster have a separate arrangement. See
 <a href="/get-started/faculty-research-lab.html">Setting Up a Research Lab</a>.</p>
 <p>Borrowing does not raise a Service Unit budget. Borrowed GPU time is charged at
@@ -62,7 +72,8 @@ held back.</p>
 <h2 id="cohorts">Cohorts</h2>
 <p>A <strong>cohort</strong> is a group of groups. Within a cohort, the member groups' quotas
 may sum to more than the physical capacity behind them. This allows each group
-a higher peak than a fixed division of the hardware would. Where several groups
+a higher peak than a fixed division of the hardware would.</p>
+<p>Where several groups
 in a cohort peak at the same time, availability can read zero while a workspace
 still has headroom; see
 <a href="#zero-availability-with-headroom-remaining">Zero Availability With Headroom Remaining</a>.</p>
@@ -77,25 +88,26 @@ The word appears only in some refusals, such as
 <h3 id="zero-availability-with-headroom-remaining">Zero Availability With Headroom Remaining</h3>
 <p>The reservation calendar can offer nothing even where a workspace has quota to
 spare. This is not a fault. A quota is a ceiling on what a group may hold, not a
-set of GPUs held aside for it. For example, a workspace whose <code>medium</code> quota is
+set of GPUs held aside for it.</p>
+<p>For example, a workspace whose <code>medium</code> quota is
 four and which currently holds none can be offered nothing on a Thursday
 evening, because the other groups in its cohort hold the hardware, as they are
 entitled to.</p>
-<p>The quota has not been reduced and the budget is untouched. The same request
-often succeeds a few hours later. Bookings are first-come, and quota headroom
+<p>The quota has not been reduced and the budget is untouched. <strong>The same request
+often succeeds a few hours later.</strong> Bookings are first-come, and quota headroom
 does not displace a booking that already exists. Options when nothing is
 available:</p>
-<ul>
-<li>Book a different hour rather than a different day. Peak evening demand is the
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-time"></span><p class="docs-card-title">A different hour</p><p>Book a different hour rather than a different day. Peak evening demand is the
   constraint. The same window at midday or overnight is more likely to be
   available and is cheaper under
-  <a href="/docs/gpu-access/service-units-and-budgets.html#peak--off-peak-hours">Peak &amp; Off-Peak Hours</a>.</li>
-<li>Request a smaller class. Classes do not share spare capacity with one
-  another, so a full <code>medium</code> class says nothing about <code>small</code>.</li>
-<li>Borrow inside 12 hours. Last-minute jobs may pick up capacity that is idle at
+  <a href="/docs/gpu-access/service-units-and-budgets.html#peak--off-peak-hours">Peak &amp; Off-Peak Hours</a>.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-resize-small"></span><p class="docs-card-title">A smaller class</p><p>Request a smaller class. Classes do not share spare capacity with one
+  another, so a full <code>medium</code> class says nothing about <code>small</code>.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-transfer"></span><p class="docs-card-title">Borrow inside 12 hours</p><p>Last-minute jobs may pick up capacity that is idle at
   the time, including capacity beyond the group's own quota; see
-  <a href="#borrowing-beyond-quota">Borrowing Beyond Quota</a>.</li>
-</ul>
+  <a href="#borrowing-beyond-quota">Borrowing Beyond Quota</a>.</p></article>
+</div>
 <p>Overcommitment affects what can be obtained, not what is delivered. A GPU that
 is obtained is held for the window at the class it was booked at. A cohort does
 not make a session slower.</p>
@@ -149,8 +161,8 @@ ways.</p>
 </table></div>
 <p>A Service Unit budget is a fifth limit, and it is not a capacity limit. It caps
 how much GPU time a member may spend, not how many GPUs exist to spend it on.
-Remaining budget does not mean a GPU is free, and a free GPU does not mean the
-budget covers it.</p>
+<strong>Remaining budget does not mean a GPU is free, and a free GPU does not mean the
+budget covers it.</strong></p>
 <p>A GPU quota does not cover storage. Storage quotas are a separate system with
 different values; see
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#workspace-and-personal-quotas">Workspace and Personal Quotas</a>.</p>
@@ -197,19 +209,23 @@ different values; see
 <p><a href="/docs/reference/reservation-events.html">Reservation Events</a> lists every event the
 reservation system writes.</p>
 <p>Zero availability does not always mean the cluster is full. Two other
-conditions produce the same symptom: a request for a class the workspace was
-not granted, which is refused whatever is idle, and a cohort that is fully drawn
+conditions produce the same symptom:</p>
+<ul>
+<li>A request for a class the workspace was
+not granted, which is refused whatever is idle. See
+<a href="#what-a-quota-is">What a Quota Is</a>.</li>
+<li>A cohort that is fully drawn
 while one of its groups still has headroom on paper. See
-<a href="#what-a-quota-is">What a Quota Is</a> and
-<a href="#zero-availability-with-headroom-remaining">Zero Availability With Headroom Remaining</a>.</p>
+<a href="#zero-availability-with-headroom-remaining">Zero Availability With Headroom Remaining</a>.</li>
+</ul>
 <h3 id="queue-position-and-wait-time">Queue Position and Wait Time</h3>
 <p>A reservation admits a session ahead of the walk-up queue. The walk-up queue
 itself is not visible: the platform reports no queue length, no queue position,
 no estimated wait, and no notification as a turn approaches. A waiting launch
 shows only that it is waiting.</p>
-<p>The wait depends on demand and can be much longer than a few minutes. If a
+<p>The wait depends on demand and can be much longer than a few minutes. <strong>If a
 launch has not obtained a GPU within 5 to 10 minutes, book a window in the
-reservation app instead. A GPU needed at a particular time is obtained by
+reservation app instead.</strong> A GPU needed at a particular time is obtained by
 booking it through <a href="/docs/gpu-access/reservations.html">Reservations</a>.</p>
 <h3 id="waiting-for-an-on-demand-lease">Waiting for an On-Demand Lease</h3>
 <p>Every GPU session that carries a class label, and has no booking to wait for,
@@ -246,7 +262,7 @@ changed.
 gives the event text.</p>
 <p>Waiting pods are served in the order the pods were created, so deleting and
 recreating a pod moves it to the back.</p>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>A forgotten pending GPU pod starts, and is charged, as soon as capacity or
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>A forgotten pending pod is charged when it starts</strong></p><p>A forgotten pending GPU pod starts, and is charged, as soon as capacity or
 budget frees up, even days later. Delete a pending pod that is no longer
 wanted with <code>kubectl delete pod &lt;pod-id&gt;</code>, or stop the Datahub session.</p></div>
 <h3 id="waiting-for-capacity">Waiting for Capacity</h3>
@@ -256,24 +272,24 @@ only for the length of the script.
 <a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a> covers the flag.</p>
 <h2 id="obtaining-capacity-when-the-cluster-is-busy">Obtaining Capacity When the Cluster Is Busy</h2>
 <ul>
-<li>Check <a href="#the-status-page">The Status Page</a> before launching. It shows the GPU
+<li><strong>Check <a href="#the-status-page">The Status Page</a> before launching.</strong> It shows the GPU
   models on each node and how many GPUs are free. For free GPUs by class, see
   <a href="#upcoming-availability-in-the-reservation-app">Upcoming Availability in the Reservation App</a>.</li>
-<li>Book a window instead of retrying. Repeated launches into a full cluster do
+<li><strong>Book a window instead of retrying.</strong> Repeated launches into a full cluster do
   not obtain a GPU, and each on-demand launch that succeeds spends Service
   Units; see
   <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>.
   A window booked a day ahead costs the same Service Units and obtains the GPU.</li>
-<li>Move work off peak evening hours. Contention is concentrated in peak evening
+<li><strong>Move work off peak evening hours.</strong> Contention is concentrated in peak evening
   hours, and off-peak hours are discounted under
   <a href="/docs/gpu-access/service-units-and-budgets.html#peak--off-peak-hours">Peak &amp; Off-Peak Hours</a>.</li>
-<li>Develop on CPU and train on GPU. A GPU attached to a container is unusable by
+<li><strong>Develop on CPU and train on GPU.</strong> A GPU attached to a container is unusable by
   anyone else even while it is idle. PyTorch and TensorFlow both switch between
   CPU and GPU with very little code. Developing on CPU is also the fastest route
   to a session when GPUs are scarce.</li>
-<li>Stop finished sessions with <strong>File → Hub Control Panel → Stop My Server</strong> in
+<li><strong>Stop finished sessions</strong> with <strong>File → Hub Control Panel → Stop My Server</strong> in
   the browser, or with <code>kubectl delete pod &lt;pod-id&gt;</code> from the shell.</li>
-<li>Borrow idle capacity beyond the workspace quota for last-minute work; see
+<li><strong>Borrow idle capacity beyond the workspace quota for last-minute work</strong>; see
   <a href="#borrowing-beyond-quota">Borrowing Beyond Quota</a>.</li>
 </ul>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Logging out does not stop a session. A session left running holds its GPU.
@@ -370,6 +386,11 @@ instructor, TA, or PI) may view them but may not edit them.
 <a href="/docs/reference/managing-a-group.html">Managing a Group</a> describes manager
 privileges.</p>
 <p>Send the request by ticket to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>,
-naming the work, the GPU class it needs, and the dates it matters on. A request
-that names a deadline can be granted for that window alone.</p>
+naming:</p>
+<ul class="docs-checklist">
+<li>The work</li>
+<li>The GPU class it needs</li>
+<li>The dates it matters on</li>
+</ul>
+<p>A request that names a deadline can be granted for that window alone.</p>
 <p>See also: <a href="/docs/reference/getting-help.html#administrative-requests">Administrative Requests</a></p>

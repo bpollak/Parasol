@@ -10,14 +10,19 @@ canonicalUrl: /docs/reference/reservation-events.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/reservation-events/
 format: html
 ---
-<p>The reservation system reports what it is doing with a GPU pod through
+<p class="lead">The reservation system reports what it is doing with a GPU pod through
 Kubernetes events on the pod. Each event is a full sentence that says what
 happened and what to do.</p>
+<dl class="docs-glance">
+<div><dt>Read with</dt><dd><code>kubectl describe pod</code> and <code>kubectl get events</code></dd></div>
+<div><dt>From column</dt><dd><code>gpu-reservation-controller</code></dd></div>
+<div><dt>Times</dt><dd>Pacific in event messages, UTC in pod annotations</dd></div>
+<div><dt>Events kept</dt><dd>About an hour by default</dd></div>
+</dl>
 <h2 id="reading-the-events">Reading the Events</h2>
-<p>Run these from the login node:</p>
-<pre class="docs-code"><code class="language-bash">kubectl describe pod &lt;pod-name&gt;      # the events at the bottom of the output
+<figure class="docs-command"><figcaption>Run on the login node</figcaption><pre class="docs-code"><code class="language-bash">kubectl describe pod &lt;pod-name&gt;      # the events at the bottom of the output
 kubectl get events                   # every recent event in the namespace
-kubectl get events --field-selector involvedObject.name=&lt;pod-name&gt;</code></pre>
+kubectl get events --field-selector involvedObject.name=&lt;pod-name&gt;</code></pre></figure>
 <p>In <code>kubectl describe pod</code>, the <strong>From</strong> column reads <code>gpu-reservation-controller</code>
 for these events. Datahub shows the same events while a session is starting.</p>
 <p>Times in event messages are Pacific time, for example
@@ -31,12 +36,19 @@ hour by default. All three are type <code>Normal</code>, so
 <h3 id="repeated-events">Repeated Events</h3>
 <p>An event about a pod that is still waiting is repeated every 30 minutes while
 its message stays the same, and written again at once when the message changes.
-Each repeat is a separate line. An <code>OnDemandLeaseDenied</code> for lack of capacity
+Each repeat is a separate line.</p>
+<p>An <code>OnDemandLeaseDenied</code> for lack of capacity
 names the current time, so its message changes on every retry and it is written
-at every retry, usually every 2 to 5 minutes. An event that suggests contacting
+at every retry, usually every 2 to 5 minutes.</p>
+<p>An event that suggests contacting
 support names
 <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</p>
 <h2 id="events-at-a-glance">Events at a Glance</h2>
+<ol class="docs-flow" aria-label="The stages of a GPU pod's events">
+<li><span class="docs-flow-label">Waiting</span><strong>The pod waits in <code>Pending</code></strong><p>Events such as <code>WaitingForReservation</code> and <code>OnDemandLeaseDenied</code> say why. See <a href="#events-while-a-pod-waits">Events While a Pod Waits</a>.</p></li>
+<li><span class="docs-flow-label">Admitted</span><strong>The reservation system admits the pod</strong><p><code>RuntimeGuaranteed</code> gives the time its GPU is guaranteed until. See <a href="#events-when-a-pod-is-admitted">Events When a Pod Is Admitted</a>.</p></li>
+<li><span class="docs-flow-label">Stopped</span><strong>The pod is deleted</strong><p><code>Preempted</code>, <code>ReservationCancelled</code>, and <code>ReservationReassigned</code> are written just before. See <a href="#events-when-a-pod-is-stopped">Events When a Pod Is Stopped</a>.</p></li>
+</ol>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -168,17 +180,18 @@ full. See
 <p>Type <code>Normal</code>. The pod matches one of its owner's bookings, and the booking has
 not opened yet. The pod is admitted within about 5 minutes of the opening.
 Nothing needs to change.</p>
-<pre class="docs-code"><code class="language-text">Waiting for your GPU reservation #4127 (1 x medium, 2026-09-23 09:00:00 PDT to 2026-09-23 17:00:00 PDT) to open; this pod will be admitted shortly after it does.</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">Waiting for your GPU reservation #4127 (1 x medium, 2026-09-23 09:00:00 PDT to 2026-09-23 17:00:00 PDT) to open; this pod will be admitted shortly after it does.</code></pre></figure>
 <p><a href="/docs/gpu-access/reservations.html#launching-before-the-window-opens">Launching Before the Window Opens</a>
 gives how far before a booking a pod waits for it, rather than starting on an
 on-demand lease.</p>
 <h3 id="reservationfull"><code>ReservationFull</code></h3>
 <p>Type <code>Warning</code>. The pod was waiting for its booking, but when the booking opened
 the owner's other pods held its GPUs. The message names those pods when they
-are in the same namespace. The pod is admitted if a GPU frees up. On PARASOL, the
+are in the same namespace. The pod is admitted if a GPU frees up.</p>
+<p>On PARASOL, the
 reservation system re-checks a waiting pod within about 10 minutes, and a pod
 that still does not fit its booking is then given an on-demand lease, charged
-separately. Stop one of the named pods with <code>kubectl delete pod &lt;pod-name&gt;</code> to
+separately. <strong>Stop one of the named pods</strong> with <code>kubectl delete pod &lt;pod-name&gt;</code> to
 free a GPU for the booking.</p>
 <p>An account can hold 1 GPU at a time by default, across all its pods, and a
 launch that would take it past that is refused. This event therefore arises
@@ -194,9 +207,9 @@ holds is given an on-demand lease, charged separately, instead of waiting. See
 <p>Type <code>Warning</code>. The pod has no booking open, so the reservation system asked
 the reservation app for an on-demand lease, and the app refused. The message
 quotes the app's reason word for word, then says whether waiting can help:</p>
-<pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: Only 0 GPU(s) available at 2026-09-23 19:07. The pod stays Pending; the controller will keep retrying.</code></pre>
-<pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: This lease costs 1.16667 SU but user 'jsmith' has only 0.5 of 10 SU remaining (currently using 9.5). The pod stays Pending; the controller will keep retrying, and the reservation service expects this to clear by 2026-09-28 00:00:00 PDT.</code></pre>
-<pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: GPU class not accessible under this group. Waiting will not change this: the pod stays Pending until its request changes or an administrator changes what refused it. If the reason looks wrong, contact support: datahub@ucsd.edu</code></pre>
+<figure class="docs-command"><figcaption>Refused for capacity</figcaption><pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: Only 0 GPU(s) available at 2026-09-23 19:07. The pod stays Pending; the controller will keep retrying.</code></pre></figure>
+<figure class="docs-command"><figcaption>Refused for budget</figcaption><pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: This lease costs 1.16667 SU but user 'jsmith' has only 0.5 of 10 SU remaining (currently using 9.5). The pod stays Pending; the controller will keep retrying, and the reservation service expects this to clear by 2026-09-28 00:00:00 PDT.</code></pre></figure>
+<figure class="docs-command"><figcaption>Refused for the class grant</figcaption><pre class="docs-code"><code class="language-text">On-demand GPU lease for 1 x medium was denied by the reservation service: GPU class not accessible under this group. Waiting will not change this: the pod stays Pending until its request changes or an administrator changes what refused it. If the reason looks wrong, contact support: datahub@ucsd.edu</code></pre></figure>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -324,7 +337,7 @@ back. If the pause lasts, contact
 <p>Type <code>Warning</code>. The pod's <code>gpu-class</code> label names no class the reservation app
 knows, so nothing can admit the pod. The message lists the known classes.
 Labels are case-sensitive. Correct the label and recreate the pod.</p>
-<pre class="docs-code"><code class="language-text">This pod's gpu-class label is Medium, which is not a GPU class the reservation service knows, so no reservation can match it and it cannot be admitted on demand. Known classes: large, medium, small, xlarge, xsmall. Correct the label and recreate the pod; if it is right, contact support: datahub@ucsd.edu</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">This pod's gpu-class label is Medium, which is not a GPU class the reservation service knows, so no reservation can match it and it cannot be admitted on demand. Known classes: large, medium, small, xlarge, xsmall. Correct the label and recreate the pod; if it is right, contact support: datahub@ucsd.edu</code></pre></figure>
 <h3 id="noreservation"><code>NoReservation</code></h3>
 <p>Type <code>Warning</code>. No booking matches the pod, and the pod does not qualify for an
 on-demand lease. The message lists why, and names any booking the user holds for
@@ -342,34 +355,39 @@ admitted on an ordinary on-demand lease and charged for it. See
 <h3 id="nomatchingnode"><code>NoMatchingNode</code></h3>
 <p>Type <code>Warning</code>. The pod has no booking and names a node or a GPU model, with
 <code>-n</code>, <code>-v</code>, or a node selector in a manifest, and no node of its GPU class
-matches. No on-demand lease is requested. The usual causes are a node number
-that does not exist, a node that belongs to another GPU class, a node that is
-out of service, and a GPU model that does not back the class. The message
-quotes the node selection and names any other GPU class whose nodes it matches.
-Correct the node, the model, or the <code>gpu-class</code> label, and recreate the pod. The
+matches. No on-demand lease is requested. The usual causes are:</p>
+<ul>
+<li>a node number that does not exist</li>
+<li>a node that belongs to another GPU class</li>
+<li>a node that is out of service</li>
+<li>a GPU model that does not back the class</li>
+</ul>
+<p>The message quotes the node selection and names any other GPU class whose nodes
+it matches. Correct the node, the model, or the <code>gpu-class</code> label, and recreate the pod. The
 reservation system checks the pod again about every 5 minutes, so a pod that
 names a node out of service starts once the node returns. If the node selection
 is right, contact <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</p>
 <p>A <code>medium</code> pod launched with <code>-n 30</code>, when node 30 is a <code>large</code> node, records:</p>
-<pre class="docs-code"><code class="language-text">This pod's node selector kubernetes.io/hostname=its-dsmlp-n30.ucsd.edu matches none of the N schedulable node(s) of GPU class medium, so it could not start on any of them and no on-demand lease is being requested for it. It does match nodes of GPU class large, so the pod's gpu-class label may be what is wrong. Correct the node selector or affinity and recreate the pod; if it is right, the nodes it names may be cordoned or out of service, so contact support: datahub@ucsd.edu</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">This pod's node selector kubernetes.io/hostname=its-dsmlp-n30.ucsd.edu matches none of the N schedulable node(s) of GPU class medium, so it could not start on any of them and no on-demand lease is being requested for it. It does match nodes of GPU class large, so the pod's gpu-class label may be what is wrong. Correct the node selector or affinity and recreate the pod; if it is right, the nodes it names may be cordoned or out of service, so contact support: datahub@ucsd.edu</code></pre></figure>
 <h3 id="waitingfornode"><code>WaitingForNode</code></h3>
 <p>Type <code>Normal</code>. The pod has no booking and was launched with <code>-n</code> or <code>-v</code>, or
 with a node selector in a manifest, and no node it allows has the GPUs it asks
-for free. No on-demand lease is requested until one does, so nothing is charged
-while the pod waits. The reservation system checks the pod again about every 5
-minutes. Other nodes of the class may be free: launching without <code>-n</code> or <code>-v</code>
+for free. No on-demand lease is requested until one does, so <strong>nothing is charged
+while the pod waits</strong>. The reservation system checks the pod again about every 5
+minutes.</p>
+<p>Other nodes of the class may be free: launching without <code>-n</code> or <code>-v</code>
 lets the pod use them. A pod that names a node or a GPU model and runs under a
 booking gets no such event. It holds the booking while it waits. See
 <a href="/docs/running-jobs/launch-sh-reference.html#node-selection">Node Selection</a>.</p>
 <p>A 1-GPU <code>medium</code> pod launched with <code>-n 30</code>, while node 30 has no free GPU,
 records:</p>
-<pre class="docs-code"><code class="language-text">No node of GPU class medium that this pod's node selector kubernetes.io/hostname=its-dsmlp-n30.ucsd.edu allows has 1 GPU(s) free, so no on-demand lease is being requested yet: one would be charged while the pod waited. It is retried until one of those nodes has room. Widening or removing the node selector or affinity would let it use the class's other nodes.</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">No node of GPU class medium that this pod's node selector kubernetes.io/hostname=its-dsmlp-n30.ucsd.edu allows has 1 GPU(s) free, so no on-demand lease is being requested yet: one would be charged while the pod waited. It is retried until one of those nodes has room. Widening or removing the node selector or affinity would let it use the class's other nodes.</code></pre></figure>
 <h2 id="events-when-a-pod-is-admitted">Events When a Pod Is Admitted</h2>
 <h3 id="runtimeguaranteed"><code>RuntimeGuaranteed</code></h3>
 <p>Type <code>Normal</code>. The pod was admitted. Its GPU is guaranteed until the time shown,
 which is the end of its reservation, extended through any booking that directly
 follows it.</p>
-<pre class="docs-code"><code class="language-text">GPU access guaranteed for 1h09m59s, until 2026-09-23 10:15:11 PDT. The pod may keep running after that, but can be preempted if reserved capacity is needed.</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">GPU access guaranteed for 1h09m59s, until 2026-09-23 10:15:11 PDT. The pod may keep running after that, but can be preempted if reserved capacity is needed.</code></pre></figure>
 <p>For an on-demand lease, the guaranteed time is the requested runtime plus 10
 minutes: a launch with the default 1-hour runtime reads about <code>1h10m</code>. The event
 is written again each time the pod moves onto another reservation. After the
@@ -388,8 +406,8 @@ guarantee. The message gives one of two causes:</p>
   usually by an <strong>Extend</strong> in the reservation app, and the pod was carried onto
   another open booking of the same owner instead of being deleted.</li>
 </ul>
-<pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213: the on-demand lease #4198 it started under was merged into it now that the reservation's window has opened, and the lease released. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre>
-<pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213: its previous reservation #4127 was cancelled or replaced. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre>
+<figure class="docs-command"><figcaption>A lease merged into a booking</figcaption><pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213: the on-demand lease #4198 it started under was merged into it now that the reservation's window has opened, and the lease released. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre></figure>
+<figure class="docs-command"><figcaption>A reservation cancelled or replaced</figcaption><pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213: its previous reservation #4127 was cancelled or replaced. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre></figure>
 <p>A new <code>RuntimeGuaranteed</code> event comes with it. Nothing needs to change.</p>
 <h3 id="overstayrelinked"><code>OverstayRelinked</code></h3>
 <p>Type <code>Normal</code>. The pod was running past its guarantee, and has been moved onto
@@ -397,7 +415,7 @@ an open booking of the same owner, class, and workspace. It is guaranteed again
 until the time shown. The booking is usually one that opened while the pod was
 overstaying, or one made by an <strong>Extend</strong> of an on-demand lease whose window
 had already ended. A new <code>RuntimeGuaranteed</code> event comes with it.</p>
-<pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213; no longer overstay. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">Pod re-linked to GPU reservation #4213; no longer overstay. GPU access guaranteed until 2026-09-23 17:00:00 PDT.</code></pre></figure>
 <h3 id="besteffortadmitted"><code>BestEffortAdmitted</code></h3>
 <p>Type <code>Normal</code>. The pod was admitted with no runtime guarantee and no charge.
 Best-effort admission is not enabled on PARASOL.</p>
@@ -406,11 +424,11 @@ Best-effort admission is not enabled on PARASOL.</p>
 <p>Type <code>Normal</code>. The pod was running past its guarantee, and its GPU was needed.
 The pod was deleted: <code>SIGTERM</code>, then a grace period, then a forced stop. A pod
 inside its guarantee is never preempted.</p>
-<pre class="docs-code"><code class="language-text">Pod preempted to free capacity for reservation(s) starting 2026-09-23 12:00:00 PDT: overstayed its runtime guarantee by 45m03s.</code></pre>
+<figure class="docs-command"><figcaption>Preempted for a booking</figcaption><pre class="docs-code"><code class="language-text">Pod preempted to free capacity for reservation(s) starting 2026-09-23 12:00:00 PDT: overstayed its runtime guarantee by 45m03s.</code></pre></figure>
 <p>The time named is when the booking that needed the GPU starts. The pod can be
 stopped up to 15 minutes before that. A second form names headroom instead of a
 booking:</p>
-<pre class="docs-code"><code class="language-text">Pod preempted to maintain 15% free on-demand capacity headroom for gpu class medium: overstayed its runtime guarantee by 45m03s.</code></pre>
+<figure class="docs-command"><figcaption>Preempted for headroom</figcaption><pre class="docs-code"><code class="language-text">Pod preempted to maintain 15% free on-demand capacity headroom for gpu class medium: overstayed its runtime guarantee by 45m03s.</code></pre></figure>
 <p>Where the message ends "its runtime guarantee could no longer be resolved", the
 pod's reservation had already ended or been cancelled. Warning annotations
 usually appear on the pod before a preemption. See
@@ -453,7 +471,7 @@ was not expected, ask the workspace manager.</p>
 <p>Type <code>Normal</code>. The booking was given to another user while its window was open,
 usually because a teammate adopted it in team mode. The pod was deleted so that
 the new owner can use the window. The message names the new owner.</p>
-<pre class="docs-code"><code class="language-text">Pod evicted: GPU reservation reassigned to mlee.</code></pre>
+<figure class="docs-command"><figcaption>Example message</figcaption><pre class="docs-code"><code class="language-text">Pod evicted: GPU reservation reassigned to mlee.</code></pre></figure>
 <p>See <a href="/docs/gpu-access/reservations.html#team-mode">Team Mode</a>.</p>
 <h2 id="waiting-with-no-event">Waiting With No Event</h2>
 <p>The reservation system writes no event in these cases. Only the scheduler's

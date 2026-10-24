@@ -10,9 +10,15 @@ canonicalUrl: /docs/gpu-access/gpu-classes.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/gpu-classes/
 format: html
 ---
-<p>A <strong>GPU class</strong> is a size band of GPU memory rather than a hardware model: a
+<p class="lead">A <strong>GPU class</strong> is a size band of GPU memory rather than a hardware model. A
 request names the amount of GPU memory the work needs, and the platform selects
 the physical card that provides it.</p>
+<dl class="docs-glance">
+<div><dt>Classes</dt><dd><code>xsmall</code> to <code>xlarge</code>, about 6 GB to 96 GB</dd></div>
+<div><dt>Request with</dt><dd><code>-l gpu-class=</code> on every GPU launch</dd></div>
+<div><dt>Default limit</dt><dd>1 GPU at a time per account</dd></div>
+<div><dt>Charged in</dt><dd>Service Units for every hour held</dd></div>
+</dl>
 <h2 id="gpu-class-sizes">GPU Class Sizes</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -51,23 +57,28 @@ the physical card that provides it.</p>
 </tbody>
 </table></div>
 <p><img alt="Bar chart of GPU memory by class, on a scale of 0 to 100 GB: xsmall about 6 GB, small 10 to 12 GB, medium 20 to 24 GB, large 40 to 48 GB, and xlarge 80 to 96 GB." src="/_images/docs/gpu-class-sizes.svg" class="img-responsive docs-figure"></p>
-<p>Plan against the memory column. The hardware column is context. Both columns
-are approximate and subject to change. A class specifies roughly how much GPU
-memory a session has, not which card it runs on, and two sessions in the same
-class on the same afternoon may run on different hardware.
+<p>Plan against the memory column. The hardware column is context, and both
+columns are approximate and subject to change.</p>
+<p>A class specifies roughly how much GPU memory a session has, not which card it
+runs on. Two sessions in the same class on the same afternoon may run on
+different hardware.
 <a href="/docs/gpu-access/workloads-by-gpu-class.html">Workloads by GPU Class</a> lists every card and slice
 that can back each class, and <a href="/docs/gpu-access/gpu-hardware.html">GPU Hardware &amp; CUDA</a> gives their
 specifications.</p>
 <h2 id="choosing-a-class">Choosing a Class</h2>
-<p>Request the smallest class the work fits within. A larger class is not faster
-for a model that already fits in a smaller one. A larger class is scarcer, so
-the wait for it is longer, and it draws more heavily on the Service Unit budget
-for every hour it is held. See
+<p><strong>Request the smallest class the work fits within.</strong> A larger class is not
+faster for a model that already fits in a smaller one. A larger class is
+scarcer, so the wait for it is longer, and it draws more heavily on the Service
+Unit budget for every hour it is held. See
 <a href="/docs/gpu-access/service-units-and-budgets.html">Service Units &amp; Budgets</a>.</p>
 <p>GPU memory, not speed, determines the class. A model's parameters, its
 optimizer state, and the activations for one batch must all fit on the card at
 once. A run that fails with a CUDA out-of-memory error has two usual remedies,
-applied in this order: a smaller batch size, then the next class up.</p>
+applied in this order:</p>
+<ol class="docs-steps">
+<li><span class="docs-step-title">A smaller batch size</span><p>Try this first. It keeps the session in the same class.</p></li>
+<li><span class="docs-step-title">The next class up</span><p>Move up one class only when the smaller batch still does not fit.</p></li>
+</ol>
 <p><a href="/docs/gpu-access/workloads-by-gpu-class.html">Workloads by GPU Class</a> gives examples of course and
 research work that fits each class, with approximate memory figures.</p>
 <h3 id="multiple-gpus">Multiple GPUs</h3>
@@ -83,31 +94,34 @@ account's limit. Requests go to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.e
 state what the work is.</p>
 <h2 id="requesting-a-class">Requesting a Class</h2>
 <p>A GPU launch requests two things: the number of GPUs and the class.</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium</code></pre>
+<figure class="docs-command"><figcaption>Example GPU launch</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium</code></pre></figure>
 <p><code>-g</code> sets the GPU count and <code>-l gpu-class=</code> sets the class. The five values are
-<code>xsmall</code>, <code>small</code>, <code>medium</code>, <code>large</code>, and <code>xlarge</code>. Always pass the
-class label on a GPU request. A GPU request without it cannot be scheduled. See
-<a href="#missing-or-misspelled-class-label">Missing or Misspelled Class Label</a>.</p>
-<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><code>-g</code> is the GPU count and <code>-G</code> is the group flag. Typing <code>-G</code> in place of
+<code>xsmall</code>, <code>small</code>, <code>medium</code>, <code>large</code>, and <code>xlarge</code>.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Always pass the class label</strong></p><p>A GPU request without the class label cannot be scheduled. See
+<a href="#missing-or-misspelled-class-label">Missing or Misspelled Class Label</a>.</p></div>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p><code>-g</code> is the GPU count and <code>-G</code> is the group flag. Typing <code>-G</code> in place of
 <code>-g</code> produces an error that does not clearly indicate the capitalization
-mistake. See <a href="/docs/running-jobs/launch-sh-reference.html#resource-and-gpu-selection-flags">Resource and GPU Selection Flags</a>.<p></p></div>
+mistake. See <a href="/docs/running-jobs/launch-sh-reference.html#resource-and-gpu-selection-flags">Resource and GPU Selection Flags</a>.</p></div>
 <h3 id="service-unit-charges-at-launch">Service Unit Charges at Launch</h3>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Launching a GPU session without a booking creates a reservation on the
 member's behalf and draws Service Units in the same way as a booked window.
 There is no free exploratory launch. See
 <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>.</p></div>
-<p>A launch without a booking holds an on-demand lease of 1 hour 10 minutes, and
-is charged for the time the session uses within it. A longer guarantee comes
-from <a href="/docs/gpu-access/reservations.html#extend">Extend</a> in the reservation app. A session must be
-stopped explicitly. Logging out does not stop it. See
-<a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>.</p>
+<ul>
+<li>A launch without a booking holds an on-demand lease of 1 hour 10 minutes, and
+is charged for the time the session uses within it.</li>
+<li>A longer guarantee comes from <a href="/docs/gpu-access/reservations.html#extend">Extend</a> in the reservation app.</li>
+<li>A session must be stopped explicitly. Logging out does not stop it. See
+<a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>.</li>
+</ul>
 <h3 id="workspace-class-grants">Workspace Class Grants</h3>
 <p>Each workspace is granted access to one or more classes, chosen when the
 workspace was provisioned to match the work it was expected to do. An
 introductory course may see <code>small</code> or <code>medium</code>. A lab fine-tuning large models
-may see <code>xlarge</code>. A request for a class the workspace was not granted is
-refused, however idle the hardware is. Access to a further class is requested
-by the instructor or PI. The grant is part of the workspace. See
+may see <code>xlarge</code>.</p>
+<p>A request for a class the workspace was not granted is refused, however idle
+the hardware is. Access to a further class is requested by the instructor or PI.
+The grant is part of the workspace. See
 <a href="/docs/workspaces-and-storage/what-a-workspace-is.html">What a Workspace Is and What It Controls</a>.</p>
 <p>A member who belongs to several workspaces selects the one a launch goes into
 with <code>-W</code>. See
@@ -174,16 +188,16 @@ covers a full cluster. <a href="/docs/reference/error-messages.html">Error Messa
 lists the messages.</p>
 <h2 id="confirming-the-allocation">Confirming the Allocation</h2>
 <p>Two commands, run inside the running container, confirm what was allocated.</p>
-<pre class="docs-code"><code class="language-bash">python -c "import torch; print(torch.cuda.get_device_name(0));"
-nvidia-smi</code></pre>
-<p>Run the first command when code reports that no device was found. That symptom
+<figure class="docs-command"><figcaption>Run inside the running container</figcaption><pre class="docs-code"><code class="language-bash">python -c "import torch; print(torch.cuda.get_device_name(0));"
+nvidia-smi</code></pre></figure>
+<p><strong>The first command</strong> is the one to run when code reports that no device was found. That symptom
 is more often an environment problem than a scheduling one. For example, an
 image without CUDA tooling cannot see a card that is attached. The
 <code>rstudio-notebook</code> image derives from the CPU image and is not GPU-enabled. See
 <a href="/docs/environments/standard-images.html#standard-images">Standard Images</a>.
 <a href="/docs/reference/error-messages.html#pytorch-gpu-detection">PyTorch GPU Detection</a>
 lists the usual causes.</p>
-<p>The second command, <code>nvidia-smi</code>, names the GPU model and how much memory it
+<p><strong>The second command</strong>, <code>nvidia-smi</code>, names the GPU model and how much memory it
 has. This confirms that the session is on the expected class rather than an
 adjacent one. A session on a Multi-Instance GPU (MIG) slice can use only the
 slice's memory, which is less than the card's; see
@@ -201,6 +215,12 @@ under <a href="/docs/gpu-access/what-ends-a-session.html#what-counts-as-idle">Wh
 start anything. When the window opens, a session is launched the usual way. The
 booking ensures that the capacity is available and that the session is
 admitted ahead of the walk-up queue.</p>
+<ol class="docs-flow" aria-label="From booking to running session">
+<li><span class="docs-flow-label">Book</span><strong>Reserve a window</strong><p>The booking holds capacity. Nothing starts yet.</p></li>
+<li><span class="docs-flow-label">Launch</span><strong>Start a session as usual</strong><p>Launch when the window opens, from Datahub or the command line.</p></li>
+<li><span class="docs-flow-label">Claim</span><strong>The session claims the booking</strong><p>It must match by user, class, workspace, and GPU count.</p></li>
+<li><span class="docs-flow-label">Run</span><strong>Admitted ahead of the walk-up queue</strong><p>An unclaimed window is cancelled at the claim deadline.</p></li>
+</ol>
 <p>There is no control that selects a booking. A session that matches the booking,
 by user, class, workspace, and GPU count, claims it; see
 <a href="/docs/gpu-access/reservations.html#claiming-a-booking">Claiming a Booking</a>. A session of a

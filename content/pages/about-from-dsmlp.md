@@ -9,7 +9,14 @@ source: DSMLP documentation (2026-09-29 build), the published DSMLP documentatio
 canonicalUrl: /about/from-dsmlp-to-parasol.html
 ---
 
-PARASOL is the new name for the Data Science and Machine Learning Platform (DSMLP). The platform works exactly as it did. If you used DSMLP or Datahub before, you do not need to do anything.
+<p class="lead">PARASOL is the new name for the Data Science and Machine Learning Platform (DSMLP). The platform works exactly as it did. If you used DSMLP or Datahub before, you do not need to do anything.</p>
+
+<dl class="docs-glance">
+<div><dt>What you need to do</dt><dd>Nothing</dd></div>
+<div><dt>Login node</dt><dd><code>dsmlp-login.ucsd.edu</code></dd></div>
+<div><dt>Reservation app</dt><dd><a href="https://reserve.dsmlp.ucsd.edu/">reserve.dsmlp.ucsd.edu</a></dd></div>
+<div><dt>Support</dt><dd><a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a></dd></div>
+</dl>
 
 ## What stays the same
 
@@ -26,13 +33,15 @@ PARASOL is the new name for the Data Science and Machine Learning Platform (DSML
 | Policy | The same [conditions of use](/docs/reference/policy.html) |
 
 
-Hostnames, container labels, and system messages still say `dsmlp`. Command output on the cluster also uses the old name. Both names refer to the same platform.
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>You will still see the old name</strong></p><p>Hostnames, container labels, and system messages still say <code>dsmlp</code>. Command output on the cluster also uses the old name. Both names refer to the same platform.</p></div>
 
 ## What changes
 
-- **The name.** Course pages, syllabi, and support replies will say PARASOL. Older material that says DSMLP is still correct.
-- **The documentation home.** Every page of the DSMLP documentation now lives on this site, alongside the guides for each audience.
-- **GPU capacity.** Four new GPU servers arrived with the name. See [Why PARASOL](/about/why-parasol.html).
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-tag"></span><p class="docs-card-title">The name</p><p>Course pages, syllabi, and support replies will say PARASOL. Older material that says DSMLP is still correct.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-book"></span><p class="docs-card-title">The documentation home</p><p>Every page of the DSMLP documentation now lives on this site, alongside the guides for each audience.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-flash"></span><p class="docs-card-title">GPU capacity</p><p>Four new GPU servers arrived with the name. See <a href="/about/why-parasol.html">Why PARASOL</a>.</p></article>
+</div>
 
 ## Where the old documentation went
 
@@ -46,7 +55,7 @@ Each page from the DSMLP documentation site has a matching page here. The [docum
 | Other audience guides | The same titles under [Get Started](/get-started/index.html) |
 | Technical documentation | The same titles under [Documentation](/docs/index.html) |
 
-When the DSMLP documentation site is retired, its addresses will forward to these pages. Course materials that link to the old addresses will keep working.
+When the DSMLP documentation site is retired, its addresses will forward to these pages. **Course materials that link to the old addresses will keep working.**
 
 ## The glossary entry
 

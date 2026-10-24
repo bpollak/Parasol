@@ -43,6 +43,12 @@ main#main-content .table > tbody > tr > td {
   vertical-align: top;
 }
 
+/* A class name or flag in a table cell never splits mid-word. */
+main#main-content .table code {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 main#main-content .main-section code {
   background: #f3f4f6;
   border-radius: 3px;
@@ -282,4 +288,291 @@ main#main-content .about-mobile-section-nav .navbar-list > li.expanded > ul {
   list-style: none;
   margin: 8px 0 -12px;
   padding: 0 0 0 16px;
+}
+
+/* ===========================================================================
+ * Documentation pattern kit
+ *
+ * Shared visual patterns for documentation and guide pages. Markup for each
+ * one is in docs/content-patterns.md. Every rule stays inside the canvas and
+ * uses the UC San Diego palette tokens from agent-site.css.
+ * ======================================================================== */
+
+/* At a glance: a row of key facts under the summary. */
+main#main-content .docs-glance {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin: 0 0 30px;
+}
+
+main#main-content .docs-glance > div {
+  background: #fff;
+  border: 1px solid var(--triton-border);
+  border-top: 4px solid var(--triton-blue);
+  border-radius: 4px;
+  padding: 14px 16px 12px;
+}
+
+main#main-content .docs-glance dt {
+  color: var(--triton-blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+main#main-content .docs-glance dd {
+  color: var(--triton-navy);
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Steps: a numbered procedure with a rail joining the numbers. */
+main#main-content .docs-steps {
+  counter-reset: docs-step;
+  list-style: none;
+  margin: 18px 0 26px;
+  padding: 0;
+}
+
+main#main-content .docs-steps > li {
+  counter-increment: docs-step;
+  min-height: 44px;
+  padding: 0 0 20px 56px;
+  position: relative;
+}
+
+main#main-content .docs-steps > li::before {
+  align-items: center;
+  background: var(--triton-navy);
+  border-radius: 50%;
+  color: #fff;
+  content: counter(docs-step);
+  display: flex;
+  font-weight: 700;
+  height: 36px;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 36px;
+}
+
+main#main-content .docs-steps > li:not(:last-child)::after {
+  background: var(--triton-border);
+  bottom: 4px;
+  content: "";
+  left: 17px;
+  position: absolute;
+  top: 42px;
+  width: 2px;
+}
+
+main#main-content .docs-steps > li > :last-child {
+  margin-bottom: 0;
+}
+
+main#main-content .docs-step-title {
+  color: var(--triton-navy);
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 36px;
+  margin-bottom: 2px;
+}
+
+/* Flow: the stages of a process, left to right, stacked on phones. */
+main#main-content .docs-flow {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  margin: 20px 0 30px;
+  padding: 0;
+}
+
+main#main-content .docs-flow > li {
+  background: var(--triton-sand);
+  border-radius: 6px;
+  border-top: 4px solid var(--triton-gold);
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px 14px 16px;
+  position: relative;
+}
+
+/* A CSS chevron between stages. */
+main#main-content .docs-flow > li:not(:last-child)::after {
+  border-right: 3px solid var(--triton-blue);
+  border-top: 3px solid var(--triton-blue);
+  content: "";
+  height: 11px;
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 11px;
+}
+
+main#main-content .docs-flow-label {
+  color: var(--triton-blue);
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+main#main-content .docs-flow strong {
+  color: var(--triton-navy);
+  display: block;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+main#main-content .docs-flow p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  main#main-content .docs-flow {
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  main#main-content .docs-flow > li:not(:last-child)::after {
+    bottom: -16px;
+    left: 50%;
+    right: auto;
+    top: auto;
+    transform: translateX(-50%) rotate(135deg);
+  }
+}
+
+/* Cards: two to four options compared side by side. */
+main#main-content .docs-cards {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin: 18px 0 28px;
+}
+
+main#main-content .docs-card {
+  background: #fff;
+  border: 1px solid var(--triton-border);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(24, 43, 73, .06);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 16px;
+}
+
+main#main-content .docs-card > .glyphicon {
+  color: var(--triton-blue);
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+main#main-content .docs-card > h3,
+main#main-content .docs-card-title {
+  color: var(--triton-navy);
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+
+main#main-content .docs-card p {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+main#main-content .docs-card > :last-child {
+  margin-bottom: 0;
+}
+
+main#main-content .docs-card-facts {
+  border-top: 1px solid var(--triton-border);
+  margin: auto 0 0;
+  padding-top: 10px;
+}
+
+main#main-content .docs-card-facts > div {
+  display: flex;
+  font-size: 14px;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+main#main-content .docs-card-facts dt {
+  color: var(--triton-slate);
+  font-weight: 400;
+}
+
+main#main-content .docs-card-facts dd {
+  color: var(--triton-navy);
+  font-weight: 700;
+  margin: 0;
+  text-align: right;
+}
+
+/* Checklist: prerequisites and requirements. */
+main#main-content .docs-checklist {
+  list-style: none;
+  margin: 12px 0 22px;
+  padding: 0;
+}
+
+main#main-content .docs-checklist > li {
+  padding: 4px 0 4px 32px;
+  position: relative;
+}
+
+/* A CSS check mark. */
+main#main-content .docs-checklist > li::before {
+  border-bottom: 3px solid #2e7d32;
+  border-right: 3px solid #2e7d32;
+  content: "";
+  height: 14px;
+  left: 9px;
+  position: absolute;
+  top: 7px;
+  transform: rotate(45deg);
+  width: 7px;
+}
+
+/* Command: a code block with a line saying where it runs. */
+main#main-content .docs-command {
+  margin: 14px 0 22px;
+}
+
+main#main-content .docs-command > figcaption {
+  background: #0f1d33;
+  border-radius: 4px 4px 0 0;
+  color: #cfe3f2;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 7px 14px;
+  text-transform: uppercase;
+}
+
+main#main-content .docs-command > pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin: 0;
+}
+
+/* The build puts a Decorator glyphicon in each callout label. */
+main#main-content .docs-callout-label > .glyphicon {
+  margin-right: 8px;
+  top: 2px;
 }

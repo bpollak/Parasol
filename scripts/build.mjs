@@ -419,14 +419,29 @@ function renderGeneratedPage(shellHtml, page, bodyHtml) {
   const bannerPosition = page.bannerPosition || "80% center";
   const bannerClass = page.bannerMode === "photo" ? "" : " landing-hub-hero--abstract";
   const eyebrow = page.eyebrow ? `<p>${escapeHtml(page.eyebrow)}</p>` : "";
+  // A page that opens with a lead summary, and the key-facts row right after
+  // it, shows them first, above the draft notice and the contents list.
+  const leadMatch = landingHub ? null : bodyHtml.match(/^\s*(<p class="lead">[\s\S]*?<\/p>)(\s*<dl class="docs-glance">[\s\S]*?<\/dl>)?/);
+  const subpageLead = leadMatch ? `${leadMatch[1]}${leadMatch[2] || ""}` : "";
+  const subpageBody = leadMatch ? bodyHtml.slice(leadMatch[0].length) : bodyHtml;
   // A hub's banner carries only the eyebrow and title. Taglines and framing
   // belong in the page body, where they are not set in yellow capitals.
   const mainContent = page.path === "/index.html"
     ? `${renderHomeHero(homeHero)}<div class="home-main-content"><section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section></div>${renderLandingMobileSectionNav(site.navigation, page.path)}`
     : landingHub
     ? `<div class="jumbotron jumbotron-fluid intro-banner landing-hub-hero${bannerClass}" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="cr-item-container"><div class="row"><div class="col-sm-12"><div class="landing-hub-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1></div></div></div></div></div></div><div class="container landing-hub-breadcrumbs"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div></div><section aria-label="Main Content" class="col-xs-12 main-section landing-hub-content">${bodyHtml}</section>${renderLandingMobileSectionNav(site.navigation, page.path)}`
-    : `<div class="jumbotron jumbotron-fluid intro-banner about-subpage-hero" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="about-subpage-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1></div></div></div><div class="container"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div><div class="row about-subpage-layout">${renderSubpageMobileNav(site.navigation, page.path)}<section aria-label="Main Content" class="col-xs-9 main-section pull-right">${renderDocsStatus(page)}${renderPageContents(bodyHtml, page)}${bodyHtml}${renderSiblingPager(page)}${renderPageHelp(page)}</section>${renderSidebar(site.navigation, page.path)}</div></div>`;
+    : `<div class="jumbotron jumbotron-fluid intro-banner about-subpage-hero" style="background-image:url('${escapeHtml(bannerImage)}');background-position:${escapeHtml(bannerPosition)};"><div class="container"><div class="about-subpage-title animated fadeInUp">${eyebrow}<h1 class="intro-banner-heading">${escapeHtml(page.title)}</h1></div></div></div><div class="container"><div class="row"><ol aria-label="Breadcrumb" class="breadcrumb breadcrumbs-list">${breadcrumbFor(page)}</ol></div><div class="row about-subpage-layout">${renderSubpageMobileNav(site.navigation, page.path)}<section aria-label="Main Content" class="col-xs-9 main-section pull-right">${subpageLead}${renderDocsStatus(page)}${renderPageContents(subpageBody, page)}${subpageBody}${renderSiblingPager(page)}${renderPageHelp(page)}</section>${renderSidebar(site.navigation, page.path)}</div></div>`;
   $("main#main-content").html(mainContent);
+  // Each callout label leads with the Decorator glyphicon for its kind, so a
+  // note, a warning, and a tip read differently before the words are read.
+  const calloutGlyphs = { "alert-info": "info-sign", "alert-warning": "warning-sign", "alert-success": "ok-sign", "alert-danger": "exclamation-sign" };
+  $("main#main-content .docs-callout").each((_, element) => {
+    const callout = $(element);
+    const kind = Object.keys(calloutGlyphs).find((name) => callout.hasClass(name));
+    const label = callout.children(".docs-callout-label").first();
+    if (!kind || !label.length || label.find(".glyphicon").length) return;
+    label.prepend(`<span aria-hidden="true" class="glyphicon glyphicon-${calloutGlyphs[kind]}"></span>`);
+  });
   return $.html();
 }
 

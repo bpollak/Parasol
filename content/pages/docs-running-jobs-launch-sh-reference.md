@@ -10,9 +10,15 @@ canonicalUrl: /docs/running-jobs/launch-sh-reference.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/running-jobs/launch-sh-reference/
 format: html
 ---
-<p>Look up a <code>launch.sh</code> option, the resources a container gets by default, or how
-it applies the CPU, memory, and GPU values you pass.
-<a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a> covers work that continues after
+<p class="lead">Look up a <code>launch.sh</code> option, the resources a container gets by default, or how
+it applies the CPU, memory, and GPU values you pass.</p>
+<dl class="docs-glance">
+<div><dt>Absolute path</dt><dd><code>/opt/launch-sh/bin/launch.sh</code></dd></div>
+<div><dt>Wrapper default</dt><dd>2 CPU, 8 GB RAM, 0 GPU</dd></div>
+<div><dt>Single pod default</dt><dd>8 CPU / 32 GB / 1 GPU</dd></div>
+<div><dt>Guaranteed share</dt><dd>Half the <code>-c</code> or <code>-m</code> value</dd></div>
+</dl>
+<p><a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a> covers work that continues after
 a terminal session ends.
 <a href="/docs/running-jobs/job-modes-and-limits.html#the-runtime-limit">The Runtime Limit</a> covers how long
 a container may run.</p>
@@ -36,9 +42,9 @@ covers the equivalents.</p>
 <p>A job submitted in one line from a personal machine names the launcher by its
 absolute path, because <code>ssh</code> runs a non-login shell in which the launcher is not
 necessarily on the path.</p>
-<pre class="docs-code"><code class="language-bash">ssh &lt;user&gt;@dsmlp-login.ucsd.edu /opt/launch-sh/bin/launch.sh -W DSC40_FA26_001 \
+<figure class="docs-command"><figcaption>Submit from a personal machine in one line</figcaption><pre class="docs-code"><code class="language-bash">ssh &lt;user&gt;@dsmlp-login.ucsd.edu /opt/launch-sh/bin/launch.sh -W DSC40_FA26_001 \
     -c 8 -m 16 -g 1 -l gpu-class=medium \
-    -i &lt;image&gt; -f ${HOME}/myproject/run-commands.sh</code></pre>
+    -i &lt;image&gt; -f ${HOME}/myproject/run-commands.sh</code></pre></figure>
 <p>The VS Code <code>ProxyCommand</code> in
 <a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a> uses the same form.</p>
 <h2 id="defaults-and-resource-tiers">Defaults and Resource Tiers</h2>
@@ -71,9 +77,9 @@ necessarily on the path.</p>
 </tr>
 </tbody>
 </table></div>
-<p>Calling <code>launch.sh</code> directly instead of a wrapper halves the CPU and leaves one
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>Calling <code>launch.sh</code> directly instead of a wrapper halves the CPU and leaves one
 eighth of the memory. The usual symptom is a process that dies without an error
-that explains the cause.</p>
+that explains the cause.</p></div>
 <p>A browser session starts at 2 CPU / 4 GB by default. That figure is a course's
 spawn configuration, not a command-line default. See
 <a href="/docs/access/datahub-in-the-browser.html#the-browser-session">The Browser Session</a>.
@@ -107,13 +113,13 @@ that does not schedule.</p>
 </tr>
 </tbody>
 </table></div>
-<p><code>-m 64</code> is not a valid request for a single container, although 64 GB is the
+<p><strong><code>-m 64</code> is not a valid request for a single container</strong>, although 64 GB is the
 namespace total. The namespace allowance may be spent across several
 containers, not in one.
 <a href="/docs/reference/getting-help.html#administrative-requests">Administrative Requests</a>
 covers requests for the third tier.</p>
-<p>The GPU default is a limit per account: 1 GPU at a time, across every pod the
-account runs. It applies on top of the reservation system's limits, so a booking
+<p>The GPU default is a limit per account: <strong>1 GPU at a time, across every pod the
+account runs</strong>. It applies on top of the reservation system's limits, so a booking
 for several GPUs, or several overlapping bookings, does not raise it. For
 multi-GPU work, the member, or a TA for a course, asks ITS to raise the
 account's limit, by ticket to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</p>
@@ -123,13 +129,21 @@ account's limit, by ticket to <a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu
 <h2 id="resource-requests-and-limits">Resource Requests and Limits</h2>
 <p>The value passed to <code>-c</code> or <code>-m</code> is the <strong>limit</strong>, the most the container may
 use. <code>launch.sh</code> sets the Kubernetes <strong>request</strong>, the amount the scheduler
-reserves and the only amount guaranteed, to half the limit. <code>-m 32</code> reserves
+reserves and the only amount guaranteed, to half the limit.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-lock"></span><p class="docs-card-title">Request</p><p>Half the limit. The amount the scheduler reserves and the only amount guaranteed.</p>
+<dl class="docs-card-facts"><div><dt>With <code>-m 32</code></dt><dd>16 GB reserved</dd></div></dl></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-resize-full"></span><p class="docs-card-title">Limit</p><p>The value passed to <code>-c</code> or <code>-m</code>. The most the container may use.</p>
+<dl class="docs-card-facts"><div><dt>With <code>-m 32</code></dt><dd>32 GB permitted</dd></div></dl></article>
+</div>
+<p><code>-m 32</code> reserves
 16 GB and permits 32 GB. The second 16 GB is available only if the node the pod
 runs on has it spare. The same halving applies to CPU.</p>
 <p>The halving causes many <code>OOMKilled</code> (out-of-memory) reports. It also explains a
 job that succeeds on one run and fails on a later run, on a busier node, with no
-change to its code. Size a job for the guarantee, not the limit: to guarantee a
-model 16 GB, launch it with <code>-m 32</code>.</p>
+change to its code.</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Size a job for the guarantee</strong></p><p>Size a job for the guarantee, not the limit: to guarantee a
+model 16 GB, launch it with <code>-m 32</code>.</p></div>
 <p>GPUs are not halved. A GPU is assigned to one container exclusively, so its
 request and limit are the same number.</p>
 <h2 id="resource-and-gpu-selection-flags">Resource and GPU Selection Flags</h2>
@@ -173,7 +187,7 @@ request and limit are the same number.</p>
 or not the session was booked ahead, and there is no free exploratory launch.
 See <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>.</p></div>
 <h3 id="gpu-class">GPU Class</h3>
-<p><code>-l gpu-class=&lt;class&gt;</code> requests a GPU size band, and every GPU request needs it.
+<p><code>-l gpu-class=&lt;class&gt;</code> requests a GPU size band, and <strong>every GPU request needs it</strong>.
 <a href="/docs/gpu-access/gpu-classes.html">GPU Classes</a> lists the classes. <code>-v</code> narrows a
 class to one GPU model and does not replace the label; see
 <a href="#node-selection">Node Selection</a>.</p>
@@ -193,9 +207,9 @@ and never claims a course booking. See
 <a href="/docs/gpu-access/reservations.html#claiming-a-booking">Claiming a Booking</a> and
 <a href="/docs/gpu-access/reservations.html#the-default-workspace">The Default Workspace</a>.</p>
 <h3 id="team-selection">Team Selection</h3>
-<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><code>-g</code> is the GPU count and <code>-G</code> is the group flag. <code>-g 1</code> requests a GPU and
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p><code>-g</code> is the GPU count and <code>-G</code> is the group flag. <code>-g 1</code> requests a GPU and
 <code>-G 1</code> does not, and the failure that follows does not point to the
-capitalization.<p></p></div>
+capitalization.</p></div>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -218,9 +232,9 @@ capitalization.<p></p></div>
 </tr>
 </tbody>
 </table></div>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC180A_FA25_A00 -G list       # find the team ID
-launch-scipy-ml.sh -W DSC180A_FA25_A00 -G &lt;teamid&gt;   # then launch with it</code></pre>
-<p><code>-G list</code> is the only way to discover a team ID. Team directory names often
+<figure class="docs-command"><figcaption>Find the team ID, then launch with it</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC180A_FA25_A00 -G list       # find the team ID
+launch-scipy-ml.sh -W DSC180A_FA25_A00 -G &lt;teamid&gt;   # then launch with it</code></pre></figure>
+<p><strong><code>-G list</code> is the only way to discover a team ID.</strong> Team directory names often
 contain brackets, which must be quoted in a <code>cd</code> command.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#belonging-to-several-workspaces">Belonging to Several Workspaces</a></p>
 <h2 id="image-workspace-and-placement-flags">Image, Workspace, and Placement Flags</h2>
@@ -291,7 +305,7 @@ contain brackets, which must be quoted in a <code>cd</code> command.</p>
 </tbody>
 </table></div>
 <h3 id="image-pull-policy">Image Pull Policy</h3>
-<p>For an image under development, pass <code>-i &lt;image&gt; -P Always</code>. See
+<p>For an image under development, pass <strong><code>-i &lt;image&gt; -P Always</code></strong>. See
 <a href="/docs/environments/building-a-custom-image.html">Building &amp; Publishing a Custom Image</a>.
 Without <code>-P Always</code>, a node already holding that
 tag keeps using its copy.</p>
@@ -304,7 +318,7 @@ tag keeps using its copy.</p>
 <h3 id="node-selection">Node Selection</h3>
 <p><code>-n</code> and <code>-v</code> each limit the nodes a session can run on. <code>-n</code> names one node.
 <code>-v</code> names a GPU model, and limits the session to the nodes that carry it.</p>
-<p><code>-n</code> takes a bare number: <code>-n 30</code>, not <code>-n n30</code>. The leading <code>n</code> shown on
+<p><strong><code>-n</code> takes a bare number</strong>: <code>-n 30</code>, not <code>-n n30</code>. The leading <code>n</code> shown on
 <a href="/docs/gpu-access/quotas-and-availability.html#the-status-page">The Status Page</a> is
 not part of the value. A pod whose named node is full waits for that node and
 does not take the same GPU elsewhere. To choose a GPU size, use
@@ -312,7 +326,7 @@ does not take the same GPU elsewhere. To choose a GPU size, use
 <p><code>-v</code> narrows a GPU class and does not replace it. Pass the class label as well,
 and name a model that backs that class in
 <a href="/docs/gpu-access/gpu-classes.html#gpu-class-sizes">GPU Class Sizes</a>:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=large -v l40s</code></pre>
+<figure class="docs-command"><figcaption>Narrow a class to one GPU model</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=large -v l40s</code></pre></figure>
 <p>The <code>-h</code> summary lists the model names. A pod whose model has no free GPU waits
 for one and does not take another model of its class. A GPU launch with <code>-v</code>
 and no class label waits in <code>Pending</code> with no event from the reservation
@@ -326,17 +340,18 @@ model can therefore use up the whole window before the session starts. See
 <p>Without a booking, a session limited with <code>-n</code> or <code>-v</code> is given no on-demand
 lease, and is not charged, until a node it allows has a free GPU. It records a
 <a href="/docs/reference/reservation-events.html#waitingfornode"><code>WaitingForNode</code></a> event
-while it waits. A session whose <code>-n</code> or <code>-v</code> matches no node of its GPU class
+while it waits.</p>
+<p>A session whose <code>-n</code> or <code>-v</code> matches no node of its GPU class
 records a <a href="/docs/reference/reservation-events.html#nomatchingnode"><code>NoMatchingNode</code></a>
 event and is given no lease. The usual causes are a node that does not exist,
 is out of service, or belongs to another class, and a model that does not back
 the class.</p>
 <p>The launch output names the node the pod was assigned to, in a line such as
-<code>INFO pod assigned to node: its-dsmlp-n04.ucsd.edu</code>. Include that line in a
-problem report.</p>
+<code>INFO pod assigned to node: its-dsmlp-n04.ucsd.edu</code>. <strong>Include that line in a
+problem report.</strong></p>
 <h3 id="pod-names">Pod Names</h3>
-<p><code>-N</code> gives the pod a name by which it can be deleted later. Give a name to any
-pod left running unattended.</p>
+<p><code>-N</code> gives the pod a name by which it can be deleted later. <strong>Give a name to any
+pod left running unattended.</strong></p>
 <h2 id="job-execution-flags">Job Execution Flags</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -403,7 +418,7 @@ actually requests.</p>
 <h3 id="option-separator">Option Separator</h3>
 <p><code>--</code> separates the launcher's options from the command's own. Everything after
 it is passed into the container untouched.</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium -B -- python train.py --epochs 50 --lr 0.01</code></pre>
+<figure class="docs-command"><figcaption>The program's own options go after <code>--</code></figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W DSC40_FA26_001 -g 1 -l gpu-class=medium -B -- python train.py --epochs 50 --lr 0.01</code></pre></figure>
 <p>Without the separator, <code>launch.sh</code> reads <code>--epochs</code> as one of its own options
 and fails with a message about a launcher flag, not about the program being run.</p>
 <h3 id="help-output-and-undocumented-options">Help Output and Undocumented Options</h3>

@@ -10,7 +10,7 @@ canonicalUrl: /docs/reference/error-messages.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/error-messages/
 format: html
 ---
-<p>Look up an error message or symptom by where you saw it, from signing in to the
+<p class="lead">Look up an error message or symptom by where you saw it, from signing in to the
 output of your own code, and find its cause and fix. An idle-culled session, a
 <code>DeadlineExceeded</code> status, and a refused <code>sudo</code> are expected platform behavior,
 not faults.</p>
@@ -378,35 +378,39 @@ booking refusal, and changes nothing.</p>
 a separate and much smaller pool than the pod's RAM. It is a different failure
 from the <code>OOMKilled</code> (out-of-memory) status, which concerns the pod's RAM. Apply
 the usual remedies in this order:</p>
-<ol>
-<li>Reduce the batch size.</li>
-<li>Restart the kernel. TensorFlow claims nearly all of the card's memory by
-   default and does not release it until the process ends, so a notebook that
-   ran TensorFlow earlier can leave too little GPU memory for PyTorch later in
-   the same session.</li>
-<li>Move to the next GPU class up if the model does not fit, and request the
-   smallest class it fits in. <a href="/docs/gpu-access/gpu-classes.html">GPU Classes</a> lists
-   the classes.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Reduce the batch size</span></li>
+<li><span class="docs-step-title">Restart the kernel</span><p>TensorFlow claims nearly all of the card's memory by
+default and does not release it until the process ends, so a notebook that
+ran TensorFlow earlier can leave too little GPU memory for PyTorch later in
+the same session.</p></li>
+<li><span class="docs-step-title">Move to the next GPU class up</span><p>Move up a class if the model does not fit, and request the
+smallest class it fits in. <a href="/docs/gpu-access/gpu-classes.html">GPU Classes</a> lists
+the classes.</p></li>
 </ol>
 <p>A run that succeeds in some sessions and fails in others of the same class can
 be landing on a card or slice with less memory. See
 <a href="/docs/gpu-access/workloads-by-gpu-class.html#differences-within-a-class">Differences Within a Class</a>.</p>
 <h3 id="pytorch-gpu-detection">PyTorch GPU Detection</h3>
 <p><code>torch.cuda.is_available()</code> returns <code>False</code> when the session has no GPU or is
-running <code>rstudio-notebook</code>. A session has no GPU when it was launched without
-<code>-g</code> or started from a CPU-only environment on the course's menu.
-<code>rstudio-notebook</code> derives from the CPU image and is not GPU-enabled. See
-<a href="/docs/environments/standard-images.html#standard-images">Standard Images</a>.
-Confirm what a session holds from inside the container:</p>
-<pre class="docs-code"><code class="language-bash">nvidia-smi
-python -c "import torch; print(torch.cuda.get_device_name(0));"</code></pre>
+running <code>rstudio-notebook</code>.</p>
+<ul>
+<li>A session has no GPU when it was launched without
+<code>-g</code> or started from a CPU-only environment on the course's menu.</li>
+<li><code>rstudio-notebook</code> derives from the CPU image and is not GPU-enabled. See
+<a href="/docs/environments/standard-images.html#standard-images">Standard Images</a>.</li>
+</ul>
+<p>Confirm what a session holds from inside the container:</p>
+<figure class="docs-command"><figcaption>Run inside the container</figcaption><pre class="docs-code"><code class="language-bash">nvidia-smi
+python -c "import torch; print(torch.cuda.get_device_name(0));"</code></pre></figure>
 <p>See also: <a href="/docs/gpu-access/gpu-classes.html#confirming-the-allocation">Confirming the Allocation</a></p>
 <h3 id="full-storage-quota">Full Storage Quota</h3>
 <p>A notebook save that fails with <code>[Errno 122] Disk quota exceeded</code>, or a "disk
-quota exceeded" email, means the storage quota is full. Files deleted in the
+quota exceeded" email, means the storage quota is full.</p>
+<p>Files deleted in the
 Jupyter interface move to <code>.local/share/Trash</code>, where they continue to count
-against the quota until the automatic purge after 7 days. A deletion in the
-Jupyter interface therefore frees no space before that purge.
+against the quota until the automatic purge after 7 days. <strong>A deletion in the
+Jupyter interface therefore frees no space before that purge.</strong>
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#workspace-and-personal-quotas">Workspace and Personal Quotas</a>
 describes storage quotas.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#jupyter-trash">Jupyter Trash</a>, <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#recovering-from-a-full-quota">Recovering from a Full Quota</a></p>

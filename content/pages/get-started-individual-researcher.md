@@ -10,33 +10,60 @@ canonicalUrl: /get-started/individual-researcher.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/individual-researcher/
 format: html
 ---
-<p>This page is for researchers working without a lab workspace: graduate
+<p class="lead">This page is for researchers working without a lab workspace: graduate
 students, postdocs, undergraduate researchers, staff researchers, and faculty
 who have not yet established a group. It assumes familiarity with a shell.</p>
+<dl class="docs-glance">
+<div><dt>For</dt><dd>Researchers working without a lab workspace</dd></div>
+<div><dt>You need</dt><dd>Familiarity with a shell</dd></div>
+<div><dt>Request through</dt><dd><a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a>, or <a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a> for the Research Cluster</dd></div>
+<div><dt>GPU time</dt><dd>From the school-wide shared research GPU pool</dd></div>
+</dl>
 <p><a href="/get-started/faculty-research-lab.html">Setting Up a Research Lab</a> covers provisioning for a
 group. <a href="/get-started/student-project.html">Projects &amp; Independent Study</a> covers for-credit
 coursework and capstones.</p>
 <h2 id="what-the-platform-is-suited-to">What the Platform Is Suited To</h2>
 <p>PARASOL, Datahub, and the Research Cluster are the same cluster. The work does not
 change with the name an article uses.</p>
-<h3 id="suitable-work">Suitable Work</h3>
-<p>The cluster suits interactive analysis, single-node GPU work at every GPU class
-size, fine-tuning, long-running batch jobs, and the broad
-range of research computing that does not require a supercomputer. It has
-operated since 2017 and carries both instruction and research.</p>
-<h3 id="unsupported-hpc-features">Unsupported HPC Features</h3>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-ok"></span><h3 id="suitable-work">Suitable Work</h3>
+<p>The cluster suits:</p>
+<ul>
+<li>interactive analysis</li>
+<li>single-node GPU work at every GPU class size</li>
+<li>fine-tuning</li>
+<li>long-running batch jobs</li>
+<li>the broad range of research computing that does not require a supercomputer</li>
+</ul>
+<p>It has
+operated since 2017 and carries both instruction and research.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span><h3 id="unsupported-hpc-features">Unsupported HPC Features</h3>
 <p>PARASOL is not a high-performance computing (HPC) system. It has no Slurm
 scheduler and no MPI or multi-node support. The <code>sbatch</code>-style wrappers are a
 compatibility layer rather than a scheduler. See
-<a href="/docs/reference/coming-from-hpc.html#slurm-compatibility-wrappers">Slurm Compatibility Wrappers</a>.
-<a href="/docs/reference/coming-from-hpc.html">Coming from HPC</a> covers HPC vocabulary and Slurm
+<a href="/docs/reference/coming-from-hpc.html#slurm-compatibility-wrappers">Slurm Compatibility Wrappers</a>.</p>
+<p><a href="/docs/reference/coming-from-hpc.html">Coming from HPC</a> covers HPC vocabulary and Slurm
 compatibility. Routing for work that requires
-these features is in <a href="#beyond-dsmlp">Beyond PARASOL</a>.</p>
+these features is in <a href="#beyond-dsmlp">Beyond PARASOL</a>.</p></article>
+</div>
 <h2 id="obtaining-access">Obtaining Access</h2>
 <p>Request access through
 <a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a>, or through
 <a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a> for the Research Cluster.
-Describe the work, its approximate resource requirements, and the timeframe.</p>
+Describe:</p>
+<ul class="docs-checklist">
+<li>The work</li>
+<li>Its approximate resource requirements</li>
+<li>The timeframe</li>
+</ul>
+<p>Once access is in place, the rest of this page follows the order of the work:</p>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Sign in</span><p>Connect with <code>ssh</code> to the login node. See <a href="#signing-in">Signing In</a>.</p></li>
+<li><span class="docs-step-title">Launch a job</span><p>Launch from the login node with a wrapper script. See <a href="#launching-a-job">Launching a Job</a>.</p></li>
+<li><span class="docs-step-title">Obtain GPU time</span><p>Draw on the shared research GPU pool, and select the smallest class the model fits within. See <a href="#obtaining-gpu-time">Obtaining GPU Time</a>.</p></li>
+<li><span class="docs-step-title">Checkpoint long-running work</span><p>See <a href="#checkpointing">Checkpointing</a>.</p></li>
+<li><span class="docs-step-title">Retrieve your files before access ends</span><p>See <a href="#end-of-access">End of Access</a>.</p></li>
+</ol>
 <h2 id="the-working-environment">The Working Environment</h2>
 <h3 id="signing-in">Signing In</h3>
 <p>Connect with <code>ssh</code> to the login node using Active Directory (AD) credentials.
@@ -52,12 +79,12 @@ available and is often the quickest way to inspect something.
 It is the one host every user passes through.</p>
 <h3 id="launching-a-job">Launching a Job</h3>
 <p>A GPU job is launched with a wrapper script, for example:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -c 8 -m 32 -g 1 -l gpu-class=large</code></pre>
+<figure class="docs-command"><figcaption>Example GPU launch</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -c 8 -m 32 -g 1 -l gpu-class=large</code></pre></figure>
 <p><code>workspace --list</code> prints the ID to use for <code>&lt;WORKSPACE&gt;</code>; see
 <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#listing-workspace-ids">Listing Workspace IDs</a>.</p>
 <p>Bare <code>launch.sh</code> and the wrapper scripts start with different default resources.
-See <a href="/docs/running-jobs/launch-sh-reference.html#default-resources">Default Resources</a>.
-Limits apply per pod and per namespace, and larger allocations are available on
+See <a href="/docs/running-jobs/launch-sh-reference.html#default-resources">Default Resources</a>.</p>
+<p>Limits apply per pod and per namespace, and larger allocations are available on
 request. See
 <a href="/docs/running-jobs/launch-sh-reference.html#resource-tiers">Resource Tiers</a> and
 <a href="/docs/reference/getting-help.html#administrative-requests">Administrative Requests</a>.
@@ -69,7 +96,8 @@ launcher.</p>
 <p>Research home directories are substantially larger than course ones and are
 set up when access is provisioned.
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#workspace-and-personal-quotas">Workspace and Personal Quotas</a>
-gives the sizes. Shared space is also available, as are optional mounts of
+gives the sizes.</p>
+<p>Shared space is also available, as are optional mounts of
 external storage such as SDSC Universal Scale Storage. See
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#mounting-external-storage">Mounting External Storage</a>.
 <a href="/docs/workspaces-and-storage/index.html">Workspaces &amp; Storage</a> describes the storage
@@ -85,37 +113,20 @@ installation has to work within that constraint. See
 <a href="/docs/environments/customizing-your-environment.html#root-access-and-system-packages">Root Access and System Packages</a>.</p>
 <h2 id="running-substantial-work">Running Substantial Work</h2>
 <h3 id="job-modes">Job Modes</h3>
-<div class="table-responsive"><table class="table table-striped">
-<thead>
-<tr>
-<th>Mode</th>
-<th>Use</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Interactive</td>
-<td>Exploration</td>
-</tr>
-<tr>
-<td>Background (<code>-b</code>)</td>
-<td>Work that must survive a disconnect</td>
-</tr>
-<tr>
-<td>Batch (<code>-B</code>)</td>
-<td>Runs that should run to completion</td>
-</tr>
-</tbody>
-</table></div>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-console"></span><p class="docs-card-title">Interactive</p><p>Exploration</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-tasks"></span><p class="docs-card-title">Background (<code>-b</code>)</p><p>Work that must survive a disconnect</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-play-circle"></span><p class="docs-card-title">Batch (<code>-B</code>)</p><p>Runs that should run to completion</p></article>
+</div>
 <p><a href="/docs/running-jobs/job-modes-and-limits.html#job-modes">Job Modes</a> describes the modes.</p>
 <h3 id="runtime-limit">Runtime Limit</h3>
-<p>Jobs default to 6 hours, and up to 12 hours may be set at launch. A booking
+<p>Jobs default to <strong>6 hours</strong>, and up to <strong>12 hours</strong> may be set at launch. A booking
 does not lift the limit. See
 <a href="/docs/gpu-access/reservations.html#reservation-length-and-session-runtime">Reservation Length and Session Runtime</a>.
 <a href="/docs/running-jobs/job-modes-and-limits.html#the-runtime-limit">The Runtime Limit</a>
 describes the limit.</p>
 <h3 id="checkpointing">Checkpointing</h3>
-<p>Checkpoint long-running work. The runtime limit, idle culling, the end of a
+<p><strong>Checkpoint long-running work.</strong> The runtime limit, idle culling, the end of a
 reservation window, and preemption can each stop a container independently of
 the code it is running.
 <a href="/docs/running-jobs/checkpointing.html">Checkpointing &amp; Logging Long Runs</a> describes the
@@ -145,10 +156,11 @@ from Fall 2026.</p>
 <p>Researchers without a lab workspace draw on a school-wide shared research GPU
 pool. The pool provides a baseline allocation, with occasional boosts when
 capacity frees up, most notably over the summer, when instructional hardware
-would otherwise be idle. Service Unit (SU) budgets divide the shared pool
+would otherwise be idle.</p>
+<p>Service Unit (SU) budgets divide the shared pool
 equitably among the researchers drawing on it.</p>
 <h3 id="choosing-a-gpu-class">Choosing a GPU Class</h3>
-<p>Select the smallest GPU class the model fits within. Five classes are available. A larger class is not faster for a
+<p><strong>Select the smallest GPU class the model fits within.</strong> Five classes are available. A larger class is not faster for a
 model that fits in a smaller one. It is scarcer and more expensive.
 <a href="/docs/gpu-access/gpu-classes.html">GPU Classes</a> describes the classes.
 <a href="/docs/gpu-access/workloads-by-gpu-class.html">Workloads by GPU Class</a> gives examples of
@@ -156,20 +168,21 @@ research work at each class, and the cards and slices behind it.</p>
 <h3 id="multi-day-reservations">Multi-Day Reservations</h3>
 <p>A research workspace starts with the same length cap as a course workspace.
 Cluster administrators can raise it on the researcher's request, so that a
-multi-day fine-tuning run can be booked against guaranteed hardware. A member's
-own booking caps at 48 hours unless the workspace is in researcher mode. See
+multi-day fine-tuning run can be booked against guaranteed hardware.</p>
+<p>A member's
+own booking caps at <strong>48 hours</strong> unless the workspace is in researcher mode. See
 <a href="/docs/gpu-access/reservations.html#reservation-length-caps">Reservation Length Caps</a>.</p>
 <h3 id="borrowing">Borrowing</h3>
 <p>When a baseline allocation is exhausted, idle capacity may still be available
 through borrowing. See
 <a href="/docs/gpu-access/quotas-and-availability.html#borrowing-beyond-quota">Borrowing Beyond Quota</a>.</p>
 <h3 id="launching-without-a-reservation">Launching Without a Reservation</h3>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Launching a GPU session without a reservation creates one and draws on the
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>A launch without a reservation still draws on the budget</strong></p><p>Launching a GPU session without a reservation creates one and draws on the
 researcher's SU budget. A script that relaunches in a loop can exhaust a
 budget window quickly, and nothing intervenes.</p></div>
 <p><a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>
 describes the charges.
-A launch holds a lease of 1 hour 10 minutes; for longer, use
+A launch holds a lease of <strong>1 hour 10 minutes</strong>; for longer, use
 <a href="/docs/gpu-access/reservations.html#extend">Extend</a> in the reservation app at
 <a href="https://reserve.dsmlp.ucsd.edu/">reserve.dsmlp.ucsd.edu</a>.</p>
 <h3 id="budget-windows">Budget Windows</h3>
@@ -178,11 +191,15 @@ budget, and either can be changed on the researcher's request. See
 <a href="/docs/gpu-access/service-units-and-budgets.html#budget-windows--cadences">Budget Windows &amp; Cadences</a>.
 See <a href="/docs/gpu-access/service-units-and-budgets.html#remaining-balance">Remaining Balance</a>.</p>
 <h3 id="cancellations-and-missed-windows">Cancellations and Missed Windows</h3>
-<p>Releasing a window at least 24 hours in advance costs nothing. A later
+<ul>
+<li><strong>Releasing a window at least 24 hours in advance costs nothing.</strong></li>
+<li>A later
 cancellation, or handing back the end of a session, keeps the time used and
-usually part of the unused time. A window missed without cancelling is charged, and an
-individual researcher has no instructor from whom to request a waiver.
-<a href="/docs/gpu-access/service-units-and-budgets.html#the-cancellation-penalty">The Cancellation Penalty</a>
+usually part of the unused time.</li>
+<li>A window missed without cancelling is charged, and an
+individual researcher has no instructor from whom to request a waiver.</li>
+</ul>
+<p><a href="/docs/gpu-access/service-units-and-budgets.html#the-cancellation-penalty">The Cancellation Penalty</a>
 describes the charge.</p>
 <h3 id="off-peak-hours">Off-Peak Hours</h3>
 <p>Off-peak discounts apply outside the peak evening hours. Work that can run at
@@ -206,8 +223,8 @@ permission model beneath it.</p>
 <p>Some data available on the cluster carries usage terms. See
 <a href="/docs/workspaces-and-storage/datasets.html#restricted--licensed-datasets">Restricted &amp; Licensed Datasets</a>.</p>
 <h3 id="data-classification">Data Classification</h3>
-<p>P4 data, such as clinical records and export-controlled information, must not be
-used on PARASOL. P3 data, which is legally or contractually protected information,
+<p><strong>P4 data, such as clinical records and export-controlled information, must not be
+used on PARASOL.</strong> P3 data, which is legally or contractually protected information,
 may be permitted after review.
 <a href="/docs/reference/policy.html#data-classification">Data Classification</a> describes the
 classification levels and the review.</p>
@@ -217,7 +234,7 @@ classification levels and the review.</p>
 than a home directory. See
 <a href="/docs/environments/building-a-custom-image.html">Building &amp; Publishing a Custom Image</a>.</p>
 <h3 id="end-of-access">End of Access</h3>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Access does not last indefinitely, and files do not survive its lapse.
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Files do not survive the end of access</strong></p><p>Access does not last indefinitely, and files do not survive its lapse.
 Retrieve required files before access ends.</p></div>
 <p><a href="/docs/workspaces-and-storage/moving-and-sharing-data.html#retrieving-work-before-access-ends">Retrieving Work Before Access Ends</a>
 describes retrieval.</p>
@@ -250,9 +267,14 @@ describes retrieval.</p>
 affected. See <a href="/docs/reference/getting-help.html#response-targets">Response Targets</a>.
 <a href="/docs/reference/getting-help.html">Getting Help</a> describes support routing in full.</p>
 <h2 id="beyond-dsmlp">Beyond PARASOL</h2>
-<p>Work requiring tightly coupled multi-node computation, MPI, a batch scheduler, or
-capacity at a scale the cluster does not carry belongs on another platform.
-<a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a> can connect
+<p>Work requiring any of these belongs on another platform:</p>
+<ul>
+<li>tightly coupled multi-node computation</li>
+<li>MPI</li>
+<li>a batch scheduler</li>
+<li>capacity at a scale the cluster does not carry</li>
+</ul>
+<p><a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a> can connect
 researchers with campus and national resources. A group large enough to warrant
 its own guaranteed capacity is a matter for its PI. See
 <a href="/get-started/faculty-research-lab.html">Setting Up a Research Lab</a>.</p>

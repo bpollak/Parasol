@@ -10,39 +10,56 @@ canonicalUrl: /get-started/student-in-a-course.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/student-in-a-course/
 format: html
 ---
-<p>This page is for students whose course uses Datahub, working entirely in a
+<p class="lead">This page is for students whose course uses Datahub, working entirely in a
 web browser at <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>. If you are not
 enrolled in such a course, start at <a href="/about/how-parasol-works.html#where-to-begin">Where to Begin</a>.</p>
+<dl class="docs-glance">
+<div><dt>For</dt><dd>Students whose course uses Datahub</dd></div>
+<div><dt>You need</dt><dd>A web browser and your campus credentials</dd></div>
+<div><dt>Access</dt><dd>Through your course enrollment, with nothing to request</dd></div>
+<div><dt>Sessions</dt><dd>One Datahub session running at a time</dd></div>
+</dl>
 <h2 id="signing-in">Signing In</h2>
-<ol>
-<li>Go to <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> and sign in through
+<p>Before you start, have:</p>
+<ul class="docs-checklist">
+<li>Enrollment in a course that uses Datahub</li>
+<li>Your campus credentials and Duo</li>
+<li>A web browser</li>
+</ul>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Sign in</span><p>Go to <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> and sign in through
    <strong>UCSD single sign-on</strong> with your campus credentials. Duo applies. Datahub
-   has no separate credentials.</li>
-<li>Select the course. If you are enrolled in more than one course that uses
+   has no separate credentials.</p></li>
+<li><span class="docs-step-title">Select the course</span><p>If you are enrolled in more than one course that uses
    Datahub, each course is listed separately. See
-   <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#belonging-to-several-workspaces">Belonging to Several Workspaces</a>.</li>
-<li>Select an environment. Your instructor decides what appears in this menu.
+   <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#belonging-to-several-workspaces">Belonging to Several Workspaces</a>.</p></li>
+<li><span class="docs-step-title">Select an environment</span><p>Your instructor decides what appears in this menu.
    Most courses offer one CPU option and, where the course uses them, a GPU
-   option.</li>
-<li>Wait for the environment to start. A launch can take a minute or two, and
-   longer when the cluster is busy.</li>
+   option.</p></li>
+<li><span class="docs-step-title">Wait for the environment to start</span><p>A launch can take a minute or two, and
+   longer when the cluster is busy.</p></li>
 </ol>
 <p><img alt="The Select Your Notebook Environment page. Two options are listed, each naming a course, its instructor and its term, with the image and its size below, 2 CPU and 8G RAM. A Launch Environment button sits below the list." src="/_images/docs/datahub-spawn-menu.png" class="img-responsive docs-figure"></p>
 <p>Your files are in the file browser on the left, and they persist between
 sessions.</p>
 <h2 id="starting-and-stopping-sessions">Starting and Stopping Sessions</h2>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Signing out or closing the tab does not stop your session. The container
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Closing the tab does not stop your session</strong></p><p>Signing out or closing the tab does not stop your session. The container
 keeps running and holding its resources, including its GPU if it has one. To
 stop it, select <strong>File → Hub Control Panel → Stop My Server</strong>.</p></div>
-<p>A session also ends on its own when it reaches its time limit, and a GPU
-session ends when you leave it idle. Saved files persist when a session ends;
-unsaved work is lost. Stopping your session is also how you release a GPU you
+<p>A session also ends on its own:</p>
+<ul>
+<li>when it reaches its time limit</li>
+<li>when you leave a GPU session idle</li>
+</ul>
+<p><strong>Saved files persist when a session ends; unsaved work is lost.</strong></p>
+<p>Stopping your session is also how you release a GPU you
 have finished with. See
 <a href="/docs/access/datahub-in-the-browser.html#stopping-a-session">Stopping a Session</a>.</p>
 <h3 id="one-datahub-session">One Datahub Session</h3>
 <p>You can have one Datahub session running at a time. To start a different
 course environment, stop the running one with
-<strong>File → Hub Control Panel → Stop My Server</strong>. The limit applies only to
+<strong>File → Hub Control Panel → Stop My Server</strong>.</p>
+<p>The limit applies only to
 Datahub: work you launch from a terminal runs alongside it. See
 <a href="/docs/access/datahub-in-the-browser.html#concurrent-datahub-sessions">Concurrent Datahub Sessions</a>.</p>
 <h2 id="sign-in-and-startup-failures">Sign-In and Startup Failures</h2>
@@ -75,14 +92,19 @@ Datahub: work you launch from a terminal runs alongside it. See
 <p>See also: <a href="/docs/access/sign-in-and-session-problems.html">Sign-In &amp; Session Problems</a></p>
 <h2 id="working-in-the-course-environment">Working in the Course Environment</h2>
 <h3 id="session-resources">Session Resources</h3>
-<p>Your course session typically begins at 2 CPU cores and 4GB RAM of its own.
+<p>Your course session typically begins at <strong>2 CPU cores and 4GB RAM</strong> of its own.
 Upper limits depend on class size, demand, and capacity. See
 <a href="/docs/access/datahub-in-the-browser.html#the-browser-session">The Browser Session</a>.</p>
 <h3 id="directories">Directories</h3>
-<p>Your home directory is private to you and specific to one course. A shared
-area that everyone in the course can read is where datasets and starter
-notebooks usually appear. A private area follows you into every course you
-take. See
+<p>You work with three areas.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><p class="docs-card-title">Home directory</p><p>Your home directory is private to you and specific to one course.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-folder-open"></span><p class="docs-card-title">Shared area</p><p>A shared area that everyone in the course can read is where datasets and starter
+notebooks usually appear.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-lock"></span><p class="docs-card-title">Private area</p><p>A private area follows you into every course you
+take.</p></article>
+</div>
+<p>See
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#where-files-live">Where Files Live</a>.</p>
 <h3 id="storage-quota">Storage Quota</h3>
 <p>Your course home directory holds notebooks and modest data. Use a large
@@ -92,7 +114,8 @@ gives the quota sizes.</p>
 <h3 id="installing-packages">Installing Packages</h3>
 <p>You can install Python packages into your own environment.
 <a href="/docs/environments/customizing-your-environment.html#installing-python-packages-into-a-private-kernel">Installing Python Packages Into a Private Kernel</a>
-gives the steps. You cannot install system-level packages, because containers
+gives the steps.</p>
+<p>You cannot install system-level packages, because containers
 run unprivileged. If your course needs a system library, ask the instructor to
 request it. See
 <a href="/docs/environments/customizing-your-environment.html#root-access-and-system-packages">Root Access and System Packages</a>.</p>
@@ -102,17 +125,19 @@ see <a href="/docs/workspaces-and-storage/moving-and-sharing-data.html">Moving &
 <h2 id="assignments">Assignments</h2>
 <p>Most courses distribute, collect, and grade notebooks with tools built into
 the environment. Your instructor tells you which tool the course uses and how
-to fetch and submit work. If an assignment will not fetch or submit, report it
-to your instructor or TA before opening a ticket.</p>
+to fetch and submit work.</p>
+<p>If an assignment will not fetch or submit, <strong>report it
+to your instructor or TA before opening a ticket.</strong></p>
 <p>See also: <a href="/docs/grading/index.html">Grading</a></p>
 <h2 id="using-a-gpu">Using a GPU</h2>
 <p>If your course offers a GPU option, selecting it is all you need to do.</p>
 <h3 id="service-unit-budget">Service Unit Budget</h3>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>Starting a GPU session books capacity and draws on your Service Unit (SU)
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Every GPU session draws on your budget</strong></p><p>Starting a GPU session books capacity and draws on your Service Unit (SU)
 budget for the course, even if you do not use the reservation calendar.
 Launching the session is what authorizes that spend, and a session you leave
 running costs the same as one you are using.</p></div>
-<p>Your course budget renews each week, and you book your own windows. If your
+<p>Your course budget renews each week, and you book your own windows.</p>
+<p>If your
 budget runs out, ask your instructor or TA. They can request an increase, or
 book a window on your behalf. A booking they make on your behalf is still
 charged to your own budget, and can leave it overdrawn until it renews. See
@@ -128,12 +153,18 @@ idleness. A warning comes first. See
 guarantees access, not a running job. Launch your notebook as usual, and it
 goes onto the reserved capacity ahead of the walk-up queue. See
 <a href="/docs/gpu-access/reservations.html">Reservations</a>.</p>
+<ol class="docs-flow" aria-label="From reservation to running notebook">
+<li><span class="docs-flow-label">Reserve</span><strong>Book a window</strong><p>Reserve a GPU in the reservation app for the time you need it.</p></li>
+<li><span class="docs-flow-label">Launch</span><strong>Launch your notebook as usual</strong><p>Start it the same way as any other session.</p></li>
+<li><span class="docs-flow-label">Run</span><strong>Ahead of the walk-up queue</strong><p>It goes onto the reserved capacity.</p></li>
+</ol>
 <p>If you miss the start of a booked window, you can still claim it within a short
 grace period. After that, the reservation is cancelled, the capacity returns to
 the pool, and a cancellation charge applies. The same happens when your session stops
 partway through a booking and you do not restart it within about 30 minutes.
-Your instructor or TA can waive the charge where warranted. Cancelling at least
-24 hours ahead costs nothing; a later cancellation keeps part of the cost. See
+Your instructor or TA can waive the charge where warranted.</p>
+<p><strong>Cancelling at least
+24 hours ahead costs nothing</strong>; a later cancellation keeps part of the cost. See
 <a href="/docs/gpu-access/reservations.html#the-claim-window">The Claim Window</a> and
 <a href="/docs/gpu-access/service-units-and-budgets.html#the-cancellation-penalty">The Cancellation Penalty</a>.</p>
 <h3 id="reservation-events">Reservation Events</h3>
@@ -188,8 +219,14 @@ them from the command line.
 <h2 id="duration-of-access">Duration of Access</h2>
 <p>You keep access for one additional quarter beyond the term in which the course
 ran: a Fall course stays available through the end of Winter. Summer does not
-count against a Spring course. Retrieve anything you need before that period
-ends. See
+count against a Spring course.</p>
+<ol class="docs-flow" aria-label="How long course access lasts">
+<li><span class="docs-flow-label">Term</span><strong>The course runs</strong><p>For example, a Fall course.</p></li>
+<li><span class="docs-flow-label">One more quarter</span><strong>Access continues</strong><p>A Fall course stays available through the end of Winter.</p></li>
+<li><span class="docs-flow-label">End</span><strong>Access ends</strong><p>After the additional quarter.</p></li>
+</ol>
+<p><strong>Retrieve anything you need before that period
+ends.</strong> See
 <a href="/docs/access/when-access-starts-and-ends.html#one-additional-quarter">One Additional Quarter</a>.</p>
 <h2 id="maintenance-and-policy">Maintenance and Policy</h2>
 <p>Datahub may be unavailable during scheduled maintenance for time-sensitive
@@ -200,14 +237,24 @@ data classification.</p>
 <h2 id="work-that-requires-a-terminal">Work That Requires a Terminal</h2>
 <p><a href="/get-started/working-from-the-command-line.html">Working from the Command Line</a> covers SSH,
 <code>launch.sh</code>, background and batch jobs, VS Code, and GPU classes that a course
-menu does not offer. Command-line work uses the same course access. There is no
+menu does not offer.</p>
+<p>Command-line work uses the same course access. There is no
 eligibility requirement, and you have nothing to request.</p>
 <h2 id="support">Support</h2>
-<p>Take course questions, such as assignments, packages your course needs, and
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><p class="docs-card-title">Course questions</p><p>Take course questions, such as assignments, packages your course needs, and
 the environment your course provides, to your instructor or TA. They are the
-first tier of support. Take platform problems, such as being unable to sign in
+first tier of support.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-wrench"></span><p class="docs-card-title">Platform problems</p><p>Take platform problems, such as being unable to sign in
 or the service behaving differently than documented, to the
 <a href="https://support.ucsd.edu/">ITS Service Desk</a> or
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>. In a ticket, name the course, say
-what you were doing, give the exact error, and include a screenshot.</p>
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</p></article>
+</div>
+<p>In a ticket:</p>
+<ul class="docs-checklist">
+<li>Name the course</li>
+<li>Say what you were doing</li>
+<li>Give the exact error</li>
+<li>Include a screenshot</li>
+</ul>
 <p>See also: <a href="/docs/reference/getting-help.html#response-targets">Response Targets</a>, <a href="/docs/reference/getting-help.html">Getting Help</a></p>

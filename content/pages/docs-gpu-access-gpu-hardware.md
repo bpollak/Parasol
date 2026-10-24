@@ -10,10 +10,16 @@ canonicalUrl: /docs/gpu-access/gpu-hardware.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/gpu-hardware/
 format: html
 ---
-<p>The cards and Multi-Instance GPU (MIG) slices listed here cover the many
+<p class="lead">The cards and Multi-Instance GPU (MIG) slices listed here cover the many
 configurations that can back a GPU class, and not every configuration is in
 service in every quarter. A session requests a class, not a card; see
 <a href="/docs/gpu-access/gpu-classes.html#gpu-class-sizes">GPU Class Sizes</a>.</p>
+<dl class="docs-glance">
+<div><dt>Architectures</dt><dd>Turing, Ampere, Ada Lovelace, Hopper, and Blackwell</dd></div>
+<div><dt>Memory</dt><dd>6 GB slices to a 96 GB card</dd></div>
+<div><dt>CUDA</dt><dd>CUDA 12 and CUDA 13, as of Fall 2026</dd></div>
+<div><dt>Profilers</dt><dd><code>nsys</code>, <code>ncu</code>, and <code>torch.profiler</code></dd></div>
+</dl>
 <h2 id="specifications">Specifications</h2>
 <p>The tables group cards by architecture, oldest first, and list the MIG slices
 cut from a card after it. <a href="/docs/gpu-access/workloads-by-gpu-class.html">Workloads by GPU Class</a>
@@ -203,18 +209,19 @@ FP8.</p>
 </table></div>
 <h2 id="mig-slices">MIG Slices</h2>
 <p>Multi-Instance GPU (MIG) divides one card into isolated slices. Each slice has
-its own memory, cache and compute, and a session on a slice can use only that
-slice. Sessions on different slices of one card do not share memory or
+its own memory, cache and compute, and <strong>a session on a slice can use only that
+slice</strong>. Sessions on different slices of one card do not share memory or
 bandwidth.</p>
 <p>A slice's name gives its compute and its memory: <code>2g.20gb</code> is two compute units
 and 20 GB. A compute unit is a seventh of an H100's compute, or a quarter of an
-A30's or an RTX PRO 6000's. A slice's bandwidth follows its share of the card's
+A30's or an RTX PRO 6000's.</p>
+<p>A slice's bandwidth follows its share of the card's
 memory rather than its compute. MIG divides an H100's memory into eighths, so
 the <code>2g.20gb</code> slice has two-eighths of the card's bandwidth.</p>
-<p>Inside a session, <code>nvidia-smi -L</code> lists the card and, on a slice, the slice's
-profile.</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Check which device a session is on</strong></p><p>Inside a session, <code>nvidia-smi -L</code> lists the card and, on a slice, the slice's
+profile.</p></div>
 <h2 id="cuda-versions">CUDA Versions</h2>
-<p>As of Fall 2026, PARASOL supports CUDA 12 and CUDA 13. The standard GPU image,
+<p>As of Fall 2026, PARASOL supports <strong>CUDA 12 and CUDA 13</strong>. The standard GPU image,
 <code>scipy-ml-notebook</code>, includes CUDA 12. The image's Dockerfile records its exact
 toolkit version; see
 <a href="/docs/environments/standard-images.html#finding-the-package-list">Finding the Package List</a>.
@@ -253,23 +260,26 @@ inside the container, so each can collect hardware metrics.</p>
 container images at <code>nvcr.io</code> are fully supported on PARASOL and include both.
 The PyTorch profiler is part of PyTorch, which <code>scipy-ml-notebook</code> includes.</p>
 <h3 id="nsight-systems-and-nsight-compute">Nsight Systems and Nsight Compute</h3>
-<p>Launch an NVIDIA image, such as <code>nvcr.io/nvidia/pytorch</code>, with <code>-i</code>. <code>-s</code> starts
+<ol class="docs-steps">
+<li><span class="docs-step-title">Launch an NVIDIA image</span><p>Launch an NVIDIA image, such as <code>nvcr.io/nvidia/pytorch</code>, with <code>-i</code>. <code>-s</code> starts
 a shell and no notebook server, because these images are not built on the
 standard images:</p>
-<pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -g 1 -l gpu-class=medium -i nvcr.io/nvidia/pytorch:&lt;tag&gt; -s</code></pre>
+<figure class="docs-command"><figcaption>Launch an NVIDIA image with a shell</figcaption><pre class="docs-code"><code class="language-bash">launch-scipy-ml.sh -W &lt;WORKSPACE&gt; -g 1 -l gpu-class=medium -i nvcr.io/nvidia/pytorch:&lt;tag&gt; -s</code></pre></figure>
 <p>These images are large, so the first launch on a node is slow. See
-<a href="/docs/environments/building-a-custom-image.html#pulling-a-large-image-ahead-of-a-session">Pulling a Large Image Ahead of a Session</a>.</p>
-<p>Profile the whole run with Nsight Systems to find where the time goes, then
+<a href="/docs/environments/building-a-custom-image.html#pulling-a-large-image-ahead-of-a-session">Pulling a Large Image Ahead of a Session</a>.</p></li>
+<li><span class="docs-step-title">Profile the run, then its kernels</span><p>Profile the whole run with Nsight Systems to find where the time goes, then
 profile the kernels that dominate with Nsight Compute:</p>
-<pre class="docs-code"><code class="language-bash">nsys profile -o timeline python train.py
-ncu --launch-count 20 -o kernels python train.py</code></pre>
+<figure class="docs-command"><figcaption>Nsight Systems, then Nsight Compute</figcaption><pre class="docs-code"><code class="language-bash">nsys profile -o timeline python train.py
+ncu --launch-count 20 -o kernels python train.py</code></pre></figure>
 <p>Nsight Compute replays each kernel many times to read its counters, so a run
 under <code>ncu</code> is far slower than a normal one. <code>--launch-count</code> limits it to the
-first kernels launched. Both reports open in NVIDIA's desktop applications of
-the same names.</p>
+first kernels launched.</p></li>
+<li><span class="docs-step-title">Open the reports</span><p>Both reports open in NVIDIA's desktop applications of
+the same names.</p></li>
+</ol>
 <h3 id="pytorch-profiler">PyTorch Profiler</h3>
 <p>In a PyTorch script, wrap a few training steps:</p>
-<pre class="docs-code"><code class="language-python">import itertools
+<figure class="docs-command"><figcaption>In a PyTorch training script</figcaption><pre class="docs-code"><code class="language-python">import itertools
 
 from torch.profiler import ProfilerActivity, profile
 
@@ -277,4 +287,4 @@ with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]) as prof:
     for batch in itertools.islice(loader, 10):
         train_step(batch)
 
-print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))</code></pre>
+print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))</code></pre></figure>

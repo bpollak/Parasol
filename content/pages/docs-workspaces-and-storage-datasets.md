@@ -10,26 +10,37 @@ canonicalUrl: /docs/workspaces-and-storage/datasets.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/workspaces-and-storage/datasets/
 format: html
 ---
-<p>Find the shared datasets on the cluster and read them where they are stored,
+<p class="lead">Find the shared datasets on the cluster and read them where they are stored,
 rather than copying them into your home directory. Request staging for a large
-dataset that several people need. Data classification decides whether protected
+dataset that several people need.</p>
+<dl class="docs-glance">
+<div><dt>Shared locations</dt><dd><code>/datasets</code> and the workspace <code>public/</code> area</dd></div>
+<div><dt>Catalog</dt><dd><a href="https://datahub.ucsd.edu/hub/datasets">datahub.ucsd.edu/hub/datasets</a></dd></div>
+<div><dt>Request staging</dt><dd><a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a></dd></div>
+<div><dt>Course distribution</dt><dd>Up to 500 GB as a matter of course</dd></div>
+</dl>
+<p>Data classification decides whether protected
 data can go on the cluster at all, and license terms limit what you can do with
 licensed data.</p>
 <h2 id="where-shared-data-lives">Where Shared Data Lives</h2>
 <p>Shared datasets are stored in one of two locations. The location determines
 what a dataset's size counts against.</p>
-<h3 id="the-datasets-tree">The <code>/datasets</code> Tree</h3>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-globe"></span><h3 id="the-datasets-tree">The <code>/datasets</code> Tree</h3>
 <p><code>/datasets</code> is the cluster-wide dataset tree. It is present in the container
 and on the login node. It holds common training corpora, including MNIST,
 CIFAR-10, Tiny-ImageNet, ImageNet, Caltech256, and ShapeNet, alongside data
 staged for particular courses. ITS places data there on request. Data under
 <code>/datasets</code> sits outside both the workspace and personal quotas.</p>
-<h3 id="the-workspace-public-area">The Workspace <code>public/</code> Area</h3>
+<dl class="docs-card-facts"><div><dt>Placed by</dt><dd>ITS, on request</dd></div><div><dt>Quota</dt><dd>Outside both</dd></div></dl></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-folder-open"></span><h3 id="the-workspace-public-area">The Workspace <code>public/</code> Area</h3>
 <p><code>public/</code> is the workspace's own shared area and the most common location for
 course datasets. The instructor or the course grader account stages data there,
 and every member of the workspace can read it.
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#the-shared-workspace-area">The Shared Workspace Area</a>
 describes the area.</p>
+<dl class="docs-card-facts"><div><dt>Staged by</dt><dd>Instructor or grader account</dd></div><div><dt>Readable by</dt><dd>Every workspace member</dd></div></dl></article>
+</div>
 <h3 id="choice-of-location">Choice of Location</h3>
 <p>The instructor chooses which of the two locations a course uses. Data that
 several courses use, or that is too large for a workspace, is usually staged
@@ -38,13 +49,13 @@ under <code>/datasets</code>. Data specific to one course usually sits in <code>
 <p>The catalog of cluster-wide datasets is published at
 <a href="https://datahub.ucsd.edu/hub/datasets">datahub.ucsd.edu/hub/datasets</a>. The
 tree itself can be browsed from a running environment or from the login node:</p>
-<pre class="docs-code"><code class="language-bash">cd /datasets
-ls</code></pre>
+<figure class="docs-command"><figcaption>Browse the tree from an environment or the login node</figcaption><pre class="docs-code"><code class="language-bash">cd /datasets
+ls</code></pre></figure>
 <p>Course data staged under <code>/datasets</code> is placed in a directory named for the
 workspace ID, <code>/datasets/&lt;workspace-id&gt;-public/</code>, and can be located without a
 catalog entry.</p>
 <h2 id="reading-shared-data-in-place">Reading Shared Data in Place</h2>
-<p>Do not copy a shared dataset into a home directory. Copying a shared dataset is
+<p><strong>Do not copy a shared dataset into a home directory.</strong> Copying a shared dataset is
 the fastest way to exhaust a quota, and the copy is no closer to the job than
 the original, because the same filesystem is visible from the container and
 from the login node. See
@@ -56,9 +67,13 @@ the source corpus.</p>
 <h2 id="asking-for-a-dataset-to-be-staged">Asking for a Dataset to Be Staged</h2>
 <p>Request staging for a large dataset that several people need, rather than
 downloading it into each home directory. Email
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a> with what the data is, its
-approximate size, and who needs to read it.</p>
-<p>Course dataset distribution of up to 500 GB is accommodated as a matter of
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a> with:</p>
+<ul class="docs-checklist">
+<li>What the data is</li>
+<li>Its approximate size</li>
+<li>Who needs to read it</li>
+</ul>
+<p>Course dataset distribution of <strong>up to 500 GB</strong> is accommodated as a matter of
 course. Larger corpora are accepted on a space-available basis.</p>
 <p>A dataset may be published cluster-wide or scoped to one course. State which in
 the request.</p>
@@ -73,19 +88,27 @@ restrictions.</p></div>
 node and in the container. <a href="/docs/workspaces-and-storage/moving-and-sharing-data.html">Moving &amp; Sharing Data</a>
 covers larger transfers.</p>
 <h2 id="restricted--licensed-datasets">Restricted &amp; Licensed Datasets</h2>
-<p>Two separate restrictions apply to datasets. Data classification determines
-whether data may be placed on the cluster at all. License terms govern what may
-be done with data the campus has already acquired.</p>
+<p>Two separate restrictions apply to datasets.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-lock"></span><p class="docs-card-title"><a href="#p3-and-p4-data">Data classification</a></p><p>Data classification determines
+whether data may be placed on the cluster at all.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-file"></span><p class="docs-card-title"><a href="#licensed-and-subscription-data">License terms</a></p><p>License terms govern what may
+be done with data the campus has already acquired.</p></article>
+</div>
 <h3 id="p3-and-p4-data">P3 and P4 Data</h3>
 <p>P3 and P4 are protection levels in the University's data classification. P4
 data, such as clinical records or export-controlled material, is prohibited on
 PARASOL without review or exception, and P3 data may be permitted
 after review. See
 <a href="/docs/reference/policy.html#data-classification">Data Classification</a>.</p>
-<p>Where either level may apply, raise the dataset before any of it reaches the
-cluster. For instruction and coursework, email
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>. For research, email Research IT at
-<a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a>.</p>
+<p><strong>Where either level may apply, raise the dataset before any of it reaches the
+cluster.</strong></p>
+<ul>
+<li>For instruction and coursework, email
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>.</li>
+<li>For research, email Research IT at
+<a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a>.</li>
+</ul>
 <h3 id="examples-of-restricted-data">Examples of Restricted Data</h3>
 <p>The University's <a href="https://security.ucop.edu/policies/institutional-information-and-it-resource-classification.html">classification
 levels</a>
@@ -129,14 +152,14 @@ the general <code>/datasets</code> tree. See
 <a href="/docs/workspaces-and-storage/your-files-and-quotas.html#mounting-external-storage">Mounting External Storage</a>.</p>
 <p>License terms usually impose the following conditions:</p>
 <ul>
-<li>Read the data in place. A copy in a home directory is a second copy under the
+<li><strong>Read the data in place.</strong> A copy in a home directory is a second copy under the
   same terms, and it consumes quota.</li>
-<li>Do not pass the data on. Access is granted to an individual, not to that
+<li><strong>Do not pass the data on.</strong> Access is granted to an individual, not to that
   person's collaborators. Moving the data into a shared or outward-facing
   location is a licensing decision, not a file operation.
   <a href="/docs/workspaces-and-storage/moving-and-sharing-data.html#sharing-with-people-who-have-no-cluster-account">Sharing with People Who Have No Cluster Account</a>
   covers sharing outside the cluster.</li>
-<li>Delete derived subsets and intermediate files that are no longer needed. They
+<li><strong>Delete derived subsets and intermediate files that are no longer needed.</strong> They
   inherit the terms of their source.</li>
 </ul>
 <p>Where a course or lab has acquired data under license terms, state so in the

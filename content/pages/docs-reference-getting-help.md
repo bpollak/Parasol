@@ -10,21 +10,38 @@ canonicalUrl: /docs/reference/getting-help.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/getting-help/
 format: html
 ---
-<p>Find out whom to contact about PARASOL, what to include in a ticket,
+<p class="lead">Find out whom to contact about PARASOL, what to include in a ticket,
 and how to ask for a change you cannot make yourself, such as more disk space
-or a larger GPU class. If you are a student in a course, start with your
-instructor or TA.</p>
+or a larger GPU class. If you are a student in a course, <strong>start with your
+instructor or TA</strong>.</p>
+<dl class="docs-glance">
+<div><dt>A course question</dt><dd>The instructor or TA, first</dd></div>
+<div><dt>PARASOL itself</dt><dd><a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a></dd></div>
+<div><dt>Outages and tickets</dt><dd>The <a href="https://support.ucsd.edu/">ITS Service Desk</a></dd></div>
+<div><dt>Self-service</dt><dd>None for administrative requests</dd></div>
+</dl>
 <h2 id="support-tiers">Support Tiers</h2>
-<p>Students in a course contact their instructor or TA first. Course staff are the
-first tier of support for course matters: an assignment, a package the course
-needs, an environment that does not contain what the syllabus specifies, or a
-missing roster entry. Course staff hold the course's own support ticket with ITS
-and can see the course and its roster.</p>
-<p>Platform problems go directly to ITS, whoever reports them. Platform problems
-include an inability to sign in at all, a service that is down, and behavior
-that differs from the documentation.</p>
-<p>Researchers and lab members have no instructor tier and use the contacts in
-<a href="#support-contacts">Support Contacts</a> directly.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><p class="docs-card-title">Students in a course</p><p>Students in a course contact their instructor or TA first. Course staff are the
+first tier of support for course matters:</p>
+<ul>
+<li>an assignment</li>
+<li>a package the course needs</li>
+<li>an environment that does not contain what the syllabus specifies</li>
+<li>a missing roster entry</li>
+</ul>
+<p>Course staff hold the course's own support ticket with ITS and can see the
+course and its roster.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-wrench"></span><p class="docs-card-title">Platform problems</p><p>Platform problems go directly to ITS, whoever reports them. Platform problems
+include:</p>
+<ul>
+<li>an inability to sign in at all</li>
+<li>a service that is down</li>
+<li>behavior that differs from the documentation</li>
+</ul></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><p class="docs-card-title">Researchers and lab members</p><p>Researchers and lab members have no instructor tier and use the contacts in
+<a href="#support-contacts">Support Contacts</a> directly.</p></article>
+</div>
 <h2 id="support-contacts">Support Contacts</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -63,8 +80,9 @@ that differs from the documentation.</p>
 <h3 id="email-and-the-service-desk">Email and the Service Desk</h3>
 <p>Email to <code>datahub@ucsd.edu</code> and a ticket through the Service Desk reach the same
 staff. Email to that address opens a case, and the Service Desk web form submits
-to the same queue. Either route may be used. The web form is better suited to
-screenshots and long pastes.</p>
+to the same queue.</p>
+<p>Either route may be used. The web form is better suited to screenshots and long
+pastes.</p>
 <h3 id="platform-selection">Platform Selection</h3>
 <p>Research IT is the first contact for the question of whether a research project
 belongs on PARASOL. Research IT can compare a project against the other platforms
@@ -75,53 +93,37 @@ group already uses.</p>
 <h2 id="contents-of-a-support-ticket">Contents of a Support Ticket</h2>
 <p>A ticket that ITS can act on without further questions contains the following
 items.</p>
-<div class="table-responsive"><table class="table table-striped">
-<thead>
-<tr>
-<th>Item</th>
-<th>Detail</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>The course or workspace</td>
-<td>By name or ID, for example COGS 108. The disk-quota-service page displays the ID.</td>
-</tr>
-<tr>
-<td>The system</td>
-<td><code>datahub.ucsd.edu</code> in a browser, or <code>dsmlp-login</code> at a terminal</td>
-</tr>
-<tr>
-<td>The environment or container</td>
-<td>The one selected, for example <code>scipy-ml-notebook</code></td>
-</tr>
-<tr>
-<td>The exact command</td>
-<td>If there was one, copied rather than described</td>
-</tr>
-<tr>
-<td>The exact error</td>
-<td>Copied rather than described, with a screenshot</td>
-</tr>
-<tr>
-<td>The time</td>
-<td>Approximately when it happened, and whether it happens every time</td>
-</tr>
-</tbody>
-</table></div>
+<ul class="docs-checklist">
+<li><strong>The course or workspace</strong>, by name or ID, for example COGS 108. The disk-quota-service page displays the ID.</li>
+<li><strong>The system</strong>: <code>datahub.ucsd.edu</code> in a browser, or <code>dsmlp-login</code> at a terminal</li>
+<li><strong>The environment or container</strong>: the one selected, for example <code>scipy-ml-notebook</code></li>
+<li><strong>The exact command</strong>, if there was one, copied rather than described</li>
+<li><strong>The exact error</strong>, copied rather than described, with a screenshot</li>
+<li><strong>The time</strong>: approximately when it happened, and whether it happens every time</li>
+</ul>
 <h3 id="command-line-details">Command-Line Details</h3>
 <p>A ticket about a problem at the command line also includes the node and the
-pod. The launch output names the node the pod was assigned to, for example
-<code>INFO pod assigned to node: its-dsmlp-n04.ucsd.edu</code>, and <code>kubectl get pods</code>
-gives the pod ID and its status.</p>
+pod.</p>
+<ul class="docs-checklist">
+<li><strong>The node</strong>: the launch output names the node the pod was assigned to, for example
+<code>INFO pod assigned to node: its-dsmlp-n04.ucsd.edu</code></li>
+<li><strong>The pod</strong>: <code>kubectl get pods</code> gives the pod ID and its status</li>
+</ul>
 <p>See also: <a href="/docs/reference/error-messages.html">Error Messages</a></p>
 <h3 id="incidents-affecting-more-than-one-person">Incidents Affecting More Than One Person</h3>
-<p>A report of an incident that affects more than one person states its scope in
-the first line. ITS prioritizes effort by the number of courses and students
-affected and by the overall impact on instruction. A first line such as "none of
+<p>A report of an incident that affects more than one person <strong>states its scope in
+the first line</strong>. ITS prioritizes effort by the number of courses and students
+affected and by the overall impact on instruction.</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Tip</strong></p><p>A first line such as "none of
 my 200 students can start a notebook, and the midterm is Thursday" distinguishes
-a broad incident from an individual report such as "my notebook will not start".</p>
+a broad incident from an individual report such as "my notebook will not start".</p></div>
 <h2 id="response-targets">Response Targets</h2>
+<ul class="row agent-metric-grid" aria-label="Response targets">
+<li class="col-sm-6 col-md-3"><div class="agent-metric-card"><strong class="agent-metric-value">1-2</strong><span class="agent-metric-label">Business days</span><span class="agent-metric-note">Target resolution of individual user issues</span></div></li>
+<li class="col-sm-6 col-md-3"><div class="agent-metric-card"><strong class="agent-metric-value">Up to 5</strong><span class="agent-metric-label">Days</span><span class="agent-metric-note">To answer a problem report from an independent study or project user</span></div></li>
+<li class="col-sm-6 col-md-3"><div class="agent-metric-card"><strong class="agent-metric-value">30</strong><span class="agent-metric-label">Minutes</span><span class="agent-metric-note">Target response, instructor incident tier</span></div></li>
+<li class="col-sm-6 col-md-3"><div class="agent-metric-card"><strong class="agent-metric-value">8</strong><span class="agent-metric-label">Hours</span><span class="agent-metric-note">Target resolution, instructor incident tier</span></div></li>
+</ul>
 <h3 id="individual-user-issues">Individual User Issues</h3>
 <p>ITS targets resolution of individual user issues within 1-2 business days. The
 target applies to students in a course, researchers, and instructors, and to
@@ -132,10 +134,13 @@ through the Independent Study Request form, may take up to 5 days to answer.</p>
 <p>For instructors only, an incident affecting multiple courses, many users, or a
 critical point in the quarter such as an exam carries a target response time of
 30 minutes from first contact to the Service Desk and a target resolution time
-of 8 hours. The tier is an instructional commitment. An instructor or TA reaches
-it by reporting a broad incident. An individual user does not reach it by
-marking a ticket urgent, and a student whose whole class is affected reaches it
-by telling the instructor.</p>
+of 8 hours.</p>
+<p>The tier is an instructional commitment.</p>
+<ul>
+<li>An instructor or TA reaches it by reporting a broad incident.</li>
+<li>An individual user does not reach it by marking a ticket urgent.</li>
+<li>A student whose whole class is affected reaches it by telling the instructor.</li>
+</ul>
 <h3 id="escalation-outside-business-hours">Escalation Outside Business Hours</h3>
 <p>Urgent problems outside business hours may be escalated through the Service
 Desk. Escalation may be requested, and the Service Desk determines how it is
@@ -202,14 +207,19 @@ window renews. When a member has run out of Service Units before a deadline,
 request more by ticket.</p>
 <p>See also: <a href="/docs/gpu-access/service-units-and-budgets.html">Service Units &amp; Budgets</a></p>
 <h2 id="writing-an-administrative-request">Writing an Administrative Request</h2>
-<p>An administrative request names the workspace, describes the work, states the
-deadline and time window, and lists what has already been tried.</p>
+<p>An administrative request:</p>
+<ul class="docs-checklist">
+<li>names <a href="#naming-the-workspace">the workspace</a></li>
+<li>describes <a href="#describing-the-work">the work</a></li>
+<li>states <a href="#deadline-and-time-window">the deadline and time window</a></li>
+<li>lists <a href="#checks-before-requesting">what has already been tried</a></li>
+</ul>
 <h3 id="naming-the-workspace">Naming the Workspace</h3>
 <p>Almost every limit in <a href="#administrative-requests">Administrative Requests</a>
-belongs to a workspace rather than to an individual. A request that does not
-name a workspace cannot be acted on. The disk-quota-service page displays the
-workspace ID, and <code>workspace --list</code> on the login node prints every workspace an
-account belongs to.</p>
+belongs to a workspace rather than to an individual. <strong>A request that does not
+name a workspace cannot be acted on.</strong></p>
+<p>The disk-quota-service page displays the workspace ID, and <code>workspace --list</code>
+on the login node prints every workspace an account belongs to.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#naming-a-workspace-on-the-command-line">Naming a Workspace on the Command Line</a></p>
 <h3 id="describing-the-work">Describing the Work</h3>
 <p>One sentence describing the work is sufficient. "Fine-tuning a 7B model for a
@@ -218,21 +228,27 @@ approximate duration.</p>
 <h3 id="deadline-and-time-window">Deadline and Time Window</h3>
 <p>A request bounded in time is easier to approve than an open-ended one. Quotas
 are date-aware: cluster administrators can raise a course's share for the span
-of a project deadline and let it revert automatically. A request for "32 CPU for
-the week of the 9th" is therefore stronger than a request for "32 CPU".</p>
+of a project deadline and let it revert automatically.</p>
+<p>A request for "32 CPU for the week of the 9th" is therefore stronger than a
+request for "32 CPU".</p>
 <h3 id="checks-before-requesting">Checks Before Requesting</h3>
-<p>For a disk quota, state that the Jupyter Trash is empty and that no personal
-copy of a shared dataset is held. For a GPU class, state that a smaller class
-does not fit. These two checks resolve a large share of requests without a
-ticket.</p>
+<ul class="docs-checklist">
+<li><strong>For a disk quota</strong>, state that the Jupyter Trash is empty and that no personal
+copy of a shared dataset is held.</li>
+<li><strong>For a GPU class</strong>, state that a smaller class does not fit.</li>
+</ul>
+<p>These two checks resolve a large share of requests without a ticket.</p>
 <h2 id="workspace-managers-and-cluster-administrators">Workspace Managers and Cluster Administrators</h2>
-<p>The <strong>workspace manager</strong> is the instructor or TA in a course, and the PI in a
-lab. A manager may view the group's reservations, book on a member's behalf,
-cancel members' bookings, and waive a cancellation charge, among other actions.
-A manager may not edit Service Unit budgets, group limits, or the workspace
-length cap, regardless of seniority.</p>
-<p><strong>Cluster administrators</strong> hold all other administrative controls and are
-reached by ticket.</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-user"></span><p class="docs-card-title">Workspace manager</p><p>The <strong>workspace manager</strong> is the instructor or TA in a course, and the PI in a
+lab.</p>
+<p>A manager may view the group's reservations, book on a member's behalf,
+cancel members' bookings, and waive a cancellation charge, among other actions.</p>
+<p>A manager may not edit Service Unit budgets, group limits, or the workspace
+length cap, regardless of seniority.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-cog"></span><p class="docs-card-title">Cluster administrators</p><p><strong>Cluster administrators</strong> hold all other administrative controls and are
+reached by ticket.</p></article>
+</div>
 <p>See also: <a href="/docs/reference/managing-a-group.html">Managing a Group</a></p>
 <h2 id="other-administrative-requests">Other Administrative Requests</h2>
 <p>The requests in this table also have no self-service path.</p>
@@ -317,6 +333,6 @@ designed.</p>
 </tr>
 </tbody>
 </table></div>
-<p>A quota increase, a GPU class, or a longer reservation window is an
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p>A quota increase, a GPU class, or a longer reservation window is an
 administrative request rather than a fault report. These requests have no
-self-service path. See <a href="#administrative-requests">Administrative Requests</a>.</p>
+self-service path. See <a href="#administrative-requests">Administrative Requests</a>.</p></div>

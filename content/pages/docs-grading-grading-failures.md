@@ -10,9 +10,14 @@ canonicalUrl: /docs/grading/grading-failures.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/grading/grading-failures/
 format: html
 ---
-<p>Look up a grading problem in an nbgrader course by its symptom, such as a
+<p class="lead">Look up a grading problem in an nbgrader course <strong>by its symptom</strong>, such as a
 notebook that will not validate, a failed export, or a missing submission, and
 follow the recovery for its cause.</p>
+<dl class="docs-glance">
+<div><dt>Shared grader account</dt><dd>Raise problems in the course support ticket</dd></div>
+<div><dt>Export fails</dt><dd>A space in a title, or an assignment deleted through the filesystem</dd></div>
+<div><dt>Students</dt><dd>Contact the course instructor or TA first</dd></div>
+</dl>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -68,27 +73,32 @@ follow the recovery for its cause.</p>
 </tbody>
 </table></div>
 <h2 id="validation--metadata-errors">Validation &amp; Metadata Errors</h2>
-<p>A student cannot validate, the notebook reports that "the source of the
-following cell has changed", a submission cannot be autograded because its
-metadata is corrupt, or validation fails with a message about a required field.</p>
-<p>The cause is a read-only or autograded cell that was copied, edited, or
-deleted. nbgrader restores read-only cells from the original, and copies of
-them break the mapping between the notebook and the assignment. This is
+<p>The symptoms:</p>
+<ul>
+<li>A student cannot validate.</li>
+<li>The notebook reports that "the source of the following cell has changed".</li>
+<li>A submission cannot be autograded because its metadata is corrupt.</li>
+<li>Validation fails with a message about a required field.</li>
+</ul>
+<p><strong>The cause is a read-only or autograded cell that was copied, edited, or
+deleted.</strong> nbgrader restores read-only cells from the original, and copies of
+them break the mapping between the notebook and the assignment.</p>
+<p>This is
 upstream nbgrader behavior, not a platform fault, and no platform-side fix
 exists.</p>
 <h3 id="recovering-the-notebook">Recovering the Notebook</h3>
 <p>The student performs these steps:</p>
-<ol>
-<li>Rename the existing notebook, adding <code>-corrupted</code> to the filename, and
-   download a copy as a fallback.</li>
-<li>Re-fetch the assignment from the assignment list. The student's files then
-   hold both copies.</li>
-<li>Open both notebooks and copy the answers into the fresh notebook.</li>
-<li>Re-submit.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Rename and keep a copy</span><p>Rename the existing notebook, adding <code>-corrupted</code> to the filename, and
+download a copy as a fallback.</p></li>
+<li><span class="docs-step-title">Re-fetch the assignment</span><p>Re-fetch the assignment from the assignment list. The student's files then
+hold both copies.</p></li>
+<li><span class="docs-step-title">Copy the answers across</span><p>Open both notebooks and copy the answers into the fresh notebook.</p></li>
+<li><span class="docs-step-title">Re-submit</span></li>
 </ol>
 <p>The grader then re-collects the assignment in Formgrader.</p>
 <h3 id="preventing-copied-cells">Preventing Copied Cells</h3>
-<p>Do not ask students to copy cells the course provided. State in the assignment
+<p><strong>Do not ask students to copy cells the course provided.</strong> State in the assignment
 that adding cells is permitted and that duplicating the provided cells is not.</p>
 <p>See also: <a href="/docs/grading/notebook-grading-workflow.html">Notebook Grading Workflow</a></p>
 <h2 id="export-failures">Export Failures</h2>
@@ -100,37 +110,34 @@ causes are known, both related to how an assignment was named or removed:</p>
   <code>nbgrader db assignment remove</code>. The database and the directories then
   disagree.</li>
 </ul>
-<p>To recover, delete the assignment with <code>nbgrader db assignment remove</code> and run
+<p><strong>To recover</strong>, delete the assignment with <code>nbgrader db assignment remove</code> and run
 the export again. See
 <a href="/docs/grading/notebook-grading-workflow.html#exporting-the-grades">Exporting the Grades</a>.</p>
 <h2 id="grader-environment-failures">Grader Environment Failures</h2>
 <h3 id="database-locked-error">Database Locked Error</h3>
 <p>To clear a "Database locked" error:</p>
-<ol>
-<li>
-<p>From a terminal in the course environment, run:</p>
-<pre class="docs-code"><code class="language-bash">rm ~/.local/share/jupyter/nbsignatures.db</code></pre>
-</li>
-<li>
-<p>Close the terminal.</p>
-</li>
-<li>Stop the server with <strong>File → Hub Control Panel → Stop My Server</strong>.</li>
-<li>Start the server again.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Remove the signatures database</span><p>From a terminal in the course environment, run:</p>
+<pre class="docs-code"><code class="language-bash">rm ~/.local/share/jupyter/nbsignatures.db</code></pre></li>
+<li><span class="docs-step-title">Close the terminal</span></li>
+<li><span class="docs-step-title">Stop the server</span><p>Stop the server with <strong>File → Hub Control Panel → Stop My Server</strong>.</p></li>
+<li><span class="docs-step-title">Start the server again</span></li>
 </ol>
 <h3 id="stale-courses-in-the-assignment-list">Stale Courses in the Assignment List</h3>
 <p>Old courses appear in the assignment list because nbgrader caches previously
 used courses. To remove an old course, delete its directory from the cache:</p>
-<pre class="docs-code"><code class="language-bash">cd ~/.local/share/jupyter/nbgrader_cache
+<figure class="docs-command"><figcaption>Remove an old course from the nbgrader cache</figcaption><pre class="docs-code"><code class="language-bash">cd ~/.local/share/jupyter/nbgrader_cache
 ls -al
-rm -r &lt;old_course_directory&gt;</code></pre>
+rm -r &lt;old_course_directory&gt;</code></pre></figure>
 <h3 id="broken-grader-environment-after-a-package-install">Broken Grader Environment After a Package Install</h3>
 <p>For an individual account, the standard fixes are clearing <code>.local</code> and running
 the manual resetter.
 <a href="/docs/environments/customizing-your-environment.html#recovering-a-broken-environment">Recovering a Broken Environment</a>
 describes the first.
 <a href="/docs/access/sign-in-and-session-problems.html#spawn-failed">"Spawn Failed"</a>
-describes the second. For
-the shared grader account, raise the problem in the course support ticket
+describes the second.</p>
+<p>For
+the shared grader account, <strong>raise the problem in the course support ticket</strong>
 instead.</p>
 <div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>The shared grader account holds the course's nbgrader state. Clearing that
 account's environment by hand can destroy the course's grading.</p></div>
@@ -142,13 +149,13 @@ something, and then by username alone. Names are imported separately. See
 <h3 id="uncollected-submissions">Uncollected Submissions</h3>
 <p>When a student reports a submission and nothing was collected, confirm three
 things with the student:</p>
-<ul>
+<ul class="docs-checklist">
 <li>The student clicked <strong>Submit</strong> rather than only saving.</li>
 <li>The assignment appears in the student's list of submitted assignments.</li>
 <li>The student is looking at the same assignment that was collected.</li>
 </ul>
-<p>Repeat submissions are permitted. Only the most recent submission is available
-to course staff, including a late one.</p>
+<p>Repeat submissions are permitted. <strong>Only the most recent submission is available
+to course staff</strong>, including a late one.</p>
 <h3 id="manual-grading-before-autograding">Manual Grading Before Autograding</h3>
 <p>An assignment cannot be manually graded until it has been autograded. Every
 assignment must go through the autograder first, including an assignment with
@@ -160,16 +167,16 @@ course environment. Request the change from ITS rather than editing the
 configuration directly.</p>
 <h2 id="missing-formgrader-menu-or-assignment-list">Missing Formgrader Menu or Assignment List</h2>
 <p>A missing Formgrader menu has two causes. Check them in order of likelihood:</p>
-<ol>
-<li>The account. nbgrader works only from the shared course grader account,
-   never from an instructor's or TA's own account.</li>
-<li>The interface. NBClassic does not carry the nbgrader extension.
-   <a href="/docs/grading/choosing-a-grading-tool.html#interface-support-for-nbgrader">Interface Support for nbgrader</a>
-   lists the interfaces that support grading.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">The account</span><p>nbgrader works only from the shared course grader account,
+never from an instructor's or TA's own account.</p></li>
+<li><span class="docs-step-title">The interface</span><p>NBClassic does not carry the nbgrader extension.
+<a href="/docs/grading/choosing-a-grading-tool.html#interface-support-for-nbgrader">Interface Support for nbgrader</a>
+lists the interfaces that support grading.</p></li>
 </ol>
 <h2 id="unresponsive-distribution-links">Unresponsive Distribution Links</h2>
-<p>A <code>git-pull</code> distribution link clicked before signing in fails silently. Sign
-in at <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> first, then click the link
+<p>A <code>git-pull</code> distribution link clicked before signing in fails silently. <strong>Sign
+in at <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> first</strong>, then click the link
 again. The sign-in steps are in
 <a href="/docs/access/datahub-in-the-browser.html#signing-in">Signing In</a>.</p>
 <h2 id="duplicate-assignment-names">Duplicate Assignment Names</h2>
@@ -179,8 +186,8 @@ account has created, not only within one course.</p>
 <h2 id="opening-a-support-ticket">Opening a Support Ticket</h2>
 <p>Instructors and TAs open a ticket for any problem that touches the shared
 grader account, the course database, or a deadline. Incidents at a critical
-point in the term are handled with more urgency than routine requests. State
-the critical timing in the ticket. <a href="/docs/reference/getting-help.html">Getting Help</a>
+point in the term are handled with more urgency than routine requests. <strong>State
+the critical timing in the ticket.</strong> <a href="/docs/reference/getting-help.html">Getting Help</a>
 lists support contacts and response targets.</p>
 <p>Students contact the course instructor or TA first. The instructor or TA can
 reproduce the problem and escalate it to ITS with the course context attached.</p>

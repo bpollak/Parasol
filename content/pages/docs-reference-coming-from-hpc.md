@@ -10,9 +10,15 @@ canonicalUrl: /docs/reference/coming-from-hpc.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/reference/coming-from-hpc/
 format: html
 ---
-<p>If you have worked on a high-performance computing (HPC) cluster that runs
+<p class="lead">If you have worked on a high-performance computing (HPC) cluster that runs
 Slurm, find the PARASOL equivalent of what you know, where PARASOL behaves
 differently, and whether your existing submission scripts run unchanged.</p>
+<dl class="docs-glance">
+<div><dt>Slurm commands</dt><dd><code>sbatch</code>, <code>srun</code>, <code>squeue</code>, and <code>scancel</code>, as wrappers around <code>launch.sh</code></dd></div>
+<div><dt>Scheduler</dt><dd>Kubernetes admission, with no Slurm scheduler</dd></div>
+<div><dt>Runtime limit</dt><dd>6 hours by default, up to 12 hours if set at launch</dd></div>
+<div><dt>Not available</dt><dd>MPI, multi-node jobs, and accounting commands</dd></div>
+</dl>
 <h2 id="hpc-terms-and-their-equivalents">HPC Terms and Their Equivalents</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -134,8 +140,8 @@ describes the guaranteed request and how to size a job for it.</p>
 submissions, it stays pending while nothing can take it. A pending GPU pod waits
 for the reservation system, which serves waiting on-demand requests in the order
 the pods were created. See
-<a href="/docs/gpu-access/quotas-and-availability.html#waiting-for-an-on-demand-lease">Waiting for an On-Demand Lease</a>.
-Until it is admitted, a GPU pod shows a <code>FailedScheduling</code> event, and the
+<a href="/docs/gpu-access/quotas-and-availability.html#waiting-for-an-on-demand-lease">Waiting for an On-Demand Lease</a>.</p>
+<p>Until it is admitted, a GPU pod shows a <code>FailedScheduling</code> event, and the
 reservation event beside it gives the reason; see
 <a href="/docs/gpu-access/gpu-classes.html#missing-or-misspelled-class-label">Missing or Misspelled Class Label</a>.
 <a href="/docs/reference/error-messages.html">Error Messages</a> also lists the messages.</p>
@@ -168,7 +174,7 @@ end of a reservation window.</p>
 </tr>
 </tbody>
 </table></div>
-<p>Idle culling has no HPC equivalent. A GPU session that stops using its GPU is
+<p><strong>Idle culling has no HPC equivalent.</strong> A GPU session that stops using its GPU is
 reclaimed regardless of its runtime limit.</p>
 <h2 id="slurm-compatibility-wrappers">Slurm Compatibility Wrappers</h2>
 <p><code>sbatch</code>, <code>srun</code>, <code>squeue</code>, and <code>scancel</code> are installed as translation wrappers
@@ -287,24 +293,30 @@ failed job with the Kubernetes commands <code>kubectl get pods</code>,
 <a href="/docs/running-jobs/kubernetes.html">Direct Kubernetes Use and Session Events</a>
 describes direct use of Kubernetes.</p>
 <h2 id="choosing-between-the-slurm-wrappers-and-launchsh">Choosing Between the Slurm Wrappers and <code>launch.sh</code></h2>
-<p>Use the Slurm wrappers to run existing submission scripts unchanged. Write new
-work against <code>launch.sh</code>, using workspaces, GPU classes, and background and
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-retweet"></span><p class="docs-card-title">The Slurm wrappers</p><p>Use the Slurm wrappers to run existing submission scripts unchanged.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-console"></span><p class="docs-card-title"><code>launch.sh</code></p><p>Write new work against <code>launch.sh</code>, using workspaces, GPU classes, and background and
 batch modes directly. See
-<a href="/docs/running-jobs/launch-sh-reference.html"><code>launch.sh</code> Reference</a>.</p>
+<a href="/docs/running-jobs/launch-sh-reference.html"><code>launch.sh</code> Reference</a>.</p></article>
+</div>
 <h2 id="unsupported-hpc-features">Unsupported HPC Features</h2>
 <p>MPI, multi-node jobs, a job scheduler, and accounting commands are not
 available. See
 <a href="#slurm-compatibility-wrappers">Slurm Compatibility Wrappers</a>. Nothing reports
 historical usage the way <code>sacct</code> does. Work that is tightly coupled across
 nodes belongs on another platform.</p>
-<p>Where any of these is a requirement, contact
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Contact Research IT first</strong></p><p>Where any of these is a requirement, contact
 <a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a> first.
 Research IT can compare the work against the other platforms the campus runs
-and against national resources.</p>
+and against national resources.</p></div>
 <p>See also: <a href="/docs/reference/getting-help.html#platform-selection">Platform Selection</a></p>
 <h2 id="features-uncommon-on-hpc-clusters">Features Uncommon on HPC Clusters</h2>
-<p>PARASOL provides a browser-based notebook environment that shares one filesystem
-with the login node, per-user containers that members build themselves, and
-Kubernetes underneath for direct use. Most HPC clusters do not provide these.
+<p>PARASOL provides:</p>
+<ul>
+<li>a browser-based notebook environment that shares one filesystem with the login node</li>
+<li>per-user containers that members build themselves</li>
+<li>Kubernetes underneath for direct use</li>
+</ul>
+<p>Most HPC clusters do not provide these.
 <a href="/docs/running-jobs/kubernetes.html">Direct Kubernetes Use and Session Events</a>
 describes direct use of Kubernetes.</p>

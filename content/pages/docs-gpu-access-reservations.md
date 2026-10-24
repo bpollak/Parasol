@@ -10,9 +10,15 @@ canonicalUrl: /docs/gpu-access/reservations.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/reservations/
 format: html
 ---
-<p>From Fall 2026, every GPU session on PARASOL runs under a reservation: either a
+<p class="lead">From Fall 2026, every GPU session on PARASOL runs under a reservation: either a
 booking made ahead in the reservation app, or an on-demand lease that the
 reservation system creates when a session launches without one.</p>
+<dl class="docs-glance">
+<div><dt>Book at</dt><dd>reserve.dsmlp.ucsd.edu, with UCSD single sign-on</dd></div>
+<div><dt>Claim within</dt><dd>15 minutes of the window's start</dd></div>
+<div><dt>Length cap</dt><dd>12 hours per reservation, by default</dd></div>
+<div><dt>Booking horizon</dt><dd>Ends within 10 days of booking, by default</dd></div>
+</dl>
 <h2 id="the-reservation-app">The Reservation App</h2>
 <p>The reservation app is at
 <a href="https://reserve.dsmlp.ucsd.edu/">reserve.dsmlp.ucsd.edu</a>. Sign in with UCSD
@@ -48,11 +54,11 @@ single sign-on. The sidebar lists these pages:</p>
 Members of a workspace in
 researcher mode also see <strong>Group Reservations</strong>; see
 <a href="#researcher-mode">Researcher Mode</a>.</p>
-<p>Times in the app are Pacific time, wherever the viewer is. No time zone is shown
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Times are Pacific</strong></p><p>Times in the app are Pacific time, wherever the viewer is. No time zone is shown
 next to them. The booking wizard also uses Pacific time to decide which hours
-have passed. Two times on the manager pages follow the viewer's browser
+have passed.</p><p>Two times on the manager pages follow the viewer's browser
 instead; see
-<a href="/docs/reference/managing-a-group.html#viewing-the-groups-reservations">Viewing the Group's Reservations</a>.</p>
+<a href="/docs/reference/managing-a-group.html#viewing-the-groups-reservations">Viewing the Group's Reservations</a>.</p></div>
 <p><a href="/docs/access/sign-in-and-session-problems.html#reservation-app-sign-in">Reservation App Sign-In</a>
 covers sign-in problems, including an expired session.</p>
 <h2 id="reservation-types">Reservation Types</h2>
@@ -86,27 +92,34 @@ covers sign-in problems, including an expired session.</p>
 </tr>
 </tbody>
 </table></div>
-<p>A reservation guarantees access, not a running job. Nothing starts when a
+<p><strong>A reservation guarantees access, not a running job.</strong> Nothing starts when a
 booked window opens. A notebook, a shell session, or a batch job is launched in
 the usual way and is admitted onto the booking. See
 <a href="#the-claim-window">The Claim Window</a>.</p>
+<ol class="docs-flow" aria-label="The life of a booking">
+<li><span class="docs-flow-label">Book</span><strong>Reserve a window</strong><p>The SU for the window is charged when it is booked.</p></li>
+<li><span class="docs-flow-label">Launch</span><strong>Start a session the usual way</strong><p>Nothing starts by itself when the window opens.</p></li>
+<li><span class="docs-flow-label">Claim</span><strong>A matching session claims it</strong><p>Within 15 minutes of the start, or the booking is cancelled as a no-show.</p></li>
+<li><span class="docs-flow-label">Run</span><strong>Protected to the end of the window</strong><p>If the session stops, start another within about 30 minutes.</p></li>
+<li><span class="docs-flow-label">After</span><strong>Runs on unprotected</strong><p>No Service Units are drawn, and the session can be stopped when its GPU is needed.</p></li>
+</ol>
 <h2 id="booking-a-window">Booking a Window</h2>
-<ol>
-<li>Select <strong>New Reservation</strong>.</li>
-<li>On <strong>Select Group</strong>, choose the workspace. A member of only one bookable
+<ol class="docs-steps">
+<li><span class="docs-step-title">Open New Reservation</span><p>Select <strong>New Reservation</strong>.</p></li>
+<li><span class="docs-step-title">Choose the workspace</span><p>On <strong>Select Group</strong>, choose the workspace. A member of only one bookable
    workspace goes straight to the next step. A workspace marked
-   <strong>On-demand only</strong> cannot be booked.</li>
-<li>On <strong>Select GPU Class</strong>, choose the class. Each card shows the class's SU
-   rate per GPU-hour and how many GPUs are free today and tomorrow.</li>
-<li>On <strong>Select Date &amp; Time</strong>, set the number of GPUs and drag across the
+   <strong>On-demand only</strong> cannot be booked.</p></li>
+<li><span class="docs-step-title">Choose the GPU class</span><p>On <strong>Select GPU Class</strong>, choose the class. Each card shows the class's SU
+   rate per GPU-hour and how many GPUs are free today and tomorrow.</p></li>
+<li><span class="docs-step-title">Set the GPUs and hours</span><p>On <strong>Select Date &amp; Time</strong>, set the number of GPUs and drag across the
    timeline to choose the hours. Hours with too few free GPUs, or with no quota
    left for the workspace, are dimmed and cannot be booked. An amber strip marks
-   discounted off-peak hours. The line below the timeline shows the hours and
-   the SU cost. Select <strong>Next</strong>.</li>
-<li>On <strong>Confirm Reservation</strong>, add notes if needed and select
-   <strong>Confirm Reservation</strong>.</li>
+   discounted off-peak hours.</p><p>The line below the timeline shows the hours and
+   the SU cost. Select <strong>Next</strong>.</p>
+<p><img alt="The Select Date &amp; Time step of the booking wizard. Hourly bars across two days show how many GPUs are free, with an amber strip under the off-peak hours. Three evening hours are selected, and the line below the timeline reads 6:00 PM to 9:00 PM, 3 hours, 1 GPU, 3 SU." src="/_images/docs/reservation-wizard-date-time.png" class="img-responsive docs-figure"></p></li>
+<li><span class="docs-step-title">Confirm</span><p>On <strong>Confirm Reservation</strong>, add notes if needed and select
+   <strong>Confirm Reservation</strong>.</p></li>
 </ol>
-<p><img alt="The Select Date &amp; Time step of the booking wizard. Hourly bars across two days show how many GPUs are free, with an amber strip under the off-peak hours. Three evening hours are selected, and the line below the timeline reads 6:00 PM to 9:00 PM, 3 hours, 1 GPU, 3 SU." src="/_images/docs/reservation-wizard-date-time.png" class="img-responsive docs-figure"></p>
 <p><strong>Next</strong> checks the booking against every rule before the confirm step, and a
 refusal appears at the top of the page.
 <a href="/docs/reference/error-messages.html#booking-refusals-in-the-reservation-app">Booking Refusals in the Reservation App</a>
@@ -163,20 +176,22 @@ even if the workspace's quota is later reduced.</p>
 administrators, to teammates in <a href="#team-mode">Team Mode</a>, and to the whole
 workspace in <a href="#researcher-mode">Researcher Mode</a>.</p>
 <p>The <strong>Email me reservation confirmation &amp; reminders</strong> checkbox is saved to the
-member's profile and applies to every reservation, not only the one being made.
-Reminder emails before a booking begin mid-quarter in Fall 2026. On-demand leases
+member's profile and applies to every reservation, not only the one being made.</p>
+<p>Reminder emails before a booking begin mid-quarter in Fall 2026. On-demand leases
 send no email.</p>
 <h2 id="the-booking-horizon">The Booking Horizon</h2>
 <p>In course and research workspaces alike, a booking must by default end within
 10 days of the moment it is made. The horizon is rolling: at 7 PM on a Monday,
-it reaches 7 PM ten days later. A booking needs no more notice than the
+it reaches 7 PM ten days later.</p>
+<p>A booking needs no more notice than the
 earliest start in <a href="#booking-rules">Booking Rules</a>. The wizard shows the
 bookable range above the timeline, for example
-<code>Bookable Wed, Sep 23, 2026 – Sat, Oct 3, 2026 7:00 PM</code>. Workspace managers are
+<code>Bookable Wed, Sep 23, 2026 – Sat, Oct 3, 2026 7:00 PM</code>.</p>
+<p>Workspace managers are
 not bound by the horizon when they book.</p>
 <p>See also: <a href="/docs/gpu-access/quotas-and-availability.html#borrowing-beyond-quota">Borrowing Beyond Quota</a></p>
 <h2 id="reservation-length-caps">Reservation Length Caps</h2>
-<p>Two caps apply to the length of one reservation. The shorter one binds.</p>
+<p>Two caps apply to the length of one reservation. <strong>The shorter one binds.</strong></p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -199,17 +214,20 @@ not bound by the horizon when they book.</p>
 </tbody>
 </table></div>
 <p>Only cluster administrators set the workspace length cap. A workspace manager
-cannot change it. Request a change by ticket to
-<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, stating the length needed and how
-the work checkpoints. A course's cap is changed at the instructor's request,
-and a research workspace's at the researcher's.</p>
+cannot change it. A course's cap is changed at the instructor's request,
+and a research workspace's at the researcher's. Request a change by ticket to
+<a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, stating:</p>
+<ul class="docs-checklist">
+<li>The length needed</li>
+<li>How the work checkpoints</li>
+</ul>
 <p>The wizard selects at most 48 hours for everyone. A longer booking, where the
 workspace allows one, is made on the <strong>Group Reservations</strong> page, which
 workspace managers and researcher-mode members can use.</p>
 <p>See also: <a href="/docs/workspaces-and-storage/what-a-workspace-is.html">What a Workspace Is and What It Controls</a></p>
 <h2 id="reservation-length-and-session-runtime">Reservation Length and Session Runtime</h2>
-<p>A reservation's length and a session's runtime are separate limits. A long
-booking does not by itself grant a long-running session.</p>
+<p>A reservation's length and a session's runtime are separate limits. <strong>A long
+booking does not by itself grant a long-running session.</strong></p>
 <p>A session, the pod a launch creates, runs for 6 hours by default and up to 12
 hours where that is set at launch. See
 <a href="/docs/running-jobs/job-modes-and-limits.html#the-runtime-limit">The Runtime Limit</a>.
@@ -251,7 +269,8 @@ teammates'. The <strong>Status</strong> filter has three settings:</p>
 </tr>
 </tbody>
 </table></div>
-<p>Select <strong>Filter</strong> to apply a change. The list is ordered oldest first.</p>
+<p>Select <strong>Filter</strong> to apply a change. The list is ordered oldest first. Each
+reservation carries a badge:</p>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
 <tr>
@@ -301,16 +320,21 @@ there is no free exploratory launch. See
 <a href="/docs/gpu-access/service-units-and-budgets.html#on-demand-lease-charges">On-Demand Lease Charges</a>.</p></div>
 <p>A GPU session is given an on-demand lease when the member has no matching
 booking open, or opening within 30 minutes. Every GPU session that carries a
-class label qualifies. A session limited to a node with <code>-n</code>, or to a GPU model
+class label qualifies.</p>
+<ul>
+<li>A session limited to a node with <code>-n</code>, or to a GPU model
 with <code>-v</code>, is given its lease only once a node it allows has a free GPU, and is
 not charged before then; see
-<a href="/docs/running-jobs/launch-sh-reference.html#node-selection">Node Selection</a>. The
+<a href="/docs/running-jobs/launch-sh-reference.html#node-selection">Node Selection</a>.</li>
+<li>The
 lease covers the session's declared runtime plus 10 minutes. A session that
-declares no runtime is given 1 hour, so a session launched with the defaults
-holds a lease of 1 hour 10 minutes. The declared
+declares no runtime is given 1 hour, so <strong>a session launched with the defaults
+holds a lease of 1 hour 10 minutes</strong>.</li>
+<li>The declared
 runtime is separate from the runtime limit in
 <a href="#reservation-length-and-session-runtime">Reservation Length and Session Runtime</a>,
-which stops the pod.</p>
+which stops the pod.</li>
+</ul>
 <p>For a longer guarantee, launch with the defaults and use <strong>Extend</strong> in the
 reservation app once the session is running. See <a href="#extend">Extend</a>.</p>
 <p>A lease ends when its session ends: stopping the session cancels the lease, and
@@ -324,19 +348,25 @@ workspace that every user is enrolled in automatically.</p>
 <p><code>ORG_ON_DEMAND</code> accepts on-demand leases only and cannot be booked. It has the
 default budget and length cap. See
 <a href="/docs/gpu-access/service-units-and-budgets.html#the-size-of-a-budget">The Size of a Budget</a> and
-<a href="#reservation-length-caps">Reservation Length Caps</a>. A job there can keep
+<a href="#reservation-length-caps">Reservation Length Caps</a>.</p>
+<p>A job there can keep
 running after its reservation ends, with no guarantee; see
 <a href="/docs/gpu-access/what-ends-a-session.html#overstay">Overstay</a>. The runtime limit still stops the
 pod. Its leases appear in <strong>My Reservations</strong> like any other.</p>
 <h3 id="availability-and-denied-leases">Availability and Denied Leases</h3>
-<p>A lease is refused when the class has no free GPU, the workspace holds its GPU
-limit for the class, or the budget cannot cover it. The pod then stays
-<code>Pending</code> with an <code>OnDemandLeaseDenied</code> event, and the request is retried until
-it succeeds or the pod is deleted. The event says whether waiting can help. A
-lease can also be refused for the request itself, such as a class the workspace
-was not granted, and waiting does not change that. The pod stays <code>Pending</code> until
+<p>A refused lease leaves the pod <code>Pending</code> with an <code>OnDemandLeaseDenied</code> event.
+The event says whether waiting can help. A lease is refused for one of two kinds
+of reason:</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-refresh"></span><p class="docs-card-title">Capacity, limit, or budget</p><p>The class has no free GPU, the workspace holds its GPU
+limit for the class, or the budget cannot cover it. The request is retried until
+it succeeds or the pod is deleted.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-ban-circle"></span><p class="docs-card-title">The request itself</p><p>Such as a class the workspace
+was not granted. Waiting does not change that. The pod stays <code>Pending</code> until
 it is deleted and launched again with the request corrected, or until an
-administrator changes the setting that refused it. Nothing fails the pod or
+administrator changes the setting that refused it.</p></article>
+</div>
+<p>Nothing fails the pod or
 deletes it. Datahub shows the event while the session is starting. See
 <a href="/docs/gpu-access/quotas-and-availability.html#waiting-for-an-on-demand-lease">Waiting for an On-Demand Lease</a>
 and <a href="/docs/reference/reservation-events.html">Reservation Events</a>.</p>
@@ -368,7 +398,7 @@ and <a href="/docs/reference/reservation-events.html">Reservation Events</a>.</p
 </tbody>
 </table></div>
 <h2 id="the-claim-window">The Claim Window</h2>
-<p>A booked window must be claimed within 15 minutes of its start. A booking is
+<p><strong>A booked window must be claimed within 15 minutes of its start.</strong> A booking is
 claimed when a matching session is waiting for it or running under it. There is
 no confirmation step and no control that selects a booking: the reservation
 system matches a session to a booking by itself.</p>
@@ -382,7 +412,7 @@ lease, charged separately. See
 not govern how far ahead a booking may be made.</p>
 <h3 id="claiming-a-booking">Claiming a Booking</h3>
 <p>A session claims a booking when all of these hold:</p>
-<ul>
+<ul class="docs-checklist">
 <li>The pod runs in the member's own namespace, as every launch does.</li>
 <li>Its <code>gpu-class</code> label is the class booked.</li>
 <li>Its <code>dsmlp/course</code> label names the workspace the booking was made under.
@@ -393,7 +423,8 @@ not govern how far ahead a booking may be made.</p>
 Two bookings are never combined for one pod.</p>
 <p>A session that does not match does not claim the booking. It is given an
 on-demand lease, charged separately, and the booking is cancelled as a no-show
-if nothing else claims it. A pod that names no course, such as one launched
+if nothing else claims it.</p>
+<p>A pod that names no course, such as one launched
 without <code>-W</code>, is treated as belonging to <code>ORG_ON_DEMAND</code>, so it never claims a
 course booking. <code>kubectl describe pod</code> lists a pod's labels.</p>
 <h3 id="launching-before-the-window-opens">Launching Before the Window Opens</h3>
@@ -416,10 +447,16 @@ course booking. <code>kubectl describe pod</code> lists a pod's labels.</p>
 </tbody>
 </table></div>
 <h3 id="relaunching-inside-a-booked-window">Relaunching Inside a Booked Window</h3>
-<p>When the last session under an open booking ends, start another matching
-session within about 30 minutes. Otherwise the rest of the booking is cancelled
-as a no-show and charged. This applies however the session ended: idle culling,
-the runtime limit, the job finishing, or a manual stop. A long break with the
+<p><strong>When the last session under an open booking ends, start another matching
+session within about 30 minutes.</strong> Otherwise the rest of the booking is cancelled
+as a no-show and charged. This applies however the session ended:</p>
+<ul>
+<li>Idle culling</li>
+<li>The runtime limit</li>
+<li>The job finishing</li>
+<li>A manual stop</li>
+</ul>
+<p>A long break with the
 session stopped can therefore cost the rest of a booking. Cancel the rest of a
 booking that will not be used.</p>
 <h2 id="planning-a-long-window">Planning a Long Window</h2>
@@ -435,9 +472,15 @@ how much remains. See
 system's interface calls "continue". The two names mean one operation. <strong>Adopt</strong>
 belongs to team mode.</p>
 <h3 id="extend">Extend</h3>
-<p>Extend keeps a running job protected for longer. On <strong>My Reservations</strong> or the
-<strong>Dashboard</strong>, select <strong>Extend</strong> on the job's reservation, choose how much time
-to add under <strong>Extend by</strong>, and select <strong>Extend</strong>.</p>
+<p>Extend keeps a running job protected for longer.</p>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Find the job's reservation</span><p>On <strong>My Reservations</strong> or the
+<strong>Dashboard</strong>, select <strong>Extend</strong> on the job's reservation.</p></li>
+<li><span class="docs-step-title">Choose the time to add</span><p>Choose how much time
+to add under <strong>Extend by</strong>.</p></li>
+<li><span class="docs-step-title">Extend</span><p>Select <strong>Extend</strong>.</p></li>
+</ol>
+<p>How Extend works:</p>
 <ul>
 <li>Extend adds 1, 2, 4, 8, or 24 hours after the end of the job's reservation,
   or after the current time if that end has passed. Each choice shows the new
@@ -458,7 +501,7 @@ to add under <strong>Extend by</strong>, and select <strong>Extend</strong>.</p>
   earlier than the current one, and leaves the reservation unchanged.</li>
 <li>Extend can be refused for capacity or budget. A refused Extend changes nothing.</li>
 </ul>
-<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Warning</strong></p><p>An Extended reservation is a booking, and a booking is not released when its
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Cancel an Extended reservation when the job finishes</strong></p><p>An Extended reservation is a booking, and a booking is not released when its
 job ends. Cancel it when the job finishes. Otherwise it is cancelled as a
 no-show about 30 minutes later. Either way, the unused time is charged on the
 scale in
@@ -466,7 +509,8 @@ scale in
 <h3 id="adopt">Adopt</h3>
 <p>In team mode, a teammate's booking that has not ended shows <strong>Adopt</strong> on
 <strong>My Reservations</strong>. Adopting it transfers the booking to the adopter, and it
-then runs under the adopter's namespace. Adopting a booking that is in progress
+then runs under the adopter's namespace.</p>
+<p>Adopting a booking that is in progress
 deletes the teammate's running pod, which records a <code>ReservationReassigned</code>
 event.</p>
 <h2 id="routes-to-more-time">Routes to More Time</h2>
@@ -483,11 +527,13 @@ stopped when a booking needs its GPU, or to keep part of the class free. See
 <h3 id="bookings-by-a-workspace-manager">Bookings by a Workspace Manager</h3>
 <p>In a course, students book their own windows. An instructor, TA, or PI can
 book on a member's behalf when the member cannot, such as when the member's
-budget is spent or the window is beyond the booking horizon. The booking is
+budget is spent or the window is beyond the booking horizon.</p>
+<p>The booking is
 charged to the member's budget. The manager skips only the check that the member
 can afford it, so the booking can leave the member at or over budget, which
 blocks the member's own bookings and on-demand leases until the budget window
-renews. The workspace length cap applies to a manager's booking as to any
+renews.</p>
+<p>The workspace length cap applies to a manager's booking as to any
 other. See <a href="/docs/reference/managing-a-group.html">Managing a Group</a>.</p>
 <h2 id="best-effort-reservations">Best-Effort Reservations</h2>
 <p>Best-effort admission, which runs a session with no runtime guarantee and no
@@ -513,16 +559,27 @@ with that team's data visible under <code>teams/</code>. No connection between t
 and team mode in the reservation system is documented.
 <a href="/docs/workspaces-and-storage/what-a-workspace-is.html#sections-teams-and-group-data">Sections, Teams and Group Data</a>
 describes team data.</p>
-<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><code>-g</code> is the GPU count and <code>-G</code> is the group flag: <code>-g 1</code> asks for one GPU,
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>Note</strong></p><p><code>-g</code> is the GPU count and <code>-G</code> is the group flag: <code>-g 1</code> asks for one GPU,
 and <code>-G 1</code> does not. See
-<a href="/docs/running-jobs/launch-sh-reference.html#resource-and-gpu-selection-flags">Resource and GPU Selection Flags</a>.<p></p></div>
+<a href="/docs/running-jobs/launch-sh-reference.html#resource-and-gpu-selection-flags">Resource and GPU Selection Flags</a>.</p></div>
 <h2 id="researcher-mode">Researcher Mode</h2>
 <p>In a workspace in researcher mode, every member can see every reservation in the
-workspace, with usernames and notes, on the <strong>Group Reservations</strong> page. A member
+workspace, with usernames and notes, on the <strong>Group Reservations</strong> page.</p>
+<ul>
+<li>A member
 can book for themselves past 48 hours with that page's <strong>New Reservation</strong> form,
-up to the workspace length cap. A member cannot cancel or change another
-member's reservation. Every other rule still applies: the budget, the booking
-horizon, the workspace's active dates, the length cap, and the GPU limits.</p>
+up to the workspace length cap.</li>
+<li>A member cannot cancel or change another
+member's reservation.</li>
+</ul>
+<p>Every other rule still applies:</p>
+<ul>
+<li>The budget</li>
+<li>The booking horizon</li>
+<li>The workspace's active dates</li>
+<li>The length cap</li>
+<li>The GPU limits</li>
+</ul>
 <h2 id="what-governs-how-much-is-held">What Governs How Much Is Held</h2>
 <p>A workspace has a quota per GPU class, the most of that class the whole
 workspace may hold at once

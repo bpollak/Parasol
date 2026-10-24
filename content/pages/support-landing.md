@@ -12,19 +12,14 @@ landingHub: true
 
 <section class="hub-section hub-section-intro" aria-labelledby="support-contacts-heading">
 <div class="hub-heading"><p class="home-kicker">Contacts</p><h2 id="support-contacts-heading">Who to ask</h2><p>Start with the contact for your topic. Students in a course should ask their instructor or TA first.</p></div>
-<div class="table-responsive">
-<table class="table table-striped">
-<thead><tr><th scope="col">Your question is about</th><th scope="col">Contact</th></tr></thead>
-<tbody>
-<tr><td>A course you are enrolled in</td><td>Your instructor or TA, first</td></tr>
-<tr><td>PARASOL or Datahub itself, including access, images, launching, and quotas</td><td><a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, or the <a href="https://support.ucsd.edu/">ITS Service Desk</a></td></tr>
-<tr><td>The Research Cluster, or Universal Scale Storage</td><td><a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a></td></tr>
-<tr><td>Which platform suits a research project</td><td><a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a></td></tr>
-<tr><td>One-on-one consultation for instructors, TAs, and Technical Points of Contact</td><td><a href="https://ucsd-datahub.youcanbook.me/">ucsd-datahub.youcanbook.me</a></td></tr>
-</tbody>
-</table>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-education"></span><p class="docs-card-title">A course you are enrolled in</p><p>Your instructor or TA, first.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-tasks"></span><p class="docs-card-title">PARASOL or Datahub itself</p><p>Access, images, launching, and quotas.</p><p><a href="mailto:datahub@ucsd.edu">datahub@ucsd.edu</a>, or the <a href="https://support.ucsd.edu/">ITS Service Desk</a></p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-hdd"></span><p class="docs-card-title">The Research Cluster, or Universal Scale Storage</p><p><a href="mailto:rcd-support@ucsd.edu">rcd-support@ucsd.edu</a></p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-road"></span><p class="docs-card-title">Which platform suits a research project</p><p><a href="https://research-it.ucsd.edu/computing/index.html">Research IT</a></p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-calendar"></span><p class="docs-card-title">One-on-one consultation</p><p>For instructors, TAs, and Technical Points of Contact.</p><p><a href="https://ucsd-datahub.youcanbook.me/">ucsd-datahub.youcanbook.me</a></p></article>
 </div>
-<p>A problem that affects a whole class or more than one person can be escalated through the ITS Service Desk. Say what is affected and how many people. See <a href="/docs/reference/getting-help.html#incidents-affecting-more-than-one-person">Incidents Affecting More Than One Person</a> and <a href="/docs/reference/getting-help.html#response-targets">Response Targets</a>.</p>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>A whole class is affected</strong></p><p>A problem that affects a whole class or more than one person can be escalated through the ITS Service Desk. Say what is affected and how many people. See <a href="/docs/reference/getting-help.html#incidents-affecting-more-than-one-person">Incidents Affecting More Than One Person</a> and <a href="/docs/reference/getting-help.html#response-targets">Response Targets</a>.</p></div>
 </section>
 
 <section class="hub-section hub-section-dark hub-full-bleed" aria-labelledby="support-self-heading">
@@ -45,7 +40,7 @@ landingHub: true
 <p class="home-kicker">Writing a ticket</p>
 <h2 id="support-ticket-heading">What to include</h2>
 <p>A ticket that names the workspace, the time, and the exact message is usually resolved without a follow-up question.</p>
-<ul>
+<ul class="docs-checklist">
 <li>The course or workspace, by name or ID</li>
 <li>Where you were working, Datahub in a browser or dsmlp-login at a terminal, and the environment you chose</li>
 <li>The exact command and error, copied with a screenshot</li>

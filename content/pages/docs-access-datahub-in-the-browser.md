@@ -10,23 +10,28 @@ canonicalUrl: /docs/access/datahub-in-the-browser.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/access/datahub-in-the-browser/
 format: html
 ---
-<p><a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> provides browser-based access to
+<p class="lead"><a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> provides browser-based access to
 course environments. It requires a browser, UCSD campus credentials, and Duo;
 no local installation or command-line experience is needed.</p>
+<dl class="docs-glance">
+<div><dt>Sign in with</dt><dd>UCSD single sign-on and Duo</dd></div>
+<div><dt>Default session</dt><dd>2 CPU cores and 4 GB of RAM, set per course</dd></div>
+<div><dt>Running at once</dt><dd>One Datahub session per member</dd></div>
+<div><dt>Stop with</dt><dd>File → Hub Control Panel → Stop My Server</dd></div>
+</dl>
 <h2 id="signing-in">Signing In</h2>
-<ol>
-<li>Open <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>.</li>
-<li>Sign in through <strong>UCSD single sign-on</strong>, with campus credentials.</li>
-<li>Approve the Duo prompt.</li>
+<ol class="docs-steps">
+<li><span class="docs-step-title">Open Datahub</span><p>Go to <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>.</p></li>
+<li><span class="docs-step-title">Sign in with campus credentials</span><p>Sign in through <strong>UCSD single sign-on</strong>. Datahub uses the standard campus sign-on, the same one used by other UCSD
+services. Nothing Datahub-specific is entered at sign-in.</p></li>
+<li><span class="docs-step-title">Approve the Duo prompt</span></li>
 </ol>
-<p>Datahub uses the standard campus sign-on, the same one used by other UCSD
-services. Nothing Datahub-specific is entered at sign-in. An account that cannot
-get past the campus sign-in page has a credential problem, not a Datahub
-problem, and the <a href="https://support.ucsd.edu/">ITS Service Desk</a> handles it.</p>
-<p>The Active Directory username is required at a different prompt, <code>ssh</code> to the
+<p>An account that cannot get past the campus sign-in page has a credential
+problem, not a Datahub problem, and the <a href="https://support.ucsd.edu/">ITS Service Desk</a> handles it.</p>
+<div class="alert alert-info docs-callout" role="note"><p class="docs-callout-label"><strong>The login node takes a different username</strong></p><p>The Active Directory username is required at a different prompt, <code>ssh</code> to the
 login node, which does not accept the full address.
 <a href="/docs/access/the-login-node.html#connecting-over-ssh">Connecting over SSH</a> describes that
-prompt.</p>
+prompt.</p></div>
 <h2 id="selecting-a-course--environment">Selecting a Course &amp; Environment</h2>
 <p>After sign-in, Datahub lists the courses available to the account and, within a
 course, the environments configured for it.</p>
@@ -43,15 +48,15 @@ Environments not present in the menu are added by the instructor.
 <a href="/docs/workspaces-and-storage/what-a-workspace-is.html">What a Workspace Is and What It Controls</a>
 describes the settings a course workspace controls.</p>
 <h3 id="startup-time">Startup Time</h3>
-<p>An environment takes one to two minutes to start, and longer while the cluster
+<p>An environment takes <strong>one to two minutes</strong> to start, and longer while the cluster
 is busy. The live state of the cluster is shown on the status page. See
 <a href="/docs/gpu-access/quotas-and-availability.html#the-status-page">The Status Page</a>.</p>
 <h2 id="the-browser-session">The Browser Session</h2>
-<p>By default, a browser session starts with 2 CPU cores and 4 GB of RAM. This is
+<p>By default, a browser session starts with <strong>2 CPU cores and 4 GB of RAM</strong>. This is
 the course spawn configuration, set per course, and a course can configure
-more. The environment menu shows each option's size. The defaults applied by
-the command-line launch scripts are a separate figure that describes a
-different object. See
+more. The environment menu shows each option's size.</p>
+<p>The defaults applied by the command-line launch scripts are a separate figure
+that describes a different object. See
 <a href="/get-started/working-from-the-command-line.html">Working from the Command Line</a>.</p>
 <p>A session provides JupyterLab, with notebooks, a file browser, a text editor,
 and a terminal. Files persist between sessions.
@@ -59,7 +64,7 @@ and a terminal. Files persist between sessions.
 describes installing software within an environment, and the conditions under
 which an installation persists.</p>
 <h2 id="concurrent-datahub-sessions">Concurrent Datahub Sessions</h2>
-<p>A member may have one Datahub session running at a time. The limit applies to
+<p>A member may have <strong>one Datahub session running at a time</strong>. The limit applies to
 Datahub itself, and it counts sessions, not environments or courses. Working in
 a different course environment requires stopping the running session first. See
 <a href="#stopping-a-session">Stopping a Session</a>.</p>
@@ -84,8 +89,8 @@ GPU where one is attached.</p></div>
 interface may take a short time to reflect the change.</p>
 <h3 id="stopping-an-unreachable-session">Stopping an Unreachable Session</h3>
 <p>Where the browser session cannot be reached at all, as with a stale profile or
-a page that will not load, the <strong>manual-resetter</strong> under the services dropdown
-at <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a> stops any running servers and
+a page that will not load, use the <strong>manual-resetter</strong> under the services dropdown
+at <a href="https://datahub.ucsd.edu">datahub.ucsd.edu</a>. It stops any running servers and
 resets the profile, leaving files untouched. The procedure is in
 <a href="/docs/access/sign-in-and-session-problems.html#spawn-failed">"Spawn Failed"</a>.</p>
 <h2 id="status--quota-pages">Status &amp; Quota Pages</h2>

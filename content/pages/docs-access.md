@@ -10,40 +10,17 @@ canonicalUrl: /docs/access/index.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/access/
 format: html
 ---
-<p>PARASOL has three access routes: the browser, the shell, and a
+<p class="lead">PARASOL has three access routes: the browser, the shell, and a
 remote editor. Start here to choose a route, to fix a sign-in or startup
 failure, or to find out when your access starts and ends. Moving between the
 routes has no eligibility requirement and requires no request.</p>
-<div class="table-responsive"><table class="table table-striped">
-<thead>
-<tr>
-<th>Page</th>
-<th>Covers</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="/docs/access/datahub-in-the-browser.html">Datahub in the Browser</a></td>
-<td>Signing in, selecting a course and environment, the browser session, concurrent Datahub sessions, stopping a session, and the status and quota pages.</td>
-</tr>
-<tr>
-<td><a href="/docs/access/the-login-node.html">The Login Node</a></td>
-<td>Connecting over SSH, the permitted and prohibited uses of <code>dsmlp-login</code>, connecting without a password, tunnels to a notebook or service, and connection failures.</td>
-</tr>
-<tr>
-<td><a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a></td>
-<td>Connecting VS Code to a container over Remote-SSH, the key pair and host entry, pod lifetime, ending the session, and editor connection failures.</td>
-</tr>
-<tr>
-<td><a href="/docs/access/sign-in-and-session-problems.html">Sign-In &amp; Session Problems</a></td>
-<td>Campus sign-in failures, a missing course, spawn failures, links clicked before sign-in, launches refused by the cluster, the end of course access, and reporting a problem.</td>
-</tr>
-<tr>
-<td><a href="/docs/access/when-access-starts-and-ends.html">When Access Starts &amp; Ends</a></td>
-<td>When access opens for each population, extensions, the duration of research access, the retention timeline, and archiving on request.</td>
-</tr>
-</tbody>
-</table></div>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-globe"></span><p class="docs-card-title"><a href="/docs/access/datahub-in-the-browser.html">Datahub in the Browser</a></p><p>Signing in, selecting a course and environment, the browser session, concurrent Datahub sessions, stopping a session, and the status and quota pages.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-console"></span><p class="docs-card-title"><a href="/docs/access/the-login-node.html">The Login Node</a></p><p>Connecting over SSH, the permitted and prohibited uses of <code>dsmlp-login</code>, connecting without a password, tunnels to a notebook or service, and connection failures.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-edit"></span><p class="docs-card-title"><a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a></p><p>Connecting VS Code to a container over Remote-SSH, the key pair and host entry, pod lifetime, ending the session, and editor connection failures.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-log-in"></span><p class="docs-card-title"><a href="/docs/access/sign-in-and-session-problems.html">Sign-In &amp; Session Problems</a></p><p>Campus sign-in failures, a missing course, spawn failures, links clicked before sign-in, launches refused by the cluster, the end of course access, and reporting a problem.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-calendar"></span><p class="docs-card-title"><a href="/docs/access/when-access-starts-and-ends.html">When Access Starts &amp; Ends</a></p><p>When access opens for each population, extensions, the duration of research access, the retention timeline, and archiving on request.</p></article>
+</div>
 <h2 id="access-routes">Access Routes</h2>
 <div class="table-responsive"><table class="table table-striped">
 <thead>
@@ -74,8 +51,8 @@ routes has no eligibility requirement and requires no request.</p>
 <h3 id="browser-access">Browser Access</h3>
 <p>The browser route covers most coursework. It requires no local installation, no
 configuration, and no knowledge of Linux. Signing in and selecting a course and
-an environment starts a Jupyter session that contains the account's files. A
-session started from <code>datahub.ucsd.edu</code> expects the browser window to remain
+an environment starts a Jupyter session that contains the account's files.</p>
+<p>A session started from <code>datahub.ucsd.edu</code> expects the browser window to remain
 open while its work runs, and is not the route for work that continues
 unattended for hours. <a href="/docs/access/datahub-in-the-browser.html">Datahub in the Browser</a>
 describes signing in and stopping a session.</p>
@@ -101,9 +78,9 @@ files rather than for running work. See <a href="/docs/access/the-login-node.htm
 <h3 id="remote-editor-access">Remote Editor Access</h3>
 <p>VS Code attached over Remote-SSH runs a local editor, with local extensions and
 a debugger, against cluster hardware. It serves editing across many files and
-requires the most setup of the three routes. Closing the editor does not
-release the container. <a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a> describes
-the setup.</p>
+requires the most setup of the three routes.</p>
+<p><strong>Closing the editor does not release the container.</strong>
+<a href="/docs/access/remote-editor-setup.html">Remote Editor Setup</a> describes the setup.</p>
 <h2 id="files-entitlements-and-concurrency-across-routes">Files, Entitlements, and Concurrency Across Routes</h2>
 <h3 id="files">Files</h3>
 <p>The login node and the container share a filesystem, and a home directory
@@ -115,10 +92,9 @@ describes the directories.</p>
 <p>Every route draws on the same workspace, the same quotas, and the same GPU
 classes. The shell exposes more of them directly but grants nothing additional.</p>
 <h3 id="concurrency">Concurrency</h3>
-<p>A member may have one Datahub session running, alongside any number of shell,
+<p>A member may have <strong>one Datahub session</strong> running, alongside any number of shell,
 VS Code, and batch jobs. See
-<a href="/docs/access/datahub-in-the-browser.html#concurrent-datahub-sessions">Concurrent Datahub Sessions</a>.
-The limit that applies is the total CPU, memory, and GPU across everything
+<a href="/docs/access/datahub-in-the-browser.html#concurrent-datahub-sessions">Concurrent Datahub Sessions</a>.</p>
+<p>The limit that applies is the total CPU, memory, and GPU across everything
 running at once. See
 <a href="/docs/running-jobs/job-modes-and-limits.html#running-several-jobs-at-once">Running Several Jobs at Once</a>.</p>
-<hr>

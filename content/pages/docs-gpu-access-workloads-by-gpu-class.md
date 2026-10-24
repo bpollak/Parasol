@@ -10,11 +10,17 @@ canonicalUrl: /docs/gpu-access/workloads-by-gpu-class.html
 legacyUrl: https://dsmlp-docs.ucsd.edu/gpu-access/workloads-by-gpu-class/
 format: html
 ---
-<p>Estimate the GPU memory your work needs, then request the smallest GPU class it
+<p class="lead">Estimate the GPU memory your work needs, then request the smallest GPU class it
 fits within, among the classes your workspace can use. See
 <a href="/docs/gpu-access/gpu-classes.html#choosing-a-class">Choosing a Class</a> and
 <a href="/docs/gpu-access/gpu-classes.html#workspace-class-grants">Workspace Class Grants</a>. Not every card
 or slice listed here backs its class in every quarter.</p>
+<dl class="docs-glance">
+<div><dt>Weights at BF16 or FP16</dt><dd>About 2 GB per billion parameters</dd></div>
+<div><dt>Full fine-tuning</dt><dd>About 16 bytes per parameter with Adam, before activations</dd></div>
+<div><dt>Size for</dt><dd>The smallest device listed for the class</dd></div>
+<div><dt>Measure with</dt><dd><code>nvidia-smi</code> or <code>torch.cuda.memory_summary()</code></dd></div>
+</dl>
 <h2 id="estimating-gpu-memory">Estimating GPU Memory</h2>
 <p>A model's weights take a fixed amount of GPU memory for each billion
 parameters, set by their precision.</p>
@@ -40,22 +46,28 @@ parameters, set by their precision.</p>
 </tr>
 </tbody>
 </table></div>
-<p>Inference needs the weights plus a cache that grows with the length of the
-context. Training also needs gradients, optimizer state, and the activations
+<p>Beyond the weights, what else must fit depends on the work:</p>
+<div class="docs-cards">
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-flash"></span><p class="docs-card-title">Inference</p><p>Inference needs the weights plus a cache that grows with the length of the
+context.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-stats"></span><p class="docs-card-title">Training</p><p>Training needs the weights plus gradients, optimizer state, and the activations
 for one batch. Full fine-tuning with the Adam optimizer takes about 16 bytes per
-parameter before activations, so a 650M-parameter model needs about 10 GB.
-LoRA (low-rank adaptation) freezes the base weights and trains small adapter
+parameter before activations, so a 650M-parameter model needs about 10 GB.</p></article>
+<article class="docs-card"><span aria-hidden="true" class="glyphicon glyphicon-adjust"></span><p class="docs-card-title">LoRA and QLoRA</p><p>LoRA (low-rank adaptation) freezes the base weights and trains small adapter
 matrices, and QLoRA does the same on a base quantized to 4 bits, so both need
-far less.</p>
+far less.</p></article>
+</div>
 <p>The memory figures in the examples are approximate peaks. They vary with batch
-size, sequence length and LoRA rank. Measure a short trial run with
-<code>nvidia-smi</code> or <code>torch.cuda.memory_summary()</code> before sizing a long one.</p>
+size, sequence length and LoRA rank.</p>
+<div class="alert alert-success docs-callout" role="note"><p class="docs-callout-label"><strong>Measure before a long run</strong></p><p>Measure a short trial run with
+<code>nvidia-smi</code> or <code>torch.cuda.memory_summary()</code> before sizing a long one.</p></div>
 <h2 id="differences-within-a-class">Differences Within a Class</h2>
 <p>The cards and slices behind one class differ in memory, speed and supported
 number formats. A <code>medium</code> session can run on a 20 GB slice or a 24 GB card, and
-a <code>large</code> session on a 40 GB slice or a 48 GB card. A run that fits only the
+a <code>large</code> session on a 40 GB slice or a 48 GB card.</p>
+<div class="alert alert-warning docs-callout" role="note"><p class="docs-callout-label"><strong>Size for the smallest device</strong></p><p>A run that fits only the
 larger device fails with a CUDA out-of-memory error whenever the session lands
-on the smaller one. Size work for the smallest device listed for the class.</p>
+on the smaller one. Size work for the smallest device listed for the class.</p></div>
 <p>The Turing cards, the RTX 2080 Ti in <code>small</code> and the Titan RTX in <code>medium</code>, have
 neither BF16 nor FlashAttention 2. Code that requires either fails or runs
 slower on those cards. FP16 mixed precision runs on every device listed. See
